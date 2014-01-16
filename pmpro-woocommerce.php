@@ -1,7 +1,5 @@
 <?php
 
-// testing
-
 /*
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
@@ -210,68 +208,27 @@ add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on", "pmprowoo_cancelled_subscription", 10, 2);
 
 /*
-	Apply discounts for membership levels.
-
-function pmprowoo_woocommerce_get_price($price, $product)
-{
-	global $pmprowoo_member_discounts, $pmprowoo_discounts_on_subscriptions;
-		
-	//are there discounts? does the current user have a membership?
-	if(!empty($pmprowoo_member_discounts) && pmpro_hasMembershipLevel())
-	{
-		//ignore subscriptions if we are se that way
-		if(!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription" || $product->product_type == "subscription_variation"))
-			return $price;
-		
-		//check all memberships
-		foreach($pmprowoo_member_discounts as $level_id => $discount)
-		{
-			if(pmpro_hasMembershipLevel($level_id))
-			{
-				//apply discount
-				$price = $price - ($price * $discount);
-				break;	//can only have 1 level at a time
-			}
-		}
-	}
-
-	return $price;
-}
-*/
-
-/*
  *  Update Membership Price
  */
-function pmprowoo_woocommerce_get_price($price, $product)
+
+add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
+
+function pmprowoo_woocommerce_get_price($price)
 {
 	global $post_id, $current_user, $price;
     $user_level_id = $current_user->membership_level->id;
     $meta = get_post_meta( get_the_ID($post_id));
-
-/*    // for debugging
-    echo '<h3>$meta</h3>';
-    echo '<div class="debug"><pre> ' . var_dump($meta) . '</pre></div>';
-    echo '<h3>$current_user</h3>';
-    echo '<div class="debug"><pre> ' . var_dump($current_user) . '</pre></div>';
-    echo '<h3>$user_level_id</h3>';
-    echo '<div class="debug"><pre> ' . var_dump($user_level_id) . '</pre></div>';
-    echo '<h3>$product</h3>';
-    echo '<div class="debug"><pre> ' . var_dump($product) . '</pre></div>';*/
 
 	// does the current user have a membership?
 	if( pmpro_hasMembershipLevel() )
 	{
         // get price for this level
        $price = (int) $meta['_level_' . $user_level_id . '_price'][0];
-//       $price = 20;
+//       $price = 20; // test price
 	}
-
-    echo '<pre>' . var_dump($price) . '</pre>';
 
 	return $price;
 }
-
-add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
 
 /*
  * Add Membership Level fields to WooCommerce products
