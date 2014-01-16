@@ -34,6 +34,9 @@ $pmprowoo_member_discounts = array(2=>.1, 3=>.1);
 global $pmprowoo_discounts_on_subscriptions;
 $pmprowoo_discounts_on_subscriptions = false;
 
+// all membership levels
+global $membership_levels;
+
 /*
 	Add users to membership levels after order is completed.
 */
@@ -235,3 +238,69 @@ function pmprowoo_woocommerce_get_price($price, $product)
 	return $price;
 }
 add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
+
+/*
+ * Add Membership Level fields to WooCommerce products
+ */
+
+// Display Fields
+add_action( 'woocommerce_product_options_general_product_data', 'pmprowoo_add_level_fields' );
+
+function pmprowoo_add_level_fields() {
+
+    global $membership_levels;
+    global $product_levels;
+
+
+    echo '<div class="options_group">';
+
+    // for debugging
+    echo '<div class="debug"><pre> ' . var_dump(get_post_meta( get_the_ID() )) . ' </pre></div>';
+
+    // For each membership level, create respective price field
+    foreach ($membership_levels as $level) {
+        woocommerce_wp_text_input(
+            array(
+                'id'                 => '_level_' . $level->id . '_price',
+                'label'              => __(  $level->name . " Price", 'pmprowoo' ),
+                'placeholder'        => '',
+                'type'               => 'number',
+                'desc_tip'           => 'true',
+                'custom_attributes'  => array(
+                    'step'  => 'any',
+                    'min'   => '0'
+                )
+            )
+        );
+        // add to array to be used later
+       $product_levels[] = $level->id;
+    }
+
+    echo '<pre>' . var_dump($product_levels) . '</pre>';
+
+    echo '</div>';
+}
+
+// Save Fields
+add_action( 'woocommerce_process_product_meta', 'pmprowoo_save_level_fields' );
+
+function pmprowoo_save_level_fields() {
+
+    global $membership_levels;
+    global $post_id;
+
+    // Save each membership level's custom price
+
+    foreach ($membership_levels as $level) {
+        $price = $_POST['_level_' . $level->id . "_price"];
+        if( !empty( $price ) ) {
+            update_post_meta( $post_id, '_level_' . $level->id . '_price', esc_attr( $price ));
+        }
+    }
+}
+
+
+
+
+
+
