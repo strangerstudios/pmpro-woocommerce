@@ -211,7 +211,7 @@ add_action("subscription_put_on", "pmprowoo_cancelled_subscription", 10, 2);
 
 /*
 	Apply discounts for membership levels.
-*/
+
 function pmprowoo_woocommerce_get_price($price, $product)
 {
 	global $pmprowoo_member_discounts, $pmprowoo_discounts_on_subscriptions;
@@ -237,6 +237,40 @@ function pmprowoo_woocommerce_get_price($price, $product)
 
 	return $price;
 }
+*/
+
+/*
+ *  Update Membership Price
+ */
+function pmprowoo_woocommerce_get_price($price, $product)
+{
+	global $post_id, $current_user, $price;
+    $user_level_id = $current_user->membership_level->id;
+    $meta = get_post_meta( get_the_ID($post_id));
+
+/*    // for debugging
+    echo '<h3>$meta</h3>';
+    echo '<div class="debug"><pre> ' . var_dump($meta) . '</pre></div>';
+    echo '<h3>$current_user</h3>';
+    echo '<div class="debug"><pre> ' . var_dump($current_user) . '</pre></div>';
+    echo '<h3>$user_level_id</h3>';
+    echo '<div class="debug"><pre> ' . var_dump($user_level_id) . '</pre></div>';
+    echo '<h3>$product</h3>';
+    echo '<div class="debug"><pre> ' . var_dump($product) . '</pre></div>';*/
+
+	// does the current user have a membership?
+	if( pmpro_hasMembershipLevel() )
+	{
+        // get price for this level
+       $price = (int) $meta['_level_' . $user_level_id . '_price'][0];
+//       $price = 20;
+	}
+
+    echo '<pre>' . var_dump($price) . '</pre>';
+
+	return $price;
+}
+
 add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
 
 /*
@@ -248,14 +282,9 @@ add_action( 'woocommerce_product_options_general_product_data', 'pmprowoo_add_le
 
 function pmprowoo_add_level_fields() {
 
-    global $membership_levels;
-    global $product_levels;
-
+    global $membership_levels, $product_levels;
 
     echo '<div class="options_group">';
-
-    // for debugging
-    echo '<div class="debug"><pre> ' . var_dump(get_post_meta( get_the_ID() )) . ' </pre></div>';
 
     // For each membership level, create respective price field
     foreach ($membership_levels as $level) {
@@ -272,12 +301,7 @@ function pmprowoo_add_level_fields() {
                 )
             )
         );
-        // add to array to be used later
-       $product_levels[] = $level->id;
     }
-
-    echo '<pre>' . var_dump($product_levels) . '</pre>';
-
     echo '</div>';
 }
 
@@ -286,8 +310,7 @@ add_action( 'woocommerce_process_product_meta', 'pmprowoo_save_level_fields' );
 
 function pmprowoo_save_level_fields() {
 
-    global $membership_levels;
-    global $post_id;
+    global $membership_levels, $post_id;
 
     // Save each membership level's custom price
 
