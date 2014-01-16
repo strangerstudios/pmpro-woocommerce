@@ -1,4 +1,7 @@
 <?php
+
+// testing
+
 /*
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
