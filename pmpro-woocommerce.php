@@ -34,6 +34,10 @@ $pmprowoo_member_discounts = array(2=>.1, 3=>.1);
 global $pmprowoo_discounts_on_subscriptions;
 $pmprowoo_discounts_on_subscriptions = false;
 
+// all membership levels
+global $membership_levels;
+
+
 /*
 	Add users to membership levels after order is completed.
 */
@@ -235,3 +239,47 @@ function pmprowoo_woocommerce_get_price($price, $product)
 	return $price;
 }
 add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
+
+/*
+ * Add Membership Level fields to WooCommerce products
+ */
+
+// Display Fields
+add_action( 'woocommerce_product_options_general_product_data', 'pmprowoo_add_level_fields' );
+
+// Save Fields
+add_action( 'woocommerce_process_product_meta', 'pmprowoo_save_level_fields' );
+
+function pmprowoo_add_level_fields() {
+
+    echo '<div class="options_group">';
+
+    // For each membership level, create respective price field
+
+    foreach ($membership_levels as $level) {
+
+//        echo '<pre>' . var_dump($level) .  '</pre>';
+//        echo '<br>Name: ' . $level->name . ' <br>';
+
+        woocommerce_wp_text_input(
+            array(
+                'id'                 => '_pmprowoo_level' . $level->name . '_price',
+                'label'              => __(  $level->name . " Price", 'pmpro-woocommerce' ),
+                'placeholder'        => '',
+                'type'               => 'number',
+                'desc_tip'           => 'true',
+                'custom_attributes'  => array(
+                                         'step'  => 'any',
+                                         'min'   => '0'
+                                        )
+            )
+        );
+    }
+
+    echo '</div>';
+
+}
+
+
+
+
