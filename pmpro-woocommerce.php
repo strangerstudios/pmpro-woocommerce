@@ -40,40 +40,40 @@ global $membership_levels;
 */
 function pmprowoo_add_membership_from_order($order_id)
 {
-	global $pmprowoo_product_levels;
-		
-	//don't bother if array is empty
-	if(empty($pmprowoo_product_levels))
-		return;
-	
-	/*
-		does this order contain a membership product?
-	*/
-	//membership product ids
-	$product_ids = array_keys($pmprowoo_product_levels);
-	
-	//get order
-	$order = new WC_Order($order_id);
-	
-	//does the order have a user id and some products?
-	if(!empty($order->user_id) && sizeof($order->get_items()) > 0) 
-	{
-		foreach($order->get_items() as $item) 
-		{			
-			if($item['product_id'] > 0) 	//not sure when a product has id 0, but the Woo code checks this
-			{
-				//is there a membership level for this product?
-				if(in_array($item['product_id'], $product_ids))
-				{					
-					//add the user to the level
-					pmpro_changeMembershipLevel($pmprowoo_product_levels[$item['product_id']], $order->user_id);
-					
-					//only going to process the first membership product, so break the loop
-					break;
-				}
-			}
-		}
-	}	
+    global $pmprowoo_product_levels;
+
+    //don't bother if array is empty
+    if(empty($pmprowoo_product_levels))
+        return;
+
+    /*
+        does this order contain a membership product?
+    */
+    //membership product ids
+    $product_ids = array_keys($pmprowoo_product_levels);
+
+    //get order
+    $order = new WC_Order($order_id);
+
+    //does the order have a user id and some products?
+    if(!empty($order->user_id) && sizeof($order->get_items()) > 0)
+    {
+        foreach($order->get_items() as $item)
+        {
+            if($item['product_id'] > 0) 	//not sure when a product has id 0, but the Woo code checks this
+            {
+                //is there a membership level for this product?
+                if(in_array($item['product_id'], $product_ids))
+                {
+                    //add the user to the level
+                    pmpro_changeMembershipLevel($pmprowoo_product_levels[$item['product_id']], $order->user_id);
+
+                    //only going to process the first membership product, so break the loop
+                    break;
+                }
+            }
+        }
+    }
 }
 add_action("woocommerce_order_status_completed", "pmprowoo_add_membership_from_order");
 
@@ -82,40 +82,40 @@ add_action("woocommerce_order_status_completed", "pmprowoo_add_membership_from_o
 */
 function pmprowoo_cancel_membership_from_order($order_id)
 {
-	global $pmprowoo_product_levels;
-		
-	//don't bother if array is empty
-	if(empty($pmprowoo_product_levels))
-		return;
-	
-	/*
-		does this order contain a membership product?
-	*/
-	//membership product ids
-	$product_ids = array_keys($pmprowoo_product_levels);
-	
-	//get order
-	$order = new WC_Order($order_id);
-	
-	//does the order have a user id and some products?
-	if(!empty($order->user_id) && sizeof($order->get_items()) > 0) 
-	{
-		foreach($order->get_items() as $item) 
-		{			
-			if($item['product_id'] > 0) 	//not sure when a product has id 0, but the Woo code checks this
-			{
-				//is there a membership level for this product?
-				if(in_array($item['product_id'], $product_ids))
-				{					
-					//add the user to the level
-					pmpro_changeMembershipLevel(0, $order->user_id);
-					
-					//only going to process the first membership product, so break the loop
-					break;
-				}
-			}
-		}
-	}	
+    global $pmprowoo_product_levels;
+
+    //don't bother if array is empty
+    if(empty($pmprowoo_product_levels))
+        return;
+
+    /*
+        does this order contain a membership product?
+    */
+    //membership product ids
+    $product_ids = array_keys($pmprowoo_product_levels);
+
+    //get order
+    $order = new WC_Order($order_id);
+
+    //does the order have a user id and some products?
+    if(!empty($order->user_id) && sizeof($order->get_items()) > 0)
+    {
+        foreach($order->get_items() as $item)
+        {
+            if($item['product_id'] > 0) 	//not sure when a product has id 0, but the Woo code checks this
+            {
+                //is there a membership level for this product?
+                if(in_array($item['product_id'], $product_ids))
+                {
+                    //add the user to the level
+                    pmpro_changeMembershipLevel(0, $order->user_id);
+
+                    //only going to process the first membership product, so break the loop
+                    break;
+                }
+            }
+        }
+    }
 }
 add_action("woocommerce_order_status_pending", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_processing", "pmprowoo_cancel_membership_from_order");
@@ -128,38 +128,38 @@ add_action("woocommerce_order_status_on_hold", "pmprowoo_cancel_membership_from_
 */
 function pmprowoo_activated_subscription($user_id, $subscription_key)
 {
-	global $pmprowoo_product_levels;
-		
-	//don't bother if array is empty
-	if(empty($pmprowoo_product_levels))
-		return;
-	
-	/*
-		does this order contain a membership product?
-	*/
-	$subscription = WC_Subscriptions_Manager::get_users_subscription( $user_id, $subscription_key );
-	if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) ) 
-	{
-		$product_id = $subscription['product_id'];
-		$order_id = $subscription['order_id'];
-		
-		//membership product ids		
-		$product_ids = array_keys($pmprowoo_product_levels);
-		
-		//get order
-		$order = new WC_Order($order_id);
-		
-		//does the order have a user id and some products?
-		if(!empty($order->user_id) && !empty($product_id)) 
-		{
-			//is there a membership level for this product?
-			if(in_array($product_id, $product_ids))
-			{					
-				//add the user to the level
-				pmpro_changeMembershipLevel($pmprowoo_product_levels[$product_id], $order->user_id);							
-			}
-		}
-	}
+    global $pmprowoo_product_levels;
+
+    //don't bother if array is empty
+    if(empty($pmprowoo_product_levels))
+        return;
+
+    /*
+        does this order contain a membership product?
+    */
+    $subscription = WC_Subscriptions_Manager::get_users_subscription( $user_id, $subscription_key );
+    if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
+    {
+        $product_id = $subscription['product_id'];
+        $order_id = $subscription['order_id'];
+
+        //membership product ids
+        $product_ids = array_keys($pmprowoo_product_levels);
+
+        //get order
+        $order = new WC_Order($order_id);
+
+        //does the order have a user id and some products?
+        if(!empty($order->user_id) && !empty($product_id))
+        {
+            //is there a membership level for this product?
+            if(in_array($product_id, $product_ids))
+            {
+                //add the user to the level
+                pmpro_changeMembershipLevel($pmprowoo_product_levels[$product_id], $order->user_id);
+            }
+        }
+    }
 }
 add_action("activated_subscription", "pmprowoo_activated_subscription", 10, 2);
 add_action("reactivated_subscription", "pmprowoo_activated_subscription", 10, 2);
@@ -169,38 +169,38 @@ add_action("reactivated_subscription", "pmprowoo_activated_subscription", 10, 2)
 */
 function pmprowoo_cancelled_subscription($user_id, $subscription_key)
 {
-	global $pmprowoo_product_levels;
-		
-	//don't bother if array is empty
-	if(empty($pmprowoo_product_levels))
-		return;
-	
-	/*
-		does this order contain a membership product?
-	*/
-	$subscription = WC_Subscriptions_Manager::get_users_subscription( $user_id, $subscription_key );
-	if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) ) 
-	{
-		$product_id = $subscription['product_id'];
-		$order_id = $subscription['order_id'];
-		
-		//membership product ids		
-		$product_ids = array_keys($pmprowoo_product_levels);
-		
-		//get order
-		$order = new WC_Order($order_id);
-		
-		//does the order have a user id and some products?
-		if(!empty($order->user_id) && !empty($product_id)) 
-		{
-			//is there a membership level for this product?
-			if(in_array($product_id, $product_ids))
-			{					
-				//add the user to the level
-				pmpro_changeMembershipLevel(0, $order->user_id);								
-			}
-		}
-	}
+    global $pmprowoo_product_levels;
+
+    //don't bother if array is empty
+    if(empty($pmprowoo_product_levels))
+        return;
+
+    /*
+        does this order contain a membership product?
+    */
+    $subscription = WC_Subscriptions_Manager::get_users_subscription( $user_id, $subscription_key );
+    if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
+    {
+        $product_id = $subscription['product_id'];
+        $order_id = $subscription['order_id'];
+
+        //membership product ids
+        $product_ids = array_keys($pmprowoo_product_levels);
+
+        //get order
+        $order = new WC_Order($order_id);
+
+        //does the order have a user id and some products?
+        if(!empty($order->user_id) && !empty($product_id))
+        {
+            //is there a membership level for this product?
+            if(in_array($product_id, $product_ids))
+            {
+                //add the user to the level
+                pmpro_changeMembershipLevel(0, $order->user_id);
+            }
+        }
+    }
 }
 add_action("cancelled_subscription", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_trashed", "pmprowoo_cancelled_subscription", 10, 2);
@@ -215,19 +215,19 @@ add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
 
 function pmprowoo_woocommerce_get_price($price)
 {
-	global $post_id, $current_user, $price;
+    global $post_id, $current_user;
     $user_level_id = $current_user->membership_level->id;
     $meta = get_post_meta( get_the_ID($post_id));
 
-	// does the current user have a membership?
-	if( pmpro_hasMembershipLevel() )
-	{
+    // does the current user have a membership?
+    if( pmpro_hasMembershipLevel() )
+    {
         // get price for this level
-       $price = (int) $meta['_level_' . $user_level_id . '_price'][0];
+        $price = (int) $meta['_level_' . $user_level_id . '_price'][0];
 //       $price = 20; // test price
-	}
+    }
 
-	return $price;
+    return $price;
 }
 
 /*
@@ -278,7 +278,6 @@ function pmprowoo_save_level_fields() {
         }
     }
 }
-
 
 
 
