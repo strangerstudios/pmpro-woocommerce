@@ -207,29 +207,48 @@ add_action("subscription_trashed", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on", "pmprowoo_cancelled_subscription", 10, 2);
 
-/*
- *  Update Membership Price
- */
-
-add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
-
-function pmprowoo_woocommerce_get_price($price)
+function pmprowoo_woocommerce_get_price($price, $product)
 {
-    global $post_id, $current_user;
-    $user_level_id = $current_user->membership_level->id;
-    $meta = get_post_meta( get_the_ID($post_id));
+    global $current_user, $pmprowoo_member_discounts;
+
+    $newprice = false;
 
     // does the current user have a membership?
-    if( pmpro_hasMembershipLevel() )
+    if(pmpro_hasMembershipLevel())
     {
         // get price for this level
-        $price = (int) $meta['_level_' . $user_level_id . '_price'][0];
-//       $price = 20; // test price
+        $level_price = '_level_' . $current_user->membership_level->id . '_price';
+        $newprice = get_post_meta($product->id, $level_price, true);
     }
 
-    return $price;
-}
+    // if we didn't get a price, look for a general member discount
+    if($newprice === false || $newprice === "")
+    {
+        $newprice = $price;
 
+        //are there discounts? does the current user have a membership?
+        if(!empty($pmprowoo_member_discounts) && pmpro_hasMembershipLevel())
+        {
+            //ignore subscriptions if we are set that way
+            if(!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription" || $product->product_type == "subscription_variation"))
+                return $price;
+
+            //check all memberships
+            foreach($pmprowoo_member_discounts as $level_id => $discount)
+            {
+                if(pmpro_hasMembershipLevel($level_id))
+                {
+                    //apply discount
+                    $newprice = $price - ($price * $discount);
+
+                    break;        //can only have 1 level at a time
+                }
+            }
+        }
+    }
+
+    return $newprice;
+}
 /*
  * Add Membership Level fields to WooCommerce products
  */
@@ -273,7 +292,7 @@ function pmprowoo_save_level_fields() {
 
     foreach ($membership_levels as $level) {
         $price = $_POST['_level_' . $level->id . "_price"];
-        if( !empty( $price ) ) {
+        if( isset( $price ) ) {
             update_post_meta( $post_id, '_level_' . $level->id . '_price', esc_attr( $price ));
         }
     }
