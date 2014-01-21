@@ -21,16 +21,19 @@ General Idea:
 	Globals/Settings	
 */
 //Define level to product connections. Array is of form $product_id => $level_id.
+//Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
 global $pmprowoo_product_levels;
 $pmprowoo_product_levels = array(3014=>2, 3017=>3);
 
 //Define discounts per level. Discounts applied to all WooCommerce purchases. Array is of form PMPro $level_id => .1 (discount as decimal)
+//Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
 global $pmprowoo_member_discounts;
 $pmprowoo_member_discounts = array(2=>.1, 3=>.1);
 
 //apply discounts to subscriptions as well?
-global $pmprowoo_discounts_on_subscriptions;
-$pmprowoo_discounts_on_subscriptions = false;
+//Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
+//global $pmprowoo_discounts_on_subscriptions;
+//$pmprowoo_discounts_on_subscriptions = false;
 
 // all membership levels
 global $membership_levels;
@@ -220,7 +223,7 @@ function pmprowoo_woocommerce_get_price($price, $product)
         $level_price = '_level_' . $current_user->membership_level->id . '_price';
         $newprice = get_post_meta($product->id, $level_price, true);
     }
-
+	
     // if we didn't get a price, look for a general member discount
     if($newprice === false || $newprice === "")
     {
@@ -246,16 +249,15 @@ function pmprowoo_woocommerce_get_price($price, $product)
             }
         }
     }
-
-    return $newprice;
+	
+	return $newprice;
 }
+add_filter("woocommerce_get_price", "pmprowoo_woocommerce_get_price", 10, 2);
+
 /*
  * Add Membership Level fields to WooCommerce products
  */
-
 // Display Fields
-add_action( 'woocommerce_product_options_general_product_data', 'pmprowoo_add_level_fields' );
-
 function pmprowoo_add_level_fields() {
 
     global $membership_levels, $product_levels;
@@ -280,10 +282,9 @@ function pmprowoo_add_level_fields() {
     }
     echo '</div>';
 }
+add_action( 'woocommerce_product_options_general_product_data', 'pmprowoo_add_level_fields' );
 
 // Save Fields
-add_action( 'woocommerce_process_product_meta', 'pmprowoo_save_level_fields' );
-
 function pmprowoo_save_level_fields() {
 
     global $membership_levels, $post_id;
@@ -297,8 +298,4 @@ function pmprowoo_save_level_fields() {
         }
     }
 }
-
-
-
-
-
+add_action( 'woocommerce_process_product_meta', 'pmprowoo_save_level_fields' );
