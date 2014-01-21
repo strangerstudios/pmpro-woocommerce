@@ -22,13 +22,13 @@ General Idea:
 */
 //Define level to product connections. Array is of form $product_id => $level_id.
 //Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
-global $pmprowoo_product_levels;
-$pmprowoo_product_levels = array(3014=>2, 3017=>3);
+//global $pmprowoo_product_levels;
+//$pmprowoo_product_levels = array(3014=>2, 3017=>3);
 
 //Define discounts per level. Discounts applied to all WooCommerce purchases. Array is of form PMPro $level_id => .1 (discount as decimal)
 //Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
-global $pmprowoo_member_discounts;
-$pmprowoo_member_discounts = array(2=>.1, 3=>.1);
+//global $pmprowoo_member_discounts;
+//$pmprowoo_member_discounts = array(2=>.1, 3=>.1);
 
 //apply discounts to subscriptions as well?
 //Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
