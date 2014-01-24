@@ -30,7 +30,10 @@ if (empty($pmprowoo_product_levels)) {
 //Define discounts per level. Discounts applied to all WooCommerce purchases. Array is of form PMPro $level_id => .1 (discount as decimal)
 //Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
 global $pmprowoo_member_discounts;
-$pmprowoo_member_discounts = array(2=>.1, 3=>.1);
+$pmprowoo_member_discounts = get_option('_pmprowoo_member_discounts');
+if (empty($pmprowoo_member_discounts)) {
+    $pmprowoo_member_discounts = [];
+}
 
 //apply discounts to subscriptions as well?
 //Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
@@ -301,12 +304,13 @@ function pmprowoo_tab_options() {
        $key = $option->id;
        $membership_level_options[$key] = $option->name;
    }
-
-    // for debugging
-    krumo($pmprowoo_product_levels);
    ?>
 
     <div id="pmprowoo_tab_data" class="panel woocommerce_options_panel">
+
+        <?php
+        krumo($pmprowoo_product_levels);
+        ?>
 
         <div class="options_group">
             <p class="form-field">                <?php
@@ -359,14 +363,7 @@ function pmprowoo_process_product_meta() {
     $level = $_POST['_membership_product_level'];
 
     // update array of product levels
-    if (isset($pmprowoo_product_levels[$post_id])) {
-        $pmprowoo_product_levels[$post_id] = $level;
-    }
-    else {
-        array_push($pmprowoo_product_levels, array(
-            $post_id => $level
-        ));
-    }
+    $pmprowoo_product_levels[$post_id] = $level;
 
     if( isset( $level ) ) {
         update_post_meta( $post_id, '_membership_product_level', esc_attr( $level ));
@@ -382,3 +379,49 @@ function pmprowoo_process_product_meta() {
     }
 }
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta' );
+
+/*
+ * Add Membership Discount Field to Edit Membership Page
+ */
+
+function pmprowoo_add_membership_discount() {
+
+    global $pmprowoo_member_discounts;
+    $level_id = intval($_REQUEST['edit']);
+    if($level_id > 0)
+        $membership_discount = $pmprowoo_member_discounts[$level_id] * 100; //convert back to %
+    else
+        $membership_discount = '';
+    ?>
+    <h3 class="topborder">Set Membership Discount</h3>
+    <p>Set a membership discount for this level which will be applied when a user with this membership level is logged in.</p>
+    <table>
+        <tbody class="form-table">
+        <tr>
+            <th scope="row" valign="top"><label for="membership_discount">Membership Discount (%):</label></th>
+            <td>
+                <input type="number" min="0" max="100" name="membership_discount" value="<?php echo esc_attr($membership_discount);?>" />
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+<?php
+}
+
+add_action("pmpro_membership_level_after_other_settings", "pmprowoo_add_membership_discount");
+
+/*
+ * Update Membership Level Discount
+ */
+function pmprowoo_save_membership_level($level_id) {
+    global $pmprowoo_member_discounts;
+
+    //convert % to decimal
+    $member_discount = $_POST['membership_discount']/100;
+    $pmprowoo_member_discounts[$level_id] = $member_discount;
+    update_option('_pmprowoo_member_discounts', $pmprowoo_member_discounts);
+}
+add_action("pmpro_save_membership_level", "pmprowoo_save_membership_level");
+
+
