@@ -269,7 +269,11 @@ function pmprowoo_get_membership_price($price, $product)
 	
 	return $newprice;
 }
-add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
+
+// only change price if this is on the front end
+if (!is_admin()) {
+    add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
+}
 
 /*
  * Add Membership Level fields to WooCommerce products
