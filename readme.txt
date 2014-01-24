@@ -1,5 +1,5 @@
 === PMPro WooCommerce ===
-Contributors: strangerstudios, jessicaoros
+Contributors: strangerstudios, jessica o
 Tags: pmpro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 3.8
@@ -33,7 +33,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Changelog ==
 
 = .2 =
-* Added per level pricing to the edit product page. (Thanks, jessicaoros)
+* Added per level pricing to the edit product page. (Thanks, jessica o)
 
 = .1 =
 * This is the initial version of the plugin.
