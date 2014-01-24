@@ -19,10 +19,13 @@ General Idea:
 /*
 	Globals/Settings	
 */
-//Define level to product connections. Array is of form $product_id => $level_id.
-//Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
+
+// Get all Product Membership Levels
 global $pmprowoo_product_levels;
-$pmprowoo_product_levels = array(74=>6);
+$pmprowoo_product_levels = get_option('_pmprowoo_product_levels');
+if (empty($pmprowoo_product_levels)) {
+    $pmprowoo_product_levels = [];
+}
 
 //Define discounts per level. Discounts applied to all WooCommerce purchases. Array is of form PMPro $level_id => .1 (discount as decimal)
 //Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
@@ -240,7 +243,7 @@ function pmprowoo_get_membership_price($price, $product)
     }
 
     $newprice = get_post_meta($product->id, $level_price, true);
-	
+
     // if we didn't get a price, look for a general member discount
     if($newprice === false || $newprice === "")
     {
@@ -266,7 +269,7 @@ function pmprowoo_get_membership_price($price, $product)
             }
         }
     }
-	
+
 	return $newprice;
 }
 
@@ -276,48 +279,106 @@ if (!is_admin()) {
 }
 
 /*
- * Add Membership Level fields to WooCommerce products
+ * Add PMPro Tab to Edit Products page
  */
 
-// Display Fields
-function pmprowoo_add_level_fields() {
-
-    global $membership_levels, $product_levels;
-
-    echo '<div class="options_group">';
-
-    // For each membership level, create respective price field
-    foreach ($membership_levels as $level) {
-        woocommerce_wp_text_input(
-            array(
-                'id'                 => '_level_' . $level->id . '_price',
-                'label'              => __(  $level->name . " Price", 'pmprowoo' ),
-                'placeholder'        => '',
-                'type'               => 'number',
-                'desc_tip'           => 'true',
-                'custom_attributes'  => array(
-                    'step'  => 'any',
-                    'min'   => '0'
-                )
-            )
-        );
-    }
-    echo '</div>';
+function pmprowoo_tab_options_tab() {
+    ?>
+    <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><?php _e('Membership', 'pmprowoo'); ?></a></li>
+<?php
 }
-add_action( 'woocommerce_product_options_general_product_data', 'pmprowoo_add_level_fields' );
+add_action('woocommerce_product_write_panel_tabs', 'pmprowoo_tab_options_tab');
 
-// Save Fields
-function pmprowoo_save_level_fields() {
+/*
+ * Add Fields to PMPro Tab
+ */
+function pmprowoo_tab_options() {
 
-    global $membership_levels, $post_id;
+   global $membership_levels, $pmprowoo_product_levels;
 
-    // Save each membership level's custom price
+   $membership_level_options[0] = 'None';
+   foreach ($membership_levels as $option) {
+       $key = $option->id;
+       $membership_level_options[$key] = $option->name;
+   }
 
-    foreach ($membership_levels as $level) {
-        $price = $_POST['_level_' . $level->id . "_price"];
-        if( isset( $price ) ) {
-            update_post_meta( $post_id, '_level_' . $level->id . '_price', esc_attr( $price ));
+    // for debugging
+    krumo($pmprowoo_product_levels);
+   ?>
+
+    <div id="pmprowoo_tab_data" class="panel woocommerce_options_panel">
+
+        <div class="options_group">
+            <p class="form-field">                <?php
+                    // Membership Product
+                    woocommerce_wp_select(
+                        array(
+                        'id'      => '_membership_product_level',
+                        'label'   => __( 'Membership Product', 'pmprowoo' ),
+                        'options' => $membership_level_options
+                        )
+                    );
+                ?>
+            </p>
+        </div>
+        <div class="options-group">
+            <p class="form-field">
+                <?php
+                    // For each membership level, create respective price field
+                    foreach ($membership_levels as $level) {
+                        woocommerce_wp_text_input(
+                            array(
+                                'id'                 => '_level_' . $level->id . '_price',
+                                'label'              => __(  $level->name . " Price", 'pmprowoo' ),
+                                'placeholder'        => '',
+                                'type'               => 'number',
+                                'desc_tip'           => 'true',
+                                'custom_attributes'  => array(
+                                    'step'  => 'any',
+                                    'min'   => '0'
+                                )
+                            )
+                        );
+                    }
+                ?>
+            </p>
+        </div>
+    </div>
+<?php
+}
+add_action('woocommerce_product_write_panels', 'pmprowoo_tab_options');
+
+/*
+ * Process PMPro Meta
+ */
+function pmprowoo_process_product_meta() {
+
+    global $membership_levels, $post_id, $pmprowoo_product_levels;
+
+    // Save membership product level
+    $level = $_POST['_membership_product_level'];
+
+    // update array of product levels
+    if (isset($pmprowoo_product_levels[$post_id])) {
+        $pmprowoo_product_levels[$post_id] = $level;
+    }
+    else {
+        array_push($pmprowoo_product_levels, array(
+            $post_id => $level
+        ));
+    }
+
+    if( isset( $level ) ) {
+        update_post_meta( $post_id, '_membership_product_level', esc_attr( $level ));
+        update_option('_pmprowoo_product_levels', $pmprowoo_product_levels);
+
+        // Save each membership level price
+        foreach ($membership_levels as $level) {
+            $price = $_POST['_level_' . $level->id . "_price"];
+            if( isset( $price ) ) {
+                update_post_meta( $post_id, '_level_' . $level->id . '_price', esc_attr( $price ));
+            }
         }
     }
 }
-add_action( 'woocommerce_process_product_meta', 'pmprowoo_save_level_fields' );
+add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta' );
