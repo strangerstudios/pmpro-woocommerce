@@ -308,10 +308,6 @@ function pmprowoo_tab_options() {
 
     <div id="pmprowoo_tab_data" class="panel woocommerce_options_panel">
 
-        <?php
-        krumo($pmprowoo_product_levels);
-        ?>
-
         <div class="options_group">
             <p class="form-field">                <?php
                     // Membership Product
