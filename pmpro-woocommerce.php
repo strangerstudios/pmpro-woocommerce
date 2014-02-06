@@ -1,9 +1,9 @@
 <?php
-/*
+/**
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: .2
+Version: .3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -17,8 +17,8 @@ General Idea:
 */
 
 /*
-	Globals/Settings	
-*/
+ * Global Settings
+ */
 
 // Get all Product Membership Levels
 global $pmprowoo_product_levels;
@@ -27,18 +27,17 @@ if (empty($pmprowoo_product_levels)) {
     $pmprowoo_product_levels = [];
 }
 
-//Define discounts per level. Discounts applied to all WooCommerce purchases. Array is of form PMPro $level_id => .1 (discount as decimal)
-//Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
+// Get all Membership Discounts
 global $pmprowoo_member_discounts;
 $pmprowoo_member_discounts = get_option('_pmprowoo_member_discounts');
 if (empty($pmprowoo_member_discounts)) {
     $pmprowoo_member_discounts = [];
 }
 
-//apply discounts to subscriptions as well?
-//Example below. Copy this to your active theme's functions.php or a custom plugin, edit, and remove the comment //
-//global $pmprowoo_discounts_on_subscriptions;
-//$pmprowoo_discounts_on_subscriptions = false;
+
+// Apply Discounts to Subscriptions
+global $pmprowoo_discounts_on_memberships;
+$pmprowoo_discounts_on_memberships = pmpro_getOption('custom_pmprowoo_discounts_on_memberships');
 
 // Get all PMPro Membership Levels
 global $membership_levels;
@@ -419,5 +418,24 @@ function pmprowoo_save_membership_level($level_id) {
     update_option('_pmprowoo_member_discounts', $pmprowoo_member_discounts);
 }
 add_action("pmpro_save_membership_level", "pmprowoo_save_membership_level");
+
+/*
+ *  Add Discounts on Subscriptions to PMPro Advanced Settings
+ */
+function pmprowoo_custom_settings() {
+    $fields = array(
+        'field1' => array(
+            'field_name' => 'pmprowoo_discounts_on_subscriptions',
+            'field_type' => 'select',
+            'label' => 'Apply Discounts to Subscriptions?',
+            'value' => 'No',
+            'options' => array('Yes','No')
+        )
+    );
+    fb::log(($fields));
+    return $fields;
+
+}
+add_filter('pmpro_custom_advanced_settings', 'pmprowoo_custom_settings');
 
 
