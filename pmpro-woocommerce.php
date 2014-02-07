@@ -16,6 +16,8 @@ General Idea:
 	NOTE: You can still only have one level per user with PMPro.
 */
 
+include_once(dirname(__FILE__)) . '/css/style.css';
+
 /*
  * Global Settings
  */
@@ -24,20 +26,23 @@ General Idea:
 global $pmprowoo_product_levels;
 $pmprowoo_product_levels = get_option('_pmprowoo_product_levels');
 if (empty($pmprowoo_product_levels)) {
-    $pmprowoo_product_levels = [];
+    $pmprowoo_product_levels = array();
 }
 
 // Get all Membership Discounts
 global $pmprowoo_member_discounts;
 $pmprowoo_member_discounts = get_option('_pmprowoo_member_discounts');
 if (empty($pmprowoo_member_discounts)) {
-    $pmprowoo_member_discounts = [];
+    $pmprowoo_member_discounts = array();
 }
 
 
 // Apply Discounts to Subscriptions
 global $pmprowoo_discounts_on_memberships;
 $pmprowoo_discounts_on_memberships = pmpro_getOption('custom_pmprowoo_discounts_on_memberships');
+if (empty($pmprowoo_discounts_on_memberships)) {
+    $pmprowoo_discounts_on_memberships = false;
+}
 
 // Get all PMPro Membership Levels
 global $membership_levels;
@@ -217,15 +222,20 @@ add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on", "pmprowoo_cancelled_subscription", 10, 2);
 
 /*
- * Update Product Prices with Membership Price or Discount
+ * Update Product Prices with Membership Price and/or Discount
  */
 function pmprowoo_get_membership_price($price, $product)
 {
-    global $current_user, $pmprowoo_member_discounts, $pmprowoo_product_levels, $woocommerce, $cart_membership_level;
+    global $current_user, $pmprowoo_member_discounts, $pmprowoo_product_levels, $woocommerce, $pmprowoo_discounts_on_subscriptions;
 
-    $newprice = false;
+    $discount_price = $price;
+
     $product_ids = array_keys($pmprowoo_product_levels); // membership product levels
     $items = $woocommerce->cart->cart_contents; // items in the cart
+
+    //ignore membership products and subscriptions if we are set that way
+    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")) || in_array($product->id, array_keys($pmprowoo_product_levels), false))
+        return $price;
 
     // Search for any membership level products. IF found, use first one as the cart membership level.
     foreach($items as $item)
@@ -237,43 +247,27 @@ function pmprowoo_get_membership_price($price, $product)
     }
 
     // use cart membership level price if set, otherwise use current member level
-    if (isset($cart_membership_level)) {
+    if (isset($cart_membership_level))
         $level_price = '_level_' . $cart_membership_level . '_price';
-    }
-    elseif (pmpro_hasMembershipLevel) {
+    elseif (pmpro_hasMembershipLevel())
         $level_price = '_level_' . $current_user->membership_level->id . '_price';
-    }
+    else
+        return $price;
 
-    $newprice = get_post_meta($product->id, $level_price, true);
+    // use this level to get the price
+    if (isset($level_price) ) {
+        if (get_post_meta($product->id, $level_price, true))
+            $discount_price =  get_post_meta($product->id, $level_price, true);
 
-    // if we didn't get a price, look for a general member discount
-    if($newprice === false || $newprice === "")
-    {
-        $newprice = $price;
-
-        //are there discounts? does the current user have a membership?
-        if(!empty($pmprowoo_member_discounts) && pmpro_hasMembershipLevel())
-        {
-            //ignore subscriptions if we are set that way
-            if(!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription" || $product->product_type == "subscription_variation"))
-                return $price;
-
-            //check all memberships
-            foreach($pmprowoo_member_discounts as $level_id => $discount)
-            {
-                if(pmpro_hasMembershipLevel($level_id))
-                {
-                    //apply discount
-                    $newprice = $price - ($price * $discount);
-
-                    break;        //can only have 1 level at a time
-                }
-            }
+        // apply discounts if there are any for this level
+        if(isset($pmprowoo_member_discounts[$cart_membership_level])) {
+            $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$cart_membership_level]);
         }
     }
 
-	return $newprice;
+    return $discount_price;
 }
+
 
 // only change price if this is on the front end
 if (!is_admin()) {
@@ -420,22 +414,22 @@ function pmprowoo_save_membership_level($level_id) {
 add_action("pmpro_save_membership_level", "pmprowoo_save_membership_level");
 
 /*
- *  Add Discounts on Subscriptions to PMPro Advanced Settings
+ *  Add Discounts on Subscriptions to PMPro Advanced Settings - will uncomment when filter is added to core
  */
-function pmprowoo_custom_settings() {
-    $fields = array(
-        'field1' => array(
-            'field_name' => 'pmprowoo_discounts_on_subscriptions',
-            'field_type' => 'select',
-            'label' => 'Apply Discounts to Subscriptions?',
-            'value' => 'No',
-            'options' => array('Yes','No')
-        )
-    );
-    fb::log(($fields));
-    return $fields;
-
-}
-add_filter('pmpro_custom_advanced_settings', 'pmprowoo_custom_settings');
+//function pmprowoo_custom_settings() {
+//    $fields = array(
+//        'field1' => array(
+//            'field_name' => 'pmprowoo_discounts_on_subscriptions',
+//            'field_type' => 'select',
+//            'label' => 'Apply Discounts to Subscriptions?',
+//            'value' => 'No',
+//            'options' => array('Yes','No')
+//        )
+//    );
+//    return $fields;
+//
+//}
+//
+//add_filter('pmpro_custom_advanced_settings', 'pmprowoo_custom_settings');
 
 
