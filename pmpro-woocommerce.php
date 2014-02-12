@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: .3
+Version: .3.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -352,7 +352,10 @@ function pmprowoo_process_product_meta() {
     $level = $_POST['_membership_product_level'];
 
     // update array of product levels
-    $pmprowoo_product_levels[$post_id] = $level;
+    if(!empty($level))
+		$pmprowoo_product_levels[$post_id] = $level;
+	elseif(isset($pmprowoo_product_levels[$post_id]))
+		unset($pmprowoo_product_levels[$post_id]);
 
     if( isset( $level ) ) {
         update_post_meta( $post_id, '_membership_product_level', esc_attr( $level ));
