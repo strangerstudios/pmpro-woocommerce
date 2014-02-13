@@ -3,18 +3,18 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: .3
+Version: .3.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
 General Idea:
 
-	1. Connect WooCommerce products to PMPro Membership Levels.
-	2. If a user purchases a certain product, give them the corresponding membership level.
-	3. If WooCommerce subscriptions are installed, and a subscription is cancelled, cancel the corresponding PMPro membership level.
-	
-	NOTE: You can still only have one level per user with PMPro.
-*/
+1. Connect WooCommerce products to PMPro Membership Levels.
+2. If a user purchases a certain product, give them the corresponding membership level.
+3. If WooCommerce subscriptions are installed, and a subscription is cancelled, cancel the corresponding PMPro membership level.
+
+NOTE: You can still only have one level per user with PMPro.
+ */
 
 include_once(dirname(__FILE__)) . '/css/style.css';
 
@@ -222,7 +222,7 @@ add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on", "pmprowoo_cancelled_subscription", 10, 2);
 
 /*
- * Update Product Prices with Membership Price and/or Discount
+ * Update Product Price Display with Membership Price and/or Discount
  */
 function pmprowoo_get_membership_price($price, $product)
 {
@@ -234,7 +234,7 @@ function pmprowoo_get_membership_price($price, $product)
     $items = $woocommerce->cart->cart_contents; // items in the cart
 
     //ignore membership products and subscriptions if we are set that way
-    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")) || in_array($product->id, array_keys($pmprowoo_product_levels), false))
+    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")))
         return $price;
 
     // Search for any membership level products. IF found, use first one as the cart membership level.
@@ -264,7 +264,6 @@ function pmprowoo_get_membership_price($price, $product)
             $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$cart_membership_level]);
         }
     }
-
     return $discount_price;
 }
 
@@ -273,6 +272,70 @@ function pmprowoo_get_membership_price($price, $product)
 if (!is_admin()) {
     add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
 }
+
+/*
+ * Update Actual Prices When Calculating Totals
+ */
+
+function pmprowoo_update_total($cart) {
+
+    foreach($cart->cart_contents as $key=>$value) {
+//        $value['data']->price = 10;
+        global $current_user, $pmprowoo_member_discounts, $pmprowoo_product_levels, $woocommerce, $pmprowoo_discounts_on_subscriptions;
+
+        $price = $value['data']->price;
+        $discount_price = $price;
+
+        $product_ids = array_keys($pmprowoo_product_levels); // membership product levels
+        $items = $cart->cart_contents; // items in the cart
+
+        //ignore membership products and subscriptions if we are set that way
+        if((!$pmprowoo_discounts_on_subscriptions && ($key->product_type == "subscription" || $key->product_type == "variable-subscription")))
+            return $price;
+
+        // Search for any membership level products. IF found, use first one as the cart membership level.
+        foreach($items as $item)
+        {
+            if (in_array($item['product_id'], $product_ids)) {
+                $cart_membership_level = $pmprowoo_product_levels[$item['product_id']];
+                break;
+            }
+        }
+
+        // use cart membership level price if set, otherwise use current member level
+        if (isset($cart_membership_level))
+            $level_price = '_level_' . $cart_membership_level . '_price';
+        elseif (pmpro_hasMembershipLevel())
+            $level_price = '_level_' . $current_user->membership_level->id . '_price';
+        else
+            return $price;
+
+        fb($level_price);
+        fb($items);
+        fb($value['data']->id);
+
+        // use this level to get the price
+        if (isset($level_price) ) {
+            if (get_post_meta($value['data']->id, $level_price, true))
+                $discount_price =  get_post_meta($value['data']->id, $level_price, true);
+
+            fb('discount price');
+            fb(get_post_meta($value['data']->id, $level_price, true));
+            fb($discount_price);
+
+            // apply discounts if there are any for this level
+            if(isset($pmprowoo_member_discounts[$cart_membership_level])) {
+                $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$cart_membership_level]);
+            }
+        }
+
+        $value['data']->price = $discount_price;
+        fb('new price');
+        fb($value['date']->price);
+    }
+}
+
+add_action('woocommerce_before_calculate_totals', 'pmprowoo_update_total');
 
 /*
  * Add PMPro Tab to Edit Products page
@@ -290,49 +353,49 @@ add_action('woocommerce_product_write_panel_tabs', 'pmprowoo_tab_options_tab');
  */
 function pmprowoo_tab_options() {
 
-   global $membership_levels, $pmprowoo_product_levels;
+    global $membership_levels, $pmprowoo_product_levels;
 
-   $membership_level_options[0] = 'None';
-   foreach ($membership_levels as $option) {
-       $key = $option->id;
-       $membership_level_options[$key] = $option->name;
-   }
-   ?>
+    $membership_level_options[0] = 'None';
+    foreach ($membership_levels as $option) {
+        $key = $option->id;
+        $membership_level_options[$key] = $option->name;
+    }
+    ?>
 
     <div id="pmprowoo_tab_data" class="panel woocommerce_options_panel">
 
         <div class="options_group">
             <p class="form-field">                <?php
-                    // Membership Product
-                    woocommerce_wp_select(
-                        array(
+                // Membership Product
+                woocommerce_wp_select(
+                    array(
                         'id'      => '_membership_product_level',
                         'label'   => __( 'Membership Product', 'pmprowoo' ),
                         'options' => $membership_level_options
-                        )
-                    );
+                    )
+                );
                 ?>
             </p>
         </div>
         <div class="options-group">
             <p class="form-field">
                 <?php
-                    // For each membership level, create respective price field
-                    foreach ($membership_levels as $level) {
-                        woocommerce_wp_text_input(
-                            array(
-                                'id'                 => '_level_' . $level->id . '_price',
-                                'label'              => __(  $level->name . " Price", 'pmprowoo' ),
-                                'placeholder'        => '',
-                                'type'               => 'number',
-                                'desc_tip'           => 'true',
-                                'custom_attributes'  => array(
-                                    'step'  => 'any',
-                                    'min'   => '0'
-                                )
+                // For each membership level, create respective price field
+                foreach ($membership_levels as $level) {
+                    woocommerce_wp_text_input(
+                        array(
+                            'id'                 => '_level_' . $level->id . '_price',
+                            'label'              => __(  $level->name . " Price", 'pmprowoo' ),
+                            'placeholder'        => '',
+                            'type'               => 'number',
+                            'desc_tip'           => 'true',
+                            'custom_attributes'  => array(
+                                'step'  => 'any',
+                                'min'   => '0'
                             )
-                        );
-                    }
+                        )
+                    );
+                }
                 ?>
             </p>
         </div>
@@ -352,7 +415,10 @@ function pmprowoo_process_product_meta() {
     $level = $_POST['_membership_product_level'];
 
     // update array of product levels
-    $pmprowoo_product_levels[$post_id] = $level;
+    if(!empty($level))
+        $pmprowoo_product_levels[$post_id] = $level;
+    elseif(isset($pmprowoo_product_levels[$post_id]))
+        unset($pmprowoo_product_levels[$post_id]);
 
     if( isset( $level ) ) {
         update_post_meta( $post_id, '_membership_product_level', esc_attr( $level ));
