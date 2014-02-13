@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: .3.1
+Version: .3.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -52,8 +52,6 @@ global $membership_levels;
 function pmprowoo_add_membership_from_order($order_id)
 {
     global $pmprowoo_product_levels;
-
-    echo $pmprowoo_product_levels;
 
     //don't bother if array is empty
     if(empty($pmprowoo_product_levels))
@@ -232,7 +230,7 @@ function pmprowoo_get_membership_price($price, $product)
 
     $product_ids = array_keys($pmprowoo_product_levels); // membership product levels
     $items = $woocommerce->cart->cart_contents; // items in the cart
-
+	
     //ignore membership products and subscriptions if we are set that way
     if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")) || in_array($product->id, array_keys($pmprowoo_product_levels), false))
         return $price;
@@ -245,7 +243,7 @@ function pmprowoo_get_membership_price($price, $product)
             break;
         }
     }
-
+	
     // use cart membership level price if set, otherwise use current member level
     if (isset($cart_membership_level))
         $level_price = '_level_' . $cart_membership_level . '_price';
@@ -253,7 +251,7 @@ function pmprowoo_get_membership_price($price, $product)
         $level_price = '_level_' . $current_user->membership_level->id . '_price';
     else
         return $price;
-
+	
     // use this level to get the price
     if (isset($level_price) ) {
         if (get_post_meta($product->id, $level_price, true))
@@ -270,8 +268,8 @@ function pmprowoo_get_membership_price($price, $product)
 
 
 // only change price if this is on the front end
-if (!is_admin()) {
-    add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
+if (!is_admin() || defined('DOING_AJAX')) {    
+	add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
 }
 
 /*
@@ -435,4 +433,36 @@ add_action("pmpro_save_membership_level", "pmprowoo_save_membership_level");
 //
 //add_filter('pmpro_custom_advanced_settings', 'pmprowoo_custom_settings');
 
-
+/*
+	Force account creation at WooCommerce checkout if the cart includes a membership product.
+*/
+function pmprowoo_woocommerce_after_checkout_registration_form()
+{
+	global $woocommerce, $pmprowoo_product_levels;
+	
+	// grab items from the cart	
+	$items = $woocommerce->cart->cart_contents;
+	
+	//membership product ids
+    $product_ids = array_keys($pmprowoo_product_levels);
+	
+	// Search for any membership level products. IF found, use first one as the cart membership level.
+    foreach($items as $item)
+    {
+        if(in_array($item['product_id'], $product_ids)) {
+            $cart_membership_level = $pmprowoo_product_levels[$item['product_id']];
+            break;
+        }
+    }
+	
+	if(!empty($cart_membership_level))
+	{
+?>
+<script>	
+	jQuery('#createaccount').prop('checked', true);
+	jQuery('#createaccount').parent().hide();	
+</script>
+<?php
+	}
+}
+add_action('woocommerce_after_checkout_registration_form', 'pmprowoo_woocommerce_after_checkout_registration_form');
