@@ -220,7 +220,7 @@ add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on", "pmprowoo_cancelled_subscription", 10, 2);
 
 /*
- * Update Product Prices with Membership Price and/or Discount
+ * Update Product Price Display with Membership Price and/or Discount
  */
 function pmprowoo_get_membership_price($price, $product)
 {
@@ -232,7 +232,7 @@ function pmprowoo_get_membership_price($price, $product)
     $items = $woocommerce->cart->cart_contents; // items in the cart
 
     //ignore membership products and subscriptions if we are set that way
-    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")) || in_array($product->id, array_keys($pmprowoo_product_levels), false))
+    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")))
         return $price;
 
     // Search for any membership level products. IF found, use first one as the cart membership level.
@@ -262,8 +262,13 @@ function pmprowoo_get_membership_price($price, $product)
             $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$cart_membership_level]);
         }
     }
-
     return $discount_price;
+}
+
+
+// only change price if this is on the front end
+if (!is_admin()) {
+    add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
 }
 
 /*
@@ -303,18 +308,10 @@ function pmprowoo_update_total($cart) {
         else
             return $price;
 
-        fb($level_price);
-        fb($items);
-        fb($value['data']->id);
-
         // use this level to get the price
         if (isset($level_price) ) {
             if (get_post_meta($value['data']->id, $level_price, true))
                 $discount_price =  get_post_meta($value['data']->id, $level_price, true);
-
-            fb('discount price');
-            fb(get_post_meta($value['data']->id, $level_price, true));
-            fb($discount_price);
 
             // apply discounts if there are any for this level
             if(isset($pmprowoo_member_discounts[$cart_membership_level])) {
@@ -323,13 +320,10 @@ function pmprowoo_update_total($cart) {
         }
 
         $value['data']->price = $discount_price;
-        fb('new price');
-        fb($value['date']->price);
     }
 }
 
 add_action('woocommerce_before_calculate_totals', 'pmprowoo_update_total');
-
 
 // only change price if this is on the front end
 if (!is_admin() || defined('DOING_AJAX')) {
