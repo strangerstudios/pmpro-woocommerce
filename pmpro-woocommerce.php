@@ -67,7 +67,7 @@ function pmprowoo_add_membership_from_order($order_id)
     $order = new WC_Order($order_id);
 
     //does the order have a user id and some products?
-    if(!empty($order->user_id) && sizeof($order->get_items()) > 0)
+    if($order->user_id>0 && sizeof($order->get_items()) > 0)
     {
         foreach($order->get_items() as $item)
         {
@@ -88,6 +88,7 @@ function pmprowoo_add_membership_from_order($order_id)
     }
 }
 add_action("woocommerce_order_status_completed", "pmprowoo_add_membership_from_order");
+
 
 /*
 	Cancel memberships when orders go into pending, processing, refunded, failed, or on hold.
@@ -110,7 +111,7 @@ function pmprowoo_cancel_membership_from_order($order_id)
     $order = new WC_Order($order_id);
 
     //does the order have a user id and some products?
-    if(!empty($order->user_id) && sizeof($order->get_items()) > 0)
+    if($order->user_id>0) && sizeof($order->get_items()) > 0)
     {
         foreach($order->get_items() as $item)
         {
@@ -162,7 +163,7 @@ function pmprowoo_activated_subscription($user_id, $subscription_key)
         $order = new WC_Order($order_id);
 
         //does the order have a user id and some products?
-        if(!empty($order->user_id) && !empty($product_id))
+        if($order->user_id>0) && !empty($product_id))
         {
             //is there a membership level for this product?
             if(in_array($product_id, $product_ids))
@@ -203,7 +204,7 @@ function pmprowoo_cancelled_subscription($user_id, $subscription_key)
         $order = new WC_Order($order_id);
 
         //does the order have a user id and some products?
-        if(!empty($order->user_id) && !empty($product_id))
+        if($order->user_id>0) && !empty($product_id))
         {
             //is there a membership level for this product?
             if(in_array($product_id, $product_ids))
@@ -264,66 +265,6 @@ function pmprowoo_get_membership_price($price, $product)
     }
     return $discount_price;
 }
-
-
-// only change price if this is on the front end
-if (!is_admin()) {
-    add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
-}
-
-/*
- * Update Actual Prices When Calculating Totals
- */
-
-function pmprowoo_update_total($cart) {
-
-    foreach($cart->cart_contents as $key=>$value) {
-//        $value['data']->price = 10;
-        global $current_user, $pmprowoo_member_discounts, $pmprowoo_product_levels, $woocommerce, $pmprowoo_discounts_on_subscriptions;
-
-        $price = $value['data']->price;
-        $discount_price = $price;
-
-        $product_ids = array_keys($pmprowoo_product_levels); // membership product levels
-        $items = $cart->cart_contents; // items in the cart
-
-        //ignore membership products and subscriptions if we are set that way
-        if((!$pmprowoo_discounts_on_subscriptions && ($key->product_type == "subscription" || $key->product_type == "variable-subscription")))
-            return $price;
-
-        // Search for any membership level products. IF found, use first one as the cart membership level.
-        foreach($items as $item)
-        {
-            if (in_array($item['product_id'], $product_ids)) {
-                $cart_membership_level = $pmprowoo_product_levels[$item['product_id']];
-                break;
-            }
-        }
-
-        // use cart membership level price if set, otherwise use current member level
-        if (isset($cart_membership_level))
-            $level_price = '_level_' . $cart_membership_level . '_price';
-        elseif (pmpro_hasMembershipLevel())
-            $level_price = '_level_' . $current_user->membership_level->id . '_price';
-        else
-            return $price;
-
-        // use this level to get the price
-        if (isset($level_price) ) {
-            if (get_post_meta($value['data']->id, $level_price, true))
-                $discount_price =  get_post_meta($value['data']->id, $level_price, true);
-
-            // apply discounts if there are any for this level
-            if(isset($pmprowoo_member_discounts[$cart_membership_level])) {
-                $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$cart_membership_level]);
-            }
-        }
-
-        $value['data']->price = $discount_price;
-    }
-}
-
-add_action('woocommerce_before_calculate_totals', 'pmprowoo_update_total');
 
 // only change price if this is on the front end
 if (!is_admin() || defined('DOING_AJAX')) {
