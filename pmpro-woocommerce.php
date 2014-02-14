@@ -221,7 +221,7 @@ add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on", "pmprowoo_cancelled_subscription", 10, 2);
 
 /*
- * Update Product Price Display with Membership Price and/or Discount
+ * Update Product Prices with Membership Price and/or Discount
  */
 function pmprowoo_get_membership_price($price, $product)
 {
@@ -233,9 +233,9 @@ function pmprowoo_get_membership_price($price, $product)
     $items = $woocommerce->cart->cart_contents; // items in the cart
 
     //ignore membership products and subscriptions if we are set that way
-    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")))
+    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")) || in_array($product->id, array_keys($pmprowoo_product_levels), false))
         return $price;
-
+        
     // Search for any membership level products. IF found, use first one as the cart membership level.
     foreach($items as $item)
     {
