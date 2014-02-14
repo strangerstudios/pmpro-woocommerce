@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: .3.2
+Version: .3.3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -111,7 +111,7 @@ function pmprowoo_cancel_membership_from_order($order_id)
     $order = new WC_Order($order_id);
 
     //does the order have a user id and some products?
-    if($order->user_id>0) && sizeof($order->get_items()) > 0)
+    if($order->user_id>0 && sizeof($order->get_items()) > 0)
     {
         foreach($order->get_items() as $item)
         {
@@ -163,7 +163,7 @@ function pmprowoo_activated_subscription($user_id, $subscription_key)
         $order = new WC_Order($order_id);
 
         //does the order have a user id and some products?
-        if($order->user_id>0) && !empty($product_id))
+        if($order->user_id>0 && !empty($product_id))
         {
             //is there a membership level for this product?
             if(in_array($product_id, $product_ids))
@@ -204,7 +204,7 @@ function pmprowoo_cancelled_subscription($user_id, $subscription_key)
         $order = new WC_Order($order_id);
 
         //does the order have a user id and some products?
-        if($order->user_id>0) && !empty($product_id))
+        if($order->user_id>0 && !empty($product_id))
         {
             //is there a membership level for this product?
             if(in_array($product_id, $product_ids))
