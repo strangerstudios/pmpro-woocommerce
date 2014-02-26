@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 3.8.1
-Stable tag: .3.2
+Stable tag: 1.0
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -28,7 +28,10 @@ Features:
 
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-woocommerce/issues
 
-== Changelog == 
+== Changelog ==
+= 1.0 =
+* Released to the WordPress repository.
+
 = .3.2 =
 * Fixed a bug where the get_price filter wasn't running when products/prices were loaded over AJAX (e.g. in the order review).
 * Added code to force account creation at checkout if the cart includes a membership level.

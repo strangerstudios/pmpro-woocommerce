@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: .3.2
+Version: 1.0
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
