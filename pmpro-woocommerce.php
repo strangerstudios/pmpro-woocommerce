@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.1
+Version: 1.1.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -39,7 +39,7 @@ if (empty($pmprowoo_member_discounts)) {
 
 // Apply Discounts to Subscriptions
 global $pmprowoo_discounts_on_memberships;
-$pmprowoo_discounts_on_memberships = pmpro_getOption('custom_pmprowoo_discounts_on_memberships');
+$pmprowoo_discounts_on_memberships = get_option('pmpro_custom_pmprowoo_discounts_on_memberships');
 if (empty($pmprowoo_discounts_on_memberships)) {
     $pmprowoo_discounts_on_memberships = false;
 }
