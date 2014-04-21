@@ -466,3 +466,32 @@ function pmprowoo_woocommerce_after_checkout_registration_form()
 	}
 }
 add_action('woocommerce_after_checkout_registration_form', 'pmprowoo_woocommerce_after_checkout_registration_form');
+
+/*
+	When the Woo Commerce Billing Address fields are updated, update the equivalent PMPro Fields
+*/
+function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
+{	
+	$um = array(
+		"billing_first_name" => "pmpro_bfirstname",
+		"billing_last_name" => "pmpro_blastname",
+		"billing_address_1" => "pmpro_baddress1",
+		"billing_address_2" => "pmpro_baddress2",
+		"billing_city" => "pmpro_bcity",
+		"billing_postcode" => "pmpro_bzipcode",
+		"billing_state" => "pmpro_bstate",
+		"billing_country" => "pmpro_bcountry",
+		"billing_phone" => "pmpro_bphone",
+		"billing_email" => "pmpro_bemail"		
+	);		
+		
+	foreach($um as $woo => $pmpro)
+	{
+		if($meta_key == $woo)
+		{			
+			update_user_meta($object_id, $pmpro, $meta_value);
+		}
+	}
+}
+add_action('update_user_meta', 'pmprowoo_update_user_meta', 10, 4);
+add_action('add_user_meta', 'pmprowoo_update_user_meta', 10, 4);
