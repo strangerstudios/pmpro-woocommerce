@@ -472,6 +472,12 @@ add_action('woocommerce_after_checkout_registration_form', 'pmprowoo_woocommerce
 */
 function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
 {	
+	//tracks updates that are made
+	global $pmprowoo_updated_user_meta;	
+	if(empty($pmprowoo_updated_user_meta))
+		$pmprowoo_updated_user_meta = array();
+	
+	//array of user meta to mirror
 	$um = array(
 		"billing_first_name" => "pmpro_bfirstname",
 		"billing_last_name" => "pmpro_blastname",
@@ -482,14 +488,26 @@ function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
 		"billing_state" => "pmpro_bstate",
 		"billing_country" => "pmpro_bcountry",
 		"billing_phone" => "pmpro_bphone",
-		"billing_email" => "pmpro_bemail"		
+		"billing_email" => "pmpro_bemail",
+		"pmpro_bfirstname" => "billing_first_name",
+		"pmpro_blastname" => "billing_last_name",
+		"pmpro_baddress1" => "billing_address_1",
+		"pmpro_baddress2" => "billing_address_2",
+		"pmpro_bcity" => "billing_city",
+		"pmpro_bzipcode" => "billing_postcode",
+		"pmpro_bstate" => "billing_state",
+		"pmpro_bcountry" => "billing_country",
+		"pmpro_bphone" => "billing_phone",
+		"pmpro_bemail" => "billing_email"
 	);		
 		
-	foreach($um as $woo => $pmpro)
+	//check if this user meta is to be mirrored
+	foreach($um as $left => $right)
 	{
-		if($meta_key == $woo)
+		if($meta_key == $left && !in_array($left, $pmprowoo_updated_user_meta))
 		{			
-			update_user_meta($object_id, $pmpro, $meta_value);
+			$pmprowoo_updated_user_meta[] = $left;
+			update_user_meta($object_id, $right, $meta_value);			
 		}
 	}
 }
