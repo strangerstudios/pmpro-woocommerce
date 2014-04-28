@@ -512,4 +512,10 @@ function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
 	}
 }
 add_action('update_user_meta', 'pmprowoo_update_user_meta', 10, 4);
-add_action('add_user_meta', 'pmprowoo_update_user_meta', 10, 4);
+
+//need to add the meta_id for add filter
+function pmprowoo_add_user_meta($object_id, $meta_key, $meta_value)
+{
+	pmprowoo_update_user_meta(NULL, $object_id, $meta_key, $meta_value);
+}
+add_action('add_user_meta', 'pmprowoo_add_user_meta', 10, 3);
