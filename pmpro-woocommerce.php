@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2
+Version: 1.2.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -476,6 +476,8 @@ function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
 	global $pmprowoo_updated_user_meta;	
 	if(empty($pmprowoo_updated_user_meta))
 		$pmprowoo_updated_user_meta = array();
+	if(empty($pmprowoo_updated_user_meta[$object_id]))
+		$pmprowoo_updated_user_meta[$object_id] = array();
 	
 	//array of user meta to mirror
 	$um = array(
@@ -504,9 +506,9 @@ function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
 	//check if this user meta is to be mirrored
 	foreach($um as $left => $right)
 	{
-		if($meta_key == $left && !in_array($left, $pmprowoo_updated_user_meta))
+		if($meta_key == $left && !in_array($left, $pmprowoo_updated_user_meta[$object_id]))
 		{			
-			$pmprowoo_updated_user_meta[] = $left;
+			$pmprowoo_updated_user_meta[$object_id][] = $left;
 			update_user_meta($object_id, $right, $meta_value);			
 		}
 	}
