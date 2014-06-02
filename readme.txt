@@ -29,10 +29,11 @@ Features:
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-woocommerce/issues
 
 == Changelog ==
+
 = 1.2.2 =
 * Added option to "Apply Member Discounts to WC Subscription Products?" to the PMPro Advanced Settings tab.
 * Fixed bug where membership discounts wouldn't be applied if no membership products were in the cart.
-* WooCommerce now mimics PMPro checkout, creating a custom level array instead of passing the ID
+* WooCommerce now mimics PMPro checkout, creating a custom level array instead of passing the ID. So if your level has an expiration number and period, it will be used when adding the level to the user checking out in WooCommerce... i.e. expiration dates "work" now. You can filter the level information using the pmprowoo_checkout_level filter.
 * Added pmprowoo_checkout_level filter to allow filtering the checkout level (to use PMPro expiration dates, etc. if Subscriptions addon is not installed)
 
 = 1.2.1 =

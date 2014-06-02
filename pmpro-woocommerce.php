@@ -86,7 +86,7 @@ function pmprowoo_add_membership_from_order($order_id)
                         'user_id' => $user_id,
                         'membership_id' => $pmpro_level->id,
                         'code_id' => '', //will support PMPro discount codes later
-                        'initial_payment' => '',
+                        'initial_payment' => $item['line_total'],
                         'billing_amount' => '',
                         'cycle_number' => '',
                         'cycle_period' => '',
@@ -97,9 +97,13 @@ function pmprowoo_add_membership_from_order($order_id)
                         'enddate' => '0000-00-00 00:00:00'
                     );
 
+					//set enddate
+					if(!empty($pmpro_level->expiration_number))
+						$custom_level['enddate'] = date("Y-m-d", strtotime("+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period));
+										
                     //let woocommerce handle everything but we can filter if we want to
                     pmpro_changeMembershipLevel(apply_filters('pmprowoo_checkout_level', $custom_level), $user_id);
-
+					
                     //only going to process the first membership product, so break the loop
                     break;
                 }
