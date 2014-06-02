@@ -2,7 +2,7 @@
 Contributors: strangerstudios, jessica o
 Tags: pmpro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 3.8.1
+Tested up to: 3.9.1
 Stable tag: 1.2.2
 
 Integrates Paid Memberships Pro with WooCommerce.
@@ -31,6 +31,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Changelog ==
 = 1.2.2 =
 * Added option to "Apply Member Discounts to WC Subscription Products?" to the PMPro Advanced Settings tab.
+* Fixed bug where membership discounts wouldn't be applied if no membership products were in the cart.
+* WooCommerce now mimics PMPro checkout, creating a custom level array instead of passing the ID
+* Added pmprowoo_checkout_level filter to allow filtering the checkout level (to use PMPro expiration dates, etc. if Subscriptions addon is not installed)
 
 = 1.2.1 =
 * Fixed updating of WooCommerce billing address user meta when brand new users checkout with PMPro.
