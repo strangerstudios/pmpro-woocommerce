@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.1
+Version: 1.2.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -77,8 +77,28 @@ function pmprowoo_add_membership_from_order($order_id)
                 if(in_array($item['product_id'], $product_ids))
                 {
 
-                    //add the user to the level
-                    pmpro_changeMembershipLevel($pmprowoo_product_levels[$item['product_id']], $order->customer_user);
+                    //get user id and level
+                    $user_id = $order->customer_user;
+                    $pmpro_level = pmpro_getLevel($pmprowoo_product_levels[$item['product_id']]);
+
+                    //create custom level to mimic PMPro checkout
+                    $custom_level = array(
+                        'user_id' => $user_id,
+                        'membership_id' => $pmpro_level->id,
+                        'code_id' => '', //will support PMPro discount codes later
+                        'initial_payment' => '',
+                        'billing_amount' => '',
+                        'cycle_number' => '',
+                        'cycle_period' => '',
+                        'billing_limit' => '',
+                        'trial_amount' => '',
+                        'trial_limit' => '',
+                        'startdate' => 'NOW()',
+                        'enddate' => '0000-00-00 00:00:00'
+                    );
+
+                    //let woocommerce handle everything but we can filter if we want to
+                    pmpro_changeMembershipLevel(apply_filters('pmprowoo_checkout_level', $custom_level), $user_id);
 
                     //only going to process the first membership product, so break the loop
                     break;
@@ -245,21 +265,25 @@ function pmprowoo_get_membership_price($price, $product)
     }
 	
     // use cart membership level price if set, otherwise use current member level
-    if (isset($cart_membership_level))
+    if (isset($cart_membership_level)) {
         $level_price = '_level_' . $cart_membership_level . '_price';
-    elseif (pmpro_hasMembershipLevel())
+        $level_id = $cart_membership_level;
+    }
+    elseif (pmpro_hasMembershipLevel()) {
         $level_price = '_level_' . $current_user->membership_level->id . '_price';
+        $level_id = $current_user->membership_level->id;
+    }
     else
         return $price;
-	
+
     // use this level to get the price
     if (isset($level_price) ) {
         if (get_post_meta($product->id, $level_price, true))
             $discount_price =  get_post_meta($product->id, $level_price, true);
 
         // apply discounts if there are any for this level
-        if(isset($pmprowoo_member_discounts[$cart_membership_level])) {
-            $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$cart_membership_level]);
+        if(isset($level_id)) {
+            $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$level_id]);
         }
     }
 
