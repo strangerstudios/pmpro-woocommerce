@@ -391,7 +391,7 @@ function pmprowoo_process_product_meta() {
         foreach ($membership_levels as $level) {
             $price = $_POST['_level_' . $level->id . "_price"];
             if( isset( $price ) ) {
-                update_post_meta( $post_id, '_level_' . $level->id . '_price', esc_attr( $price ));
+                update_post_meta( $post_id, '_level_' . $level->id . '_price', number_format(esc_attr( $price ), 2));
             }
         }
     }
