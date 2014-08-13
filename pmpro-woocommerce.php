@@ -350,12 +350,9 @@ function pmprowoo_tab_options() {
                                 'id'                 => '_level_' . $level->id . '_price',
                                 'label'              => __(  $level->name . " Price", 'pmprowoo' ),
                                 'placeholder'        => '',
-                                'type'               => 'number',
+                                'type'               => 'text',
                                 'desc_tip'           => 'true',
-                                'custom_attributes'  => array(
-                                    'step'  => 'any',
-                                    'min'   => '0'
-                                )
+                                'data_type'          => 'price'
                             )
                         );
                     }
@@ -390,9 +387,13 @@ function pmprowoo_process_product_meta() {
         // Save each membership level price
         foreach ($membership_levels as $level) {
             $price = $_POST['_level_' . $level->id . "_price"];
-            if( isset( $price ) ) {
-                update_post_meta( $post_id, '_level_' . $level->id . '_price', number_format(esc_attr( $price ), 2));
-            }
+            fb($price, 'price');
+            fb($_POST, '$_POST');
+            fb(number_format(1000, 2), '1000');
+            if( isset( $price ) )
+                update_post_meta( $post_id, '_level_' . $level->id . '_price', $price);
+            else
+                delete_post_meta( $post_id, '_level_' . $level->id . '_price');
         }
     }
 }

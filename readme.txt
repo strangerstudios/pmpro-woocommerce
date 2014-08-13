@@ -31,6 +31,8 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Changelog ==
 = 1.2.4 =
 * Fixed bug with WooCommerce Subscriptions being put "on hold".
+* Fixed bug when entering a membership price > 1000.
+* Fixed bug on some setups which set membership price to 0 if nothing was entered.
 
 = 1.2.3 =
 * Fixed bug when setting member price to "0" in product settings.
