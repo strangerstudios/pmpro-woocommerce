@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 3.9.1
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -29,6 +29,10 @@ Features:
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-woocommerce/issues
 
 == Changelog ==
+= 1.2.4 =
+* Fixed bug with WooCommerce Subscriptions being put "on hold".
+* Fixed bug when entering a membership price > 1000.
+* Fixed bug on some setups which set membership price to 0 if nothing was entered.
 
 = 1.2.3 =
 * Fixed bug when setting member price to "0" in product settings.
