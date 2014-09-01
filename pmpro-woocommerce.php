@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.4
+Version: 1.2.5
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -542,3 +542,12 @@ function pmprowoo_add_user_meta($object_id, $meta_key, $meta_value)
 	pmprowoo_update_user_meta(NULL, $object_id, $meta_key, $meta_value);
 }
 add_action('add_user_meta', 'pmprowoo_add_user_meta', 10, 3);
+
+//apply end date extension filter to woo commerce checkouts as well
+function pmprowoo_checkout_level_extend_memberships($level, $user_id)
+{
+	$level = pmpro_checkout_level_extend_memberships($level);
+	
+	return $level;
+}
+add_filter('pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships', 10, 2);

@@ -2,8 +2,8 @@
 Contributors: strangerstudios, jessica o
 Tags: pmpro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 3.9.1
-Stable tag: 1.2.4
+Tested up to: 4.0
+Stable tag: 1.2.5
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -29,6 +29,9 @@ Features:
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-woocommerce/issues
 
 == Changelog ==
+= 1.2.5 =
+* Now applying end date extension filter to woo commerce checkouts as well. So if an existing member purchases a product for their level that has an end date, their end date will be extended from the old end date. (Thanks, trishacupra)
+
 = 1.2.4 =
 * Fixed bug with WooCommerce Subscriptions being put "on hold".
 * Fixed bug when entering a membership price > 1000.
