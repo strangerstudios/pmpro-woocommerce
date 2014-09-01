@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.5
+Version: 1.2.5.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -543,11 +543,49 @@ function pmprowoo_add_user_meta($object_id, $meta_key, $meta_value)
 }
 add_action('add_user_meta', 'pmprowoo_add_user_meta', 10, 3);
 
-//apply end date extension filter to woo commerce checkouts as well
-function pmprowoo_checkout_level_extend_memberships($level, $user_id)
-{
-	$level = pmpro_checkout_level_extend_memberships($level);
+/*
+	apply end date extension filter to woo commerce checkouts as well
 	
-	return $level;
+	$level_array is a custom_level array for the pmpro_changeMembershipLevel call
+	$level_obj in the function is an object with the stored values for the level
+*/
+function pmprowoo_checkout_level_extend_memberships($level_array)
+{
+	$level_obj = pmpro_getLevel($level_array['membership_id']);
+		
+	//does this level expire? are they an existing user of this level?
+	if(!empty($level_obj) && !empty($level_obj->expiration_number) && pmpro_hasMembershipLevel($level_obj->id, $level_array['user_id']))
+	{
+		//get the current enddate of their membership
+		$user = get_userdata($level_array['user_id']);
+		$user->membership_level = pmpro_getMembershipLevelForUser($user->ID);
+		$expiration_date = $user->membership_level->enddate;
+		
+		//calculate days left
+		$todays_date = current_time('timestamp');
+		$time_left = $expiration_date - $todays_date;
+		
+		//time left?
+		if($time_left > 0)
+		{
+			//convert to days and add to the expiration date (assumes expiration was 1 year)
+			$days_left = floor($time_left/(60*60*24));
+			
+			//figure out days based on period
+			if($level_obj->expiration_period == "Day")
+				$total_days = $days_left + $level_obj->expiration_number;
+			elseif($level_obj->expiration_period == "Week")
+				$total_days = $days_left + $level_obj->expiration_number * 7;
+			elseif($level_obj->expiration_period == "Month")
+				$total_days = $days_left + $level->expiration_number * 30;
+			elseif($level_obj->expiration_period == "Year")
+				$total_days = $days_left + $level_obj->expiration_number * 365;
+			
+			//update the end date
+			$level_array['enddate'] = date("Y-m-d", strtotime("+ $total_days Days"));
+		}
+	}
+		
+	return $level_array;
 }
-add_filter('pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships', 10, 2);
+add_filter('pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships');
