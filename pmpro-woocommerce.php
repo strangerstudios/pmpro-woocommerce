@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.5.1
+Version: 1.2.5.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -577,7 +577,7 @@ function pmprowoo_checkout_level_extend_memberships($level_array)
 			elseif($level_obj->expiration_period == "Week")
 				$total_days = $days_left + $level_obj->expiration_number * 7;
 			elseif($level_obj->expiration_period == "Month")
-				$total_days = $days_left + $level->expiration_number * 30;
+				$total_days = $days_left + $level_obj->expiration_number * 30;
 			elseif($level_obj->expiration_period == "Year")
 				$total_days = $days_left + $level_obj->expiration_number * 365;
 			

@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 4.0
-Stable tag: 1.2.5.1
+Stable tag: 1.2.5.2
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -29,6 +29,9 @@ Features:
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-woocommerce/issues
 
 == Changelog ==
+= 1.2.5.2 =
+* Fixed bug with getting the expiration_number for levels with an X months expiration. (Thanks, Arnaud Devic)
+
 = 1.2.5.1 =
 * Fixed the pmprowoo_checkout_level_extend_memberships() filter added in 1.2.5.
 
