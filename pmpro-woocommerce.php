@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.5.2
+Version: 1.2.6
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -153,8 +153,8 @@ function pmprowoo_cancel_membership_from_order($order_id)
         }
     }
 }
-add_action("woocommerce_order_status_pending", "pmprowoo_cancel_membership_from_order");
-add_action("woocommerce_order_status_processing", "pmprowoo_cancel_membership_from_order");
+//add_action("woocommerce_order_status_pending", "pmprowoo_cancel_membership_from_order");
+//add_action("woocommerce_order_status_processing", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_refunded", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_on_hold", "pmprowoo_cancel_membership_from_order");
