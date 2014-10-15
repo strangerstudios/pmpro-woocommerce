@@ -3,7 +3,7 @@
 Plugin Name: PMPro WooCommerce
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.6
+Version: 1.2.7
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -51,7 +51,7 @@ global $membership_levels;
 */
 function pmprowoo_add_membership_from_order($order_id)
 {
-    global $pmprowoo_product_levels;
+    global $wpdb, $pmprowoo_product_levels;
 
     //don't bother if array is empty
     if(empty($pmprowoo_product_levels))
@@ -76,11 +76,18 @@ function pmprowoo_add_membership_from_order($order_id)
                 //is there a membership level for this product?
                 if(in_array($item['product_id'], $product_ids))
                 {
-
                     //get user id and level
                     $user_id = $order->customer_user;
                     $pmpro_level = pmpro_getLevel($pmprowoo_product_levels[$item['product_id']]);
 
+					//if checking out for the same level they have, keep their old start date
+					$sqlQuery = "SELECT startdate FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . esc_sql($user_id) . "' AND membership_id = '" . esc_sql($pmpro_level->id) . "' AND status = 'active' ORDER BY id DESC LIMIT 1";		
+					$old_startdate = $wpdb->get_var($sqlQuery);					
+					if(!empty($old_startdate))
+						$startdate = "'" . $old_startdate . "'";
+					else
+						$startdate = "'" . current_time('mysql') . "'";
+					
                     //create custom level to mimic PMPro checkout
                     $custom_level = array(
                         'user_id' => $user_id,
@@ -93,7 +100,7 @@ function pmprowoo_add_membership_from_order($order_id)
                         'billing_limit' => '',
                         'trial_amount' => '',
                         'trial_limit' => '',
-                        'startdate' => 'NOW()',
+                        'startdate' => $startdate,
                         'enddate' => '0000-00-00 00:00:00'
                     );
 
