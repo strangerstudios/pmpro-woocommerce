@@ -1,9 +1,9 @@
-=== PMPro WooCommerce ===
+=== Paid Memberships Pro - WooCommerce Add On ===
 Contributors: strangerstudios, jessica o
-Tags: pmpro, woocommerce, member, prices, pricing, membership, subscription
+Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 4.0
-Stable tag: 1.2.7
+Tested up to: 4.2.1
+Stable tag: 1.2.8
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -28,7 +28,16 @@ Features:
 
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-woocommerce/issues
 
+== Screenshots ==
+
+1. The "Membership" meta box on a single product. Optionally use this WooCommerce Product to buy a PMPro Membership Level or set specific pricing based on membership level for each product.
+2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
+
 == Changelog ==
+= 1.2.8 =
+* Using current_time('timestamp') in a couple strtotime calls.
+* Added links to docs and support in the "plugin row meta".
+
 = 1.2.7 = 
 * Fixed bug where startdate was not being set correctly for new users. (Thanks, liferaft) This script can be used to fix startdates for old members: https://gist.github.com/strangerstudios/4604f62e9812cf3afde7
 

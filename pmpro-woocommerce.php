@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: PMPro WooCommerce
+Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
 Version: 1.2.7
@@ -106,7 +106,7 @@ function pmprowoo_add_membership_from_order($order_id)
 
 					//set enddate
 					if(!empty($pmpro_level->expiration_number))
-						$custom_level['enddate'] = date("Y-m-d", strtotime("+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period));
+						$custom_level['enddate'] = date("Y-m-d", strtotime("+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period, current_time('timestamp')));
 										
                     //let woocommerce handle everything but we can filter if we want to
                     pmpro_changeMembershipLevel(apply_filters('pmprowoo_checkout_level', $custom_level), $user_id);
@@ -559,7 +559,7 @@ add_action('add_user_meta', 'pmprowoo_add_user_meta', 10, 3);
 function pmprowoo_checkout_level_extend_memberships($level_array)
 {
 	$level_obj = pmpro_getLevel($level_array['membership_id']);
-		
+	
 	//does this level expire? are they an existing user of this level?
 	if(!empty($level_obj) && !empty($level_obj->expiration_number) && pmpro_hasMembershipLevel($level_obj->id, $level_array['user_id']))
 	{
@@ -589,10 +589,26 @@ function pmprowoo_checkout_level_extend_memberships($level_array)
 				$total_days = $days_left + $level_obj->expiration_number * 365;
 			
 			//update the end date
-			$level_array['enddate'] = date("Y-m-d", strtotime("+ $total_days Days"));
+			$level_array['enddate'] = date("Y-m-d", strtotime("+ $total_days Days", $todays_date));
 		}
 	}
 		
 	return $level_array;
 }
 add_filter('pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships');
+
+/*
+Function to add links to the plugin row meta
+*/
+function pmprowoo_plugin_row_meta($links, $file) {
+	if(strpos($file, 'pmpro-woocommerce.php') !== false)
+	{
+		$new_links = array(
+			'<a href="' . esc_url('http://www.paidmembershipspro.com/add-ons/third-party-integration/pmpro-woocommerce/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
+		);
+		$links = array_merge($links, $new_links);
+	}
+	return $links;
+}
+add_filter('plugin_row_meta', 'pmprowoo_plugin_row_meta', 10, 2);
