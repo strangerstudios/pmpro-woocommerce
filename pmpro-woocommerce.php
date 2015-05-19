@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.8
+Version: 1.2.9
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -249,6 +249,7 @@ add_action("cancelled_subscription", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_trashed", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on-hold", "pmprowoo_cancelled_subscription", 10, 2);
+add_action("scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10, 2);
 
 /*
  * Update Product Prices with Membership Price and/or Discount
