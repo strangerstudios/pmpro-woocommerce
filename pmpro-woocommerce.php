@@ -262,9 +262,9 @@ function pmprowoo_get_membership_price($price, $product)
 
     $product_ids = array_keys($pmprowoo_product_levels); // membership product levels
     $items = $woocommerce->cart->cart_contents; // items in the cart
-	
+
     //ignore membership products and subscriptions if we are set that way
-    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")) || in_array($product->id, array_keys($pmprowoo_product_levels), false))
+    if(!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription" || in_array($product->id, array_keys($pmprowoo_product_levels), false)))
         return $price;
 
     // Search for any membership level products. IF found, use first one as the cart membership level.
