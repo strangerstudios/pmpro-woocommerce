@@ -409,7 +409,7 @@ function pmprowoo_add_membership_discount() {
 
     global $pmprowoo_member_discounts;
     $level_id = intval($_REQUEST['edit']);
-    if($level_id > 0)
+    if($level_id > 0 && !empty($pmprowoo_member_discounts) && !empty($pmprowoo_member_discounts[$level_id]))
         $membership_discount = $pmprowoo_member_discounts[$level_id] * 100; //convert back to %
     else
         $membership_discount = '';
