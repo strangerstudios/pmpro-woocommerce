@@ -16,6 +16,10 @@ General Idea:
 	NOTE: You can still only have one level per user with PMPro.
 */
 
+// quitely exit if PMPro isn't active
+if (! defined('PMPRO_DIR') && ! function_exists('pmpro_init'))
+	return;
+ 	
 include_once(dirname(__FILE__)) . '/css/style.css';
 
 /*
