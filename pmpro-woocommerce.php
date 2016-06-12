@@ -169,6 +169,7 @@ function pmprowoo_cancel_membership_from_order($order_id)
 add_action("woocommerce_order_status_refunded", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_on_hold", "pmprowoo_cancel_membership_from_order");
+add_action("woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_from_order");
 
 /*
 	Activate memberships when WooCommerce subscriptions change status.
