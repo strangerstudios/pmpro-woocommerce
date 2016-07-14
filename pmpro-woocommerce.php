@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.11
+Version: 1.2.12
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -294,7 +294,7 @@ function pmprowoo_get_membership_price($price, $product)
 
     // use this level to get the price
     if (isset($level_price) ) {
-        if (get_post_meta($product->id, $level_price, true))
+        if (get_post_meta($product->id, $level_price, true) !== false)
             $discount_price =  get_post_meta($product->id, $level_price, true);
 
         // apply discounts if there are any for this level
