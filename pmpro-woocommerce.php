@@ -293,7 +293,7 @@ function pmprowoo_get_membership_price($price, $product)
         return $price;
 
     // use this level to get the price
-    if (isset($level_price) ) {
+    if (isset($level_price) && !empty($pmprowoo_member_discounts)) {
         if (get_post_meta($product->id, $level_price, true))
             $discount_price =  get_post_meta($product->id, $level_price, true);
 
