@@ -2,7 +2,7 @@
 Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 4.4.3
+Tested up to: 4.6.1
 Stable tag: 1.2.11
 
 Integrates Paid Memberships Pro with WooCommerce.
