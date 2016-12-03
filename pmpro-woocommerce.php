@@ -334,7 +334,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
 
 	           //create new gift code
 	           $code = "GIFT" . rand(1, 99) . pmpro_getDiscountCode(); //added rand to code to make it unique for multiple gift orders
-	           $starts = date("Y-m-d");
+	           $starts = current_time( 'Y-m-d', 0 );
 	           $expires = date("Y-m-d", strtotime("+1 year"));		
 	           $sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($code) . "', '" . $starts . "', '" . $expires . "', '1')";
 	
