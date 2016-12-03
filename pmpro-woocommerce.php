@@ -305,11 +305,12 @@ function pmprowoo_add_gift_code_from_order($order_id)
 
     //get order
     $order = new WC_Order($order_id);
-
+    $items = $order->get_items();
+	
     //does the order have some products?
-    if(sizeof($order->get_items()) > 0)
+    if(sizeof($items) > 0)
     {
-        foreach($order->get_items() as $item)
+        foreach($items as $item_id => $item)
         {
             if($item['product_id'] > 0) 	//not sure when a product has id 0, but the Woo code checks this
             {
@@ -356,14 +357,17 @@ function pmprowoo_add_gift_code_from_order($order_id)
            '" . esc_sql($gift_level->expiration_number) . "',
            '" . esc_sql($gift_level->expiration_period) . "')";
 		$wpdb->query($sqlQuery);
+			  
+              /* Add Code to Order Meta */
+              wc_add_order_item_meta( $item_id, "Gift Code", $code );
 		
 	           /*
 		      //Email Gift Code
                       // Tag: !!gift_product!!  =>  Title of the Product
                       // Tag: !!membership_gift_code!!  => Generated Gift Code
 	           */	
-                  $recipient_name = wp_strip_all_tags($item['gift_recipient_name']);
-                  $recipient_email = wp_strip_all_tags($item['gift_recipient_email']);
+                  $recipient_name = wp_strip_all_tags($item['Recipient Name']);
+                  $recipient_email = wp_strip_all_tags($item['Recipient Email']);
 
                   if(!empty($recipient_email)){
 
