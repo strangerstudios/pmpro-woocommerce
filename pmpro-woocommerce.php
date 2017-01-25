@@ -292,25 +292,25 @@ function pmprowoo_get_membership_price($price, $product)
     if (isset($cart_membership_level)) {
         $level_price = '_level_' . $cart_membership_level . '_price';
         $level_id = $cart_membership_level;
-    }
-    elseif (pmpro_hasMembershipLevel()) {
-        $level_price = '_level_' . $current_user->membership_level->id . '_price';
+    } elseif (pmpro_hasMembershipLevel()) {        
+		$level_price = '_level_' . $current_user->membership_level->id . '_price';
         $level_id = $current_user->membership_level->id;
     }
     else
         return $price;
-
+	
     // use this level to get the price
-    if (isset($level_price) && !empty($pmprowoo_member_discounts)) {
-        if (get_post_meta($product->id, $level_price, true) !== false) {
-			$discount_price =  get_post_meta($product->id, $level_price, true);
+    if (isset($level_price)) {        
+		$level_price = get_post_meta($product->id, $level_price, true);
+		if ($level_price !== false) {
+			$discount_price = $level_price;
 		}
 			
         // apply discounts if there are any for this level
-        if(isset($level_id)) {
+        if(isset($level_id) && !empty($pmprowoo_member_discounts)) {
             $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$level_id]);
         }
-    }
+    }		
 
     return $discount_price;
 }

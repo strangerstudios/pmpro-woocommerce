@@ -37,6 +37,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 = 1.2.12 =
 * BUG: Fixed bug when setting membership price to 0.
 * BUG: Fixed PHP notices on WooCommerce single product page when PMPro membership price discount was empty.
+* BUG: Fixed issue where member prices were not being applied to products for members.
 
 = 1.2.11 =
 * BUG: Fixed bug where site would crash (PHP whitecreen) if Paid Memberships Pro was not active.
