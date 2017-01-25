@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.11
+Version: 1.3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -307,7 +307,7 @@ function pmprowoo_get_membership_price($price, $product)
 		}
 			
         // apply discounts if there are any for this level
-        if(isset($level_id) && !empty($pmprowoo_member_discounts)) {
+        if(isset($level_id) && !empty($pmprowoo_member_discounts) && !empty($pmprowoo_member_discounts[$level_id])) {
             $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$level_id]);
         }
     }		
@@ -358,6 +358,16 @@ function pmprowoo_tab_options() {
                         'options' => $membership_level_options
                         )
                     );
+					
+					// Membership Product
+                    woocommerce_wp_checkbox(
+                        array(
+                        'id'      => '_membership_product_autocomplete',
+                        'label'   => __( 'Autocomplete Order Status', 'pmprowoo' ),                       
+						'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmprowoo' ),                        
+						'cbvalue' => 1,
+						)
+                    );
                 ?>
             </p>
         </div>
@@ -392,17 +402,25 @@ function pmprowoo_process_product_meta() {
 
     global $membership_levels, $post_id, $pmprowoo_product_levels;
 
-    // Save membership product level
-    $level = $_POST['_membership_product_level'];
-
+    // get values from post
+    if(isset($_POST['_membership_product_level']))
+		$level = intval($_POST['_membership_product_level']);
+	if(isset($_POST['_membership_product_autocomplete'])) {
+		if($_POST['_membership_product_autocomplete'] == 'yes' || $_POST['_membership_product_autocomplete'] == 1)
+			$autocomplete = 1;
+		else
+			$autocomplete = 0;
+	}
+		
     // update array of product levels
     if(!empty($level))
 		$pmprowoo_product_levels[$post_id] = $level;
 	elseif(isset($pmprowoo_product_levels[$post_id]))
 		unset($pmprowoo_product_levels[$post_id]);
 
+	// update post meta for level and prices
     if( isset( $level ) ) {
-        update_post_meta( $post_id, '_membership_product_level', esc_attr( $level ));
+        update_post_meta( $post_id, '_membership_product_level', $level );
         update_option('_pmprowoo_product_levels', $pmprowoo_product_levels);
 
         // Save each membership level price
@@ -411,6 +429,10 @@ function pmprowoo_process_product_meta() {
             update_post_meta( $post_id, '_level_' . $level->id . '_price', $price);
         }
     }
+	
+	// update post meta for the autocomplete option
+	if( isset ($autocomplete ) )
+		update_post_meta( $post_id, '_membership_product_autocomplete', $autocomplete );
 }
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta' );
 
@@ -626,3 +648,41 @@ function pmprowoo_plugin_row_meta($links, $file) {
 	return $links;
 }
 add_filter('plugin_row_meta', 'pmprowoo_plugin_row_meta', 10, 2);
+
+/*
+	Check if Autocomplete setting is active for the product.
+*/
+function pmprowoo_order_autocomplete($order_id) {
+	//get the existing order
+	$order = new WC_Order( $order_id );
+  
+	//assume we won't autocomplete
+	$autocomplete = false;
+	
+	//get line items
+	if ( count( $order->get_items() ) > 0 ) {
+		foreach( $order->get_items() as $item ) {			
+			if ( $item['type'] == 'line_item') {
+				//get product info and check if product is marked to autocomplete
+				$_product = $order->get_product_from_item( $item );
+				$product_autocomplete = get_post_meta($_product->id, '_membership_product_autocomplete', true);
+								
+				//if any product is not virtual and not marked for autocomplete, we won't autocomplete
+				if ( ! $_product->is_virtual() && !$product_autocomplete ) {						
+					//found a non-virtual, non-membership product in the cart
+					$autocomplete = false;
+					break;
+				} elseif($product_autocomplete) {
+					//found a membership product in the cart marked to autocomplete
+					$autocomplete = true;
+				}
+			}
+		}
+	}
+	
+	//change status if needed
+	if(!empty($autocomplete)) {
+		$order->update_status('completed', 'Autocomplete via PMPro WooCommerce.');
+	}
+}
+add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete' );
