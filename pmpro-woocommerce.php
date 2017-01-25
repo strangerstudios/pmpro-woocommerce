@@ -250,11 +250,18 @@ function pmprowoo_cancelled_subscription($user_id, $subscription_key)
         }
     }
 }
+//WooCommerce Subscriptions v1 hooks
 add_action("cancelled_subscription", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_trashed", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("subscription_put_on-hold", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10, 2);
+
+//WooCommerce Subscriptions v2 hooks
+add_action("woocommerce_subscription_status_cancelled", "pmprowoo_cancelled_subscription", 10, 2);
+add_action("woocommerce_subscription_status_expired", "pmprowoo_cancelled_subscription", 10, 2);
+add_action("woocommerce_subscription_status_on-hold", "pmprowoo_cancelled_subscription", 10, 2);
+add_action("woocommerce_scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10, 2);
 
 /*
  * Update Product Prices with Membership Price and/or Discount
