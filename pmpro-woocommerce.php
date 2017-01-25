@@ -169,6 +169,7 @@ function pmprowoo_cancel_membership_from_order($order_id)
 add_action("woocommerce_order_status_refunded", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order");
 add_action("woocommerce_order_status_on_hold", "pmprowoo_cancel_membership_from_order");
+add_action("woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_from_order");
 
 /*
 	Activate memberships when WooCommerce subscriptions change status.
@@ -293,10 +294,11 @@ function pmprowoo_get_membership_price($price, $product)
         return $price;
 
     // use this level to get the price
-    if (isset($level_price) ) {
-        if (get_post_meta($product->id, $level_price, true) !== false)
-            $discount_price =  get_post_meta($product->id, $level_price, true);
-
+    if (isset($level_price) && !empty($pmprowoo_member_discounts)) {
+        if (get_post_meta($product->id, $level_price, true) !== false) {
+			$discount_price =  get_post_meta($product->id, $level_price, true);
+		}
+			
         // apply discounts if there are any for this level
         if(isset($level_id)) {
             $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$level_id]);
