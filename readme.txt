@@ -34,6 +34,10 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
+= 1.2.12 =
+* BUG: Fixed bug when setting membership price to 0.
+* BUG: Fixed PHP notices on WooCommerce single product page when PMPro membership price discount was empty.
+
 = 1.2.11 =
 * BUG: Fixed bug where site would crash (PHP whitecreen) if Paid Memberships Pro was not active.
 
