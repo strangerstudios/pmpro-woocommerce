@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 4.7.2
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -34,6 +34,13 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
+= 1.3.2 =
+* BUG/FIX: Moved CSS load to proper WordPress action hook
+* BUG/FIX: Prevent fatal error by using WC_Subscriptions_Manager::get_users_subscriptions()
+* BUG/ENHANCEMENT: Configure proper text domain for translation
+* BUG/ENHANCEMENT: Updated action hook for deprecated WooCommerce hooks
+* ENHANCEMENT: Added translation for all text being displayed
+
 = 1.3.1 =
 * BUG: Fixed issue where products with blank membership pricing were being marked as free for members. Use "0", "0.00", or "0,00" to mark something as free. Use blank ("") to have a product use the main price or sale price.
 * ENHANCEMENT: Made the wording of the member discount a bit more clear on the edit level page.

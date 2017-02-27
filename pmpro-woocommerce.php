@@ -3,9 +3,11 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.3.1
+Version: 1.3.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
+Text Domain: pmpro-woocommerce
+
 
 General Idea:
 
@@ -19,8 +21,7 @@ General Idea:
 // quitely exit if PMPro isn't active
 if (! defined('PMPRO_DIR') && ! function_exists('pmpro_init'))
 	return;
- 	
-include_once(dirname(__FILE__)) . '/css/style.css';
+
 
 /*
  * Global Settings
@@ -185,7 +186,7 @@ function pmprowoo_activated_subscription($user_id, $subscription_key)
     /*
         does this order contain a membership product?
     */
-    $subscription = WC_Subscriptions_Manager::get_users_subscription( $user_id, $subscription_key );
+    $subscription = WC_Subscriptions_Manager::get_users_subscriptions( $user_id, $subscription_key );
     if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
     {
         $product_id = $subscription['product_id'];
@@ -226,7 +227,7 @@ function pmprowoo_cancelled_subscription($user_id, $subscription_key)
     /*
         does this order contain a membership product?
     */
-    $subscription = WC_Subscriptions_Manager::get_users_subscription( $user_id, $subscription_key );
+    $subscription = WC_Subscriptions_Manager::get_users_subscriptions( $user_id, $subscription_key );
     if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
     {
         $product_id = $subscription['product_id'];
@@ -263,11 +264,17 @@ add_action("woocommerce_subscription_status_expired", "pmprowoo_cancelled_subscr
 add_action("woocommerce_subscription_status_on-hold", "pmprowoo_cancelled_subscription", 10, 2);
 add_action("woocommerce_scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10, 2);
 
-/*
+/**
  * Update Product Prices with Membership Price and/or Discount
+ *
+ * @param float $price
+ * @param WC_Product $product
+ *
+ * @return string
  */
 function pmprowoo_get_membership_price($price, $product)
 {
+
     global $current_user, $pmprowoo_member_discounts, $pmprowoo_product_levels, $woocommerce, $pmprowoo_discounts_on_subscriptions;
 
     $discount_price = $price;
@@ -276,7 +283,7 @@ function pmprowoo_get_membership_price($price, $product)
     $items = $woocommerce->cart->cart_contents; // items in the cart
 
     //ignore membership products and subscriptions if we are set that way
-    if(!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription" || in_array($product->id, array_keys($pmprowoo_product_levels), false)))
+    if(!$pmprowoo_discounts_on_subscriptions && ($product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product->get_id(), array_keys($pmprowoo_product_levels), false)))
         return $price;
 
     // Search for any membership level products. IF found, use first one as the cart membership level.
@@ -301,7 +308,7 @@ function pmprowoo_get_membership_price($price, $product)
 		
     // use this level to get the price
     if (isset($level_price)) {
-		$level_price = get_post_meta($product->id, $level_price, true);		
+		$level_price = get_post_meta($product->get_id(), $level_price, true);
 		if(!empty($level_price) || $level_price === '0' || $level_price === '0.00' || $level_price === '0,00') {
 			$discount_price = $level_price;
 		} 
@@ -327,7 +334,7 @@ if (!is_admin() || defined('DOING_AJAX')) {
 
 function pmprowoo_tab_options_tab() {
     ?>
-    <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><?php _e('Membership', 'pmprowoo'); ?></a></li>
+    <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><?php esc_html_e('Membership', 'pmprowoo'); ?></a></li>
 <?php
 }
 add_action('woocommerce_product_write_panel_tabs', 'pmprowoo_tab_options_tab');
@@ -354,7 +361,7 @@ function pmprowoo_tab_options() {
                     woocommerce_wp_select(
                         array(
                         'id'      => '_membership_product_level',
-                        'label'   => __( 'Membership Product', 'pmprowoo' ),
+                        'label'   => __( 'Membership Product', 'pmpro-woocommerce' ),
                         'options' => $membership_level_options
                         )
                     );
@@ -363,8 +370,8 @@ function pmprowoo_tab_options() {
                     woocommerce_wp_checkbox(
                         array(
                         'id'      => '_membership_product_autocomplete',
-                        'label'   => __( 'Autocomplete Order Status', 'pmprowoo' ),                       
-						'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmprowoo' ),                        
+                        'label'   => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
+						'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
 						'cbvalue' => 1,
 						)
                     );
@@ -379,7 +386,7 @@ function pmprowoo_tab_options() {
                         woocommerce_wp_text_input(
                             array(
                                 'id'                 => '_level_' . $level->id . '_price',
-                                'label'              => __(  $level->name . " Price", 'pmprowoo' ),
+                                'label'              => __(  $level->name . " Price", 'pmpro-woocommerce' ),
                                 'placeholder'        => '',
                                 'type'               => 'text',
                                 'desc_tip'           => 'true',
@@ -393,7 +400,7 @@ function pmprowoo_tab_options() {
     </div>
 <?php
 }
-add_action('woocommerce_product_write_panels', 'pmprowoo_tab_options');
+add_action('woocommerce_product_data_panels', 'pmprowoo_tab_options');
 
 /*
  * Process PMPro Meta
@@ -449,12 +456,12 @@ function pmprowoo_add_membership_discount() {
     else
         $membership_discount = '';
     ?>
-    <h3 class="topborder">Set Membership Discount</h3>
-    <p>Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page.</p>
+    <h3 class="topborder"><?php _e("Set Membership Discount", "pmpro-woocommerce"); ?></h3>
+    <p><?php _e("Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page.", "pmpro-woocommerce"); ?></p>
     <table>
         <tbody class="form-table">
         <tr>
-            <th scope="row" valign="top"><label for="membership_discount">Membership Discount (%):</label></th>
+            <th scope="row" valign="top"><label for="membership_discount"><?php _e("Membership Discount (%):", "pmpro-woocommerce"); ?></label></th>
             <td>
                 <input type="number" min="0" max="100" name="membership_discount" value="<?php echo esc_attr($membership_discount);?>" />
             </td>
@@ -488,9 +495,9 @@ function pmprowoo_custom_settings() {
         'field1' => array(
             'field_name' => 'pmprowoo_discounts_on_subscriptions',
             'field_type' => 'select',
-            'label' => 'Apply Member Discounts to WC Subscription Products?',
-            'value' => 'No',
-            'options' => array('Yes','No')
+            'label' => __('Apply Member Discounts to WC Subscription Products?', 'pmpro-woocommerce'),
+            'value' => __('No', 'pmpro-woocommerce'),
+            'options' => array( __('Yes', 'pmpro-woocommerce'), __('No', 'pmpro-woocommerce'))
         )
     );
     return $fields;
@@ -633,6 +640,18 @@ function pmprowoo_checkout_level_extend_memberships($level_array)
 }
 add_filter('pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships');
 
+/**
+ * Enqueue CSS properly
+ */
+function pmprowoo_enqueue_css() {
+
+	wp_register_style( 'pmprowoo', plugins_url(__FILE__, '/css/style.css' ), null );
+
+	//wp_enqueue_style('pmprowoo');
+}
+
+add_action('wp_enqueue_scripts', 'pmprowoo_enqueue_css' );
+
 /*
 Function to add links to the plugin row meta
 */
@@ -665,7 +684,7 @@ function pmprowoo_order_autocomplete($order_id) {
 			if ( $item['type'] == 'line_item') {
 				//get product info and check if product is marked to autocomplete
 				$_product = $order->get_product_from_item( $item );
-				$product_autocomplete = get_post_meta($_product->id, '_membership_product_autocomplete', true);
+				$product_autocomplete = get_post_meta($_product->get_id(), '_membership_product_autocomplete', true);
 								
 				//if any product is not virtual and not marked for autocomplete, we won't autocomplete
 				if ( ! $_product->is_virtual() && !$product_autocomplete ) {						
@@ -682,7 +701,7 @@ function pmprowoo_order_autocomplete($order_id) {
 	
 	//change status if needed
 	if(!empty($autocomplete)) {
-		$order->update_status('completed', 'Autocomplete via PMPro WooCommerce.');
+		$order->update_status('completed', __('Autocomplete via PMPro WooCommerce.', 'pmpro-woocommerce'));
 	}
 }
 add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete' );
