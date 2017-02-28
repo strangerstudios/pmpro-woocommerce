@@ -192,7 +192,7 @@ add_action("woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_fro
 /*
 	Activate memberships when WooCommerce subscriptions change status.
 */
-function pmprowoo_activated_subscription($user_id, $subscription_key)
+function pmprowoo_activated_subscription($subscription)
 {
     global $pmprowoo_product_levels;
 
@@ -203,41 +203,37 @@ function pmprowoo_activated_subscription($user_id, $subscription_key)
 	//don't bother if array is empty
     if(empty($pmprowoo_product_levels))
         return;
-
+	
     /*
-        does this order contain a membership product?
+        Does this order contain a membership product?
+		Since v2 of WCSubs, we need to check all line items
     */
-    $subscription = WC_Subscriptions_Manager::get_subscription( $subscription_key );
-    if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
-    {
-        $product_id = $subscription['product_id'];
-        $order_id = $subscription['order_id'];
-
+	$items = $subscription->get_items();	
+    if ( !empty( $items ) && !empty( $subscription->order->customer_user ) ) {
         //membership product ids
-        $product_ids = array_keys($pmprowoo_product_levels);
-
-        //get order
-        $order = new WC_Order($order_id);
-
-        //does the order have a user id and some products?
-        if(!empty($order->customer_user) && !empty($product_id))
-        {
-            //is there a membership level for this product?
-            if(in_array($product_id, $product_ids))
-            {
-                //add the user to the level
-                pmpro_changeMembershipLevel($pmprowoo_product_levels[$product_id], $order->customer_user);
-            }
-        }
-    }
+		$product_ids = array_keys($pmprowoo_product_levels);
+		
+		foreach( $items as $product ) {					
+			//does the order have a user id and some products?
+			if(!empty($product['product_id']))
+			{
+				//is there a membership level for this product?
+				if(in_array($product['product_id'], $product_ids))
+				{
+					//add the user to the level
+					pmpro_changeMembershipLevel($pmprowoo_product_levels[$product['product_id']], $subscription->order->customer_user);
+				}
+			}
+		}
+    }	
 }
-add_action("activated_subscription", "pmprowoo_activated_subscription", 10, 2);
-add_action("reactivated_subscription", "pmprowoo_activated_subscription", 10, 2);
+add_action('woocommerce_subscription_status_active', 'pmprowoo_activated_subscription');
+add_action('woocommerce_subscription_status_on-hold_to_active', 'pmprowoo_activated_subscription');
 
 /*
 	Cancel memberships when WooCommerce subscriptions change status.
 */
-function pmprowoo_cancelled_subscription($user_id, $subscription_key)
+function pmprowoo_cancelled_subscription($subscription)
 {
     global $pmprowoo_product_levels;
 
@@ -248,46 +244,36 @@ function pmprowoo_cancelled_subscription($user_id, $subscription_key)
 	//don't bother if array is empty
     if(empty($pmprowoo_product_levels))
         return;
-
+	
     /*
-        does this order contain a membership product?
+        Does this order contain a membership product?
+		Since v2 of WCSubs, we need to check all line items
     */
-    $subscription = WC_Subscriptions_Manager::get_subscription( $subscription_key );
-    if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
-    {
-        $product_id = $subscription['product_id'];
-        $order_id = $subscription['order_id'];
-
+	$items = $subscription->get_items();
+    if ( !empty( $items ) && !empty( $subscription->order->customer_user ) ) {
         //membership product ids
-        $product_ids = array_keys($pmprowoo_product_levels);
-
-        //get order
-        $order = new WC_Order($order_id);
-
-        //does the order have a user id and some products?
-        if(!empty($order->customer_user) && !empty($product_id))
-        {
-            //is there a membership level for this product?
-            if(in_array($product_id, $product_ids))
-            {
-                //add the user to the level
-                pmpro_changeMembershipLevel(0, $order->customer_user);
-            }
-        }
+		$product_ids = array_keys($pmprowoo_product_levels);
+		
+		foreach( $items as $product ) {					
+			//does the order have a user id and some products?
+			if(!empty($product['product_id']))
+			{
+				//is there a membership level for this product?
+				if(in_array($product['product_id'], $product_ids))
+				{
+					//add the user to the level
+					pmpro_changeMembershipLevel(0, $subscription->order->customer_user);
+				}
+			}
+		}
     }
 }
-//WooCommerce Subscriptions v1 hooks
-add_action("cancelled_subscription", "pmprowoo_cancelled_subscription", 10, 2);
-add_action("subscription_trashed", "pmprowoo_cancelled_subscription", 10, 2);
-add_action("subscription_expired", "pmprowoo_cancelled_subscription", 10, 2);
-add_action("subscription_put_on-hold", "pmprowoo_cancelled_subscription", 10, 2);
-add_action("scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10, 2);
-
 //WooCommerce Subscriptions v2 hooks
-add_action("woocommerce_subscription_status_cancelled", "pmprowoo_cancelled_subscription", 10, 2);
-add_action("woocommerce_subscription_status_expired", "pmprowoo_cancelled_subscription", 10, 2);
-add_action("woocommerce_subscription_status_on-hold", "pmprowoo_cancelled_subscription", 10, 2);
-add_action("woocommerce_scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10, 2);
+add_action("woocommerce_subscription_status_cancelled", "pmprowoo_cancelled_subscription", 10);
+add_action("woocommerce_subscription_status_trash", "pmprowoo_cancelled_subscription", 10);
+add_action("woocommerce_subscription_status_expired", "pmprowoo_cancelled_subscription", 10);
+add_action("woocommerce_subscription_status_on-hold", "pmprowoo_cancelled_subscription", 10);
+add_action("woocommerce_scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10);
 
 /**
  * Update Product Prices with Membership Price and/or Discount

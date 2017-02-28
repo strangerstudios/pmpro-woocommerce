@@ -36,11 +36,11 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Changelog ==
 = 1.4 =
 * FEATURE: If the PMPro Gift Levels Addon is also active, adds settings to set a product to generate and email a gift certificate after purchase. (Thanks, Ted Barnett)
+* BUG/FIX: Updated to fully support the new WooCommerce v2+ Subscriptions hooks for activation and cancelling. No longer supporting older versions of WC Subscriptions.
 * BUG/FIX: Moved CSS load to proper WordPress action hook
-* BUG/FIX: Prevent fatal error by using WC_Subscriptions_Manager::get_users_subscriptions()
 * BUG/ENHANCEMENT: Configure proper text domain for translation
 * BUG/ENHANCEMENT: Updated action hook for deprecated WooCommerce hooks
-* ENHANCEMENT: Added translation for all text being displayed
+* ENHANCEMENT: Wrapping all strings for translation and using the proper text domain (pmpro-woocommerce) to support GlotPress translations.
 
 = 1.3.1 =
 * BUG: Fixed issue where products with blank membership pricing were being marked as free for members. Use "0", "0.00", or "0,00" to mark something as free. Use blank ("") to have a product use the main price or sale price.
@@ -127,3 +127,8 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 
 = .1 =
 * This is the initial version of the plugin.
+
+== Upgrade Notice ==
+
+= 1.4 =
+Fixes bugs related to the WooCommerce Subscriptions v2 update. Added support for translations. PLEASE NOTE that PMPro WooCommerce will no longer support older versions of WooCommerce Subscriptions. Make sure all plugins are up to date.
