@@ -207,7 +207,7 @@ function pmprowoo_activated_subscription($user_id, $subscription_key)
     /*
         does this order contain a membership product?
     */
-    $subscription = WC_Subscriptions_Manager::get_users_subscriptions( $user_id, $subscription_key );
+    $subscription = WC_Subscriptions_Manager::get_subscription( $subscription_key );
     if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
     {
         $product_id = $subscription['product_id'];
@@ -252,7 +252,7 @@ function pmprowoo_cancelled_subscription($user_id, $subscription_key)
     /*
         does this order contain a membership product?
     */
-    $subscription = WC_Subscriptions_Manager::get_users_subscriptions( $user_id, $subscription_key );
+    $subscription = WC_Subscriptions_Manager::get_subscription( $subscription_key );
     if ( isset( $subscription['product_id'] ) && isset( $subscription['order_id'] ) )
     {
         $product_id = $subscription['product_id'];
