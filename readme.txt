@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 4.7.2
-Stable tag: 1.3.2
+Stable tag: 1.4
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -34,7 +34,8 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
-= 1.3.2 =
+= 1.4 =
+* FEATURE: If the PMPro Gift Levels Addon is also active, adds settings to set a product to generate and email a gift certificate after purchase. (Thanks, Ted Barnett)
 * BUG/FIX: Moved CSS load to proper WordPress action hook
 * BUG/FIX: Prevent fatal error by using WC_Subscriptions_Manager::get_users_subscriptions()
 * BUG/ENHANCEMENT: Configure proper text domain for translation
