@@ -34,6 +34,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
+= 1.4.1 =
+* BUG: Fixed typo in our add_action call so PMPro memberships are cancelled when the WooCommerce Subscriptions woocommerce_scheduled_subscription_end_of_prepaid_term hook fires.
+
 = 1.4 =
 * FEATURE: If the PMPro Gift Levels Addon is also active, adds settings to set a product to generate and email a gift certificate after purchase. (Thanks, Ted Barnett)
 * BUG/FIX: Updated to fully support the new WooCommerce v2+ Subscriptions hooks for activation and cancelling. No longer supporting older versions of WC Subscriptions.
