@@ -273,7 +273,7 @@ add_action("woocommerce_subscription_status_cancelled", "pmprowoo_cancelled_subs
 add_action("woocommerce_subscription_status_trash", "pmprowoo_cancelled_subscription", 10);
 add_action("woocommerce_subscription_status_expired", "pmprowoo_cancelled_subscription", 10);
 add_action("woocommerce_subscription_status_on-hold", "pmprowoo_cancelled_subscription", 10);
-add_action("woocommerce_scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscriptions", 10);
+add_action("woocommerce_scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscription", 10);
 
 /**
  * Update Product Prices with Membership Price and/or Discount
