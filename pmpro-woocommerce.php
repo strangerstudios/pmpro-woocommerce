@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.4.1
+Version: 1.4.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 Text Domain: pmpro-woocommerce
@@ -662,7 +662,7 @@ add_filter('pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_membership
  */
 function pmprowoo_enqueue_css() {
 
-	wp_register_style( 'pmprowoo', plugins_url(__FILE__, '/css/style.css' ), null );
+	wp_register_style( 'pmprowoo', plugins_url('/css/style.css', __FILE__ ), null );
 	wp_enqueue_style('pmprowoo');
 }
 

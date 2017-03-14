@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 4.7.3
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -34,6 +34,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
+= 1.4.2 =
+* BUG: Fixed bug with loading our CSS. (Thanks, Hogash and VR51 on GitHub)
+
 = 1.4.1 =
 * BUG: Fixed typo in our add_action call so PMPro memberships are cancelled when the WooCommerce Subscriptions woocommerce_scheduled_subscription_end_of_prepaid_term hook fires.
 
