@@ -339,7 +339,7 @@ function pmprowoo_get_membership_price($price, $product)
 
 // only change price if this is on the front end
 if (!is_admin() || defined('DOING_AJAX')) {    
-	add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
+	add_filter("woocommerce_product_get_price", "pmprowoo_get_membership_price", 10, 2);
 }
 
 /*
