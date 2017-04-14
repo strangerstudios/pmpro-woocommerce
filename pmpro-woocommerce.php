@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.4.3
+Version: 1.4.4
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 Text Domain: pmpro-woocommerce
@@ -507,16 +507,18 @@ add_action("pmpro_save_membership_level", "pmprowoo_save_membership_level");
 /*
  *  Add Discounts on Subscriptions to PMPro Advanced Settings - will uncomment when filter is added to core
  */
-function pmprowoo_custom_settings() {
-    $fields = array(
-        'field1' => array(
+function pmprowoo_custom_settings($fields) {
+    if(!is_array($fields))
+    	$fields = array();
+
+    $fields[] = array(
             'field_name' => 'pmprowoo_discounts_on_subscriptions',
             'field_type' => 'select',
             'label' => __('Apply Member Discounts to WC Subscription Products?', 'pmpro-woocommerce'),
             'value' => __('No', 'pmpro-woocommerce'),
             'options' => array( __('Yes', 'pmpro-woocommerce'), __('No', 'pmpro-woocommerce'))
-        )
-    );
+        );
+
     return $fields;
 }
 add_filter('pmpro_custom_advanced_settings', 'pmprowoo_custom_settings');
