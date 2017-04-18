@@ -340,12 +340,33 @@ function pmprowoo_get_membership_price($price, $product)
 // only change price if this is on the front end
 if (!is_admin() || defined('DOING_AJAX')) {    
 	add_filter("woocommerce_product_get_price", "pmprowoo_get_membership_price", 10, 2);
+	add_filter("woocommerce_product_variation_get_price", "pmprowoo_get_membership_price", 10, 5 );
+	add_filter("woocommerce_variable_price_html", "pmprowoo_woocommerce_variable_price_html", 10, 2);
+}
+
+/**
+ * Update Variable Product Price Range
+ *
+ * @param string $variation_range_html
+ * @param WC_Product $product
+ *
+ * @return string
+ */
+function pmprowoo_woocommerce_variable_price_html($variation_range_html, $product) {
+	$prices = $product->get_variation_prices( true );
+
+	$min_price     = current($prices['price']);
+	$max_price     = end($prices['price']);
+	
+	$member_min_price = pmprowoo_get_membership_price($min_price, $product);
+	$member_max_price = pmprowoo_get_membership_price($max_price, $product);	   
+	
+	return wc_format_price_range($member_min_price, $member_max_price);
 }
 
 /*
  * Add PMPro Tab to Edit Products page
  */
-
 function pmprowoo_tab_options_tab() {
     ?>
     <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><?php esc_html_e('Membership', 'pmprowoo'); ?></a></li>
