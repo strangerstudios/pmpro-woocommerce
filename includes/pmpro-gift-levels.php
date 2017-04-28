@@ -24,9 +24,9 @@ add_filter('pmpro_email_data', 'pmprowoo_gift_levels_pmpro_email_data');
  * Add front-end product fields for Gift Membership.
  */
 function pmprowoo_gift_levels_add_recipient_fields() {
-    global $product;
-    $gift_membership_code = get_post_meta($product->id, '_gift_membership_code', true);
-    $gift_membership_email_option = get_post_meta($product->id, '_gift_membership_email_option', true);
+    global $product;	
+    $gift_membership_code = get_post_meta( $product->get_id(), '_gift_membership_code', true);
+    $gift_membership_email_option = get_post_meta($product->get_id(), '_gift_membership_email_option', true);
     if(!empty($gift_membership_code) && !empty($gift_membership_email_option)){
       if($gift_membership_email_option == '1'){
           echo '<table class="variations gift-membership-fields" cellspacing="0">
