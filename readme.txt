@@ -2,8 +2,8 @@
 Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 4.7.3
-Stable tag: 1.4.5
+Tested up to: 4.7.5
+Stable tag: 1.4.6
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -34,6 +34,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
+= 1.4.6 =
+* FEATURE: Added support for PMPro Multiple Memberships Per User addon. Use the pmprowoo_mmpu_force_add_level filter to override MMPU Level Group restrictions.
+
 = 1.4.5 =
 * BUG: Fixed issue where since WC v3.0 variable products were not having their prices adjusted properly based on the membership pricing settings.
 
