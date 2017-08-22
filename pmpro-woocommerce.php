@@ -407,9 +407,8 @@ function pmprowoo_tab_options() {
                         array(
                         'id'      => '_membership_product_autocomplete',
                         'label'   => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
-						'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
-						'cbvalue' => 1,
-						)
+			'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
+			)
                     );
                 ?>
             </p>
