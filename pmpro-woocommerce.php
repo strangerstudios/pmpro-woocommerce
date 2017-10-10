@@ -247,7 +247,10 @@ function pmprowoo_cancelled_subscription($subscription)
 	//don't bother if array is empty
     if(empty($pmprowoo_product_levels))
         return;
-	
+
+    if ( is_numeric( $subscription ) ) {
+        $subscription = wcs_get_subscription( $subscription );
+    }
     /*
         Does this order contain a membership product?
 		Since v2 of WCSubs, we need to check all line items
