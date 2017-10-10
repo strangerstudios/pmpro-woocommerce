@@ -204,7 +204,7 @@ function pmprowoo_activated_subscription($subscription)
     if(empty($pmprowoo_product_levels))
         return;
 	
-    if ( is_numeric( $subscription ) {
+    if ( is_numeric( $subscription ) ) {
 	    $subscription = wcs_get_subscription( $subscription );
     }
     /*
