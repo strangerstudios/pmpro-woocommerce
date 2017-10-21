@@ -209,7 +209,8 @@ function pmprowoo_activated_subscription($subscription)
 		Since v2 of WCSubs, we need to check all line items
     */
 	$items = $subscription->get_items();	
-    if ( !empty( $items ) && !empty( $subscription->order->customer_user ) ) {
+	$customer_id = !empty( $subscription->order->customer_user ) ? $subscription->order->customer_user : $subscription->customer_id; 
+    if ( !empty( $items ) && !empty( $customer_id ) ) {
         //membership product ids
 		$product_ids = array_keys($pmprowoo_product_levels);
 		
@@ -221,7 +222,7 @@ function pmprowoo_activated_subscription($subscription)
 				if(in_array($product['product_id'], $product_ids))
 				{
 					//add the user to the level
-					pmpro_changeMembershipLevel($pmprowoo_product_levels[$product['product_id']], $subscription->order->customer_user);
+					pmpro_changeMembershipLevel($pmprowoo_product_levels[$product['product_id']], $customer_id );
 				}
 			}
 		}
@@ -250,7 +251,8 @@ function pmprowoo_cancelled_subscription($subscription)
 		Since v2 of WCSubs, we need to check all line items
     */
 	$items = $subscription->get_items();
-    if ( !empty( $items ) && !empty( $subscription->order->customer_user ) ) {
+	$customer_id = !empty( $subscription->order->customer_user ) ? $subscription->order->customer_user : $subscription->customer_id; 
+    if ( !empty( $items ) && !empty( $customer_id ) ) {
         //membership product ids
 		$product_ids = array_keys($pmprowoo_product_levels);
 		
@@ -262,7 +264,7 @@ function pmprowoo_cancelled_subscription($subscription)
 				if(in_array($product['product_id'], $product_ids))
 				{
 					//add the user to the level
-					pmpro_changeMembershipLevel(0, $subscription->order->customer_user);
+					pmpro_changeMembershipLevel(0, $customer_id);
 				}
 			}
 		}
