@@ -744,3 +744,62 @@ function pmprowoo_order_autocomplete($order_id) {
 	}
 }
 add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete' );
+
+/**
+ * Show a strike out price for member pricing for both single and variation pricing.
+ * @since x.x >>CHANGE THIS
+ * @return string
+ * @uses woocommerce_get_price_html
+ */
+function pmprowoo_strike_prices( $price, $product ) {
+
+    global $pmprowoo_member_discounts, $current_user;
+
+    $level_id = $current_user->membership_level->id;
+
+    // get pricing for simple product
+    if( 'simple' == $product->product_type ) {
+        // get normal non-member price.
+        $regular_price = get_post_meta( $product->get_id(), '_regular_price', true );
+        $sale_price = get_post_meta( $product->get_id(), '_sale_price', true );
+
+        // set price variable to sale price if available.
+        if( !empty( $sale_price ) ) {
+
+            $regular_price = $sale_price;
+            $price = wc_price( pmprowoo_get_membership_price( $regular_price, $product ) );
+
+        }
+
+        // only show this to members.
+        if( isset($level_id) && !empty( $pmprowoo_member_discounts ) && !empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
+           $formatted_price = '<del>' . wc_price( $regular_price ) . '</del> ';
+        }
+      
+        $formatted_price .= $price;
+
+        // update price variable so we can return it later.
+        $price = $formatted_price;
+    }
+
+    // get pricing for variable products.
+    if( 'variable' == $product->product_type ) {
+        $prices = $product->get_variation_prices( true );
+
+        $min_price = current( $prices['price'] );
+        $max_price  = end( $prices['price'] );
+
+        $regular_range =  wc_format_price_range( $min_price, $max_price );
+
+       if( isset($level_id) && !empty( $pmprowoo_member_discounts ) && !empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
+            $formatted_price = '<del>' . $regular_range . '</del> ';
+        }
+        $formatted_price .= $price;
+
+        $price = $formatted_price;
+    }
+    
+    return $price;
+
+}
+add_filter( 'woocommerce_get_price_html', 'pmprowoo_strike_prices', 10, 2 );
