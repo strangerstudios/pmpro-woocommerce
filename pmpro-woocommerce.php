@@ -75,8 +75,6 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 	
 	$has_membership = pmprowoo_cart_has_membership();
 	$product_id     = $product->get_id();
-	
-	error_log( "For product ({$product_id}) -> Cart contains membership product? " . ( $has_membership ? 'yes' : 'no' ) );
 	$is_purchasable = ( in_array( $product_id, array_keys( $pmprowoo_product_levels ) ) && true === $has_membership ? false : $is_purchasable );
 	
 	if ( false === $is_purchasable ) {
