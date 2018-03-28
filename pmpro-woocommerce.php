@@ -161,19 +161,21 @@ function pmprowoo_cancel_membership_from_order($order_id)
 
     //get order
     $order = new WC_Order($order_id);
+    $user_id = !empty( $order) ? $order->get_user_id() : null;
 
     //does the order have a user id and some products?
-    if(!empty($order->customer_user) && sizeof($order->get_items()) > 0)
+    if(!empty($user_id) && sizeof($order->get_items()) > 0)
     {
         foreach($order->get_items() as $item)
         {
             if($item['product_id'] > 0) 	//not sure when a product has id 0, but the Woo code checks this
             {
+            	//check if another active subscription exists
+			    $has_sub = wcs_user_has_subscription( $user_id, $item['product_id'], 'active' );
                 //is there a membership level for this product?
-                if(in_array($item['product_id'], $product_ids))
-                {
+                if( !has_sub && in_array($item['product_id'], $product_ids) ) {
                     //add the user to the level
-                    pmpro_changeMembershipLevel(0, $order->customer_user);
+                    pmpro_changeMembershipLevel(0, $user_id);
 
                     //only going to process the first membership product, so break the loop
                     break;
@@ -245,24 +247,29 @@ function pmprowoo_cancelled_subscription($subscription)
     if(empty($pmprowoo_product_levels))
         return;
 	
+	if ( is_numeric( $subscription ) ) {
+        $subscription = wcs_get_subscription( $subscription );
+    }
     /*
         Does this order contain a membership product?
 		Since v2 of WCSubs, we need to check all line items
     */
-	$items = $subscription->get_items();
-    if ( !empty( $items ) && !empty( $subscription->order->customer_user ) ) {
+	$items   = $subscription->get_items();
+	$user_id = !empty( $subscription->order) ? $subscription->order->get_user_id() : null;
+	
+    if ( !empty( $items ) && !empty( $user_id ) ) {
         //membership product ids
 		$product_ids = array_keys($pmprowoo_product_levels);
 		
 		foreach( $items as $product ) {					
 			//does the order have a user id and some products?
-			if(!empty($product['product_id']))
-			{
+			if(!empty($product['product_id'])) {
+			    //check if another active subscription exists
+			    $has_sub = wcs_user_has_subscription( $user_id, $product['product_id'], 'active' );
 				//is there a membership level for this product?
-				if(in_array($product['product_id'], $product_ids))
-				{
+				if( !$has_sub && in_array($product['product_id'], $product_ids) ){
 					//add the user to the level
-					pmpro_changeMembershipLevel(0, $subscription->order->customer_user);
+					pmpro_changeMembershipLevel(0, $user_id);
 				}
 			}
 		}
