@@ -519,7 +519,7 @@ function pmprowoo_save_membership_level($level_id) {
     global $pmprowoo_member_discounts;
 
     //convert % to decimal
-    $member_discount = $_POST['membership_discount']/100;
+    $member_discount = (isset($_POST['membership_discount']) ? sanitize_text_field( $_POST['membership_discount'] ) ? 0 )/100;
     $pmprowoo_member_discounts[$level_id] = $member_discount;
     update_option('_pmprowoo_member_discounts', $pmprowoo_member_discounts);
 }
