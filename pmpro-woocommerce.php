@@ -286,9 +286,10 @@ function pmprowoo_activated_subscription( $subscription ) {
 		Does this order contain a membership product?
 		Since v2 of WCSubs, we need to check all line items
 	*/
-	$items   = $subscription->get_items();
-	$order   = $subscription->get_last_order();
-	$user_id = $order->get_user_id();
+	$items    = $subscription->get_items();
+	$order_id = $subscription->get_last_order();
+	$order    = wc_get_order( $order_id );
+	$user_id  = $order->get_user_id();
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
@@ -330,9 +331,10 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		Does this order contain a membership product?
 		Since v2 of WCSubs, we need to check all line items
 	*/
-	$items   = $subscription->get_items();
-	$order   = $subscription->get_last_order();
-	$user_id = $order->get_user_id();
+	$items    = $subscription->get_items();
+	$order_id = $subscription->get_last_order();
+	$order    = wc_get_order( $order_id );
+	$user_id  = $order->get_user_id();
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
