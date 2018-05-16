@@ -2,7 +2,7 @@
 Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 4.7.3
+Tested up to: 4.9.6
 Stable tag: 1.5
 
 Integrates Paid Memberships Pro with WooCommerce.
@@ -37,7 +37,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 = 1.5 =
 * BUG/FIX: Various PHP Warning messages (Deprecated functionality)
 * ENHANCEMENT: Prevents a user from adding more than a single membership product to the shopping cart
-* ENHANCEMENT: Improved function documentation
+* ENHANCEMENT: Improved function documentation by adding the "WC requires at least" and "WC tested up to" fields to the plugin header.
 
 = 1.4.5 =
 * BUG: Fixed issue where since WC v3.0 variable products were not having their prices adjusted properly based on the membership pricing settings.

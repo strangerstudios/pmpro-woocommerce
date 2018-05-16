@@ -5,7 +5,7 @@ Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
 Version: 1.5
 WC requires at least: 3.3
-WC tested up to: 3.3.3
+WC tested up to: 3.3.5
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 Text Domain: pmpro-woocommerce
@@ -75,6 +75,11 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 	
 	global $pmprowoo_product_levels;
 	
+	// Not purchasable for some other reason.
+	if( ! $is_purchasable ) {
+		return $is_purchasable;
+	}
+
 	$has_membership = pmprowoo_cart_has_membership();
 	$product_id     = $product->get_id();
 	$is_purchasable = ( in_array( $product_id, array_keys( $pmprowoo_product_levels ) ) && true === $has_membership ? false : $is_purchasable );
