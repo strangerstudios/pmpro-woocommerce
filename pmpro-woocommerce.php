@@ -118,7 +118,9 @@ function pmprowoo_cart_has_membership() {
 	global $pmprowoo_product_levels;
 	$has_membership = false;
 	
-	foreach ( WC()->cart->get_cart_contents() as $cart_item ) {
+	$cart_items = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array();
+	
+	foreach ( $cart_items as $cart_item ) {
 		$has_membership = $has_membership || in_array( $cart_item['product_id'], array_keys( $pmprowoo_product_levels ) );
 	}
 	
@@ -379,7 +381,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	$discount_price = $price;
 	
 	$product_ids = array_keys( $pmprowoo_product_levels ); // membership product levels
-	$items       = WC()->cart->get_cart_contents(); // items in the cart
+	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 	
 	//ignore membership products and subscriptions if we are set that way
 	if ( ! $pmprowoo_discounts_on_subscriptions && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product->get_id(), array_keys( $pmprowoo_product_levels ), false ) ) ) {
