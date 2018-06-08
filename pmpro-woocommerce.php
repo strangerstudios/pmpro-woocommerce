@@ -289,6 +289,7 @@ function pmprowoo_activated_subscription( $subscription ) {
 	$order_id = $subscription->get_last_order();
 	if( version_compare( get_option( 'woocommerce_subscriptions_active_version' ), '2.0', '>' ) ) {
 		$user_id = $subscription->get_user_id();
+		$items = $subscription->get_items();
 	} else {
 		$order    = wc_get_order( $order_id );
 		$items    = $order->get_items();
@@ -338,6 +339,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 	$order_id = $subscription->get_last_order();
 	if( version_compare( get_option( 'woocommerce_subscriptions_active_version' ), '2.0', '>' ) ) {
 		$user_id = $subscription->get_user_id();
+		$items = $subscription->get_items();
 	} else {
 		$order    = wc_get_order( $order_id );
 		$items    = $order->get_items();
