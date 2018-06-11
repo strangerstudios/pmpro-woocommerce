@@ -485,7 +485,7 @@ add_action( 'woocommerce_product_write_panel_tabs', 'pmprowoo_tab_options_tab' )
  */
 function pmprowoo_tab_options() {
 	
-	global $membership_levels, $pmprowoo_product_levels;
+	global $membership_levels, $pmprowoo_product_levels, $post;
 	
 	$membership_level_options = array( 'None' );
 	
@@ -510,11 +510,19 @@ function pmprowoo_tab_options() {
 				);
 				
 				// Membership Product
+				if( !empty( $post->ID ) ) {
+					$cbvalue = get_post_meta( $post->ID, '_membership_product_autocomplete', true );
+				}
+				if( empty( $cbvalue ) ) {
+					$cbvalue = NULL;
+				}
+
 				woocommerce_wp_checkbox(
 					array(
 						'id'          => '_membership_product_autocomplete',
 						'label'       => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
 						'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
+						'cbvalue'	  => $cbvalue,
 					)
 				);
 				?>
@@ -558,12 +566,13 @@ function pmprowoo_process_product_meta() {
 	if ( isset( $_POST['_membership_product_level'] ) ) {
 		$level = intval( $_POST['_membership_product_level'] );
 	}
-	if ( isset( $_POST['_membership_product_autocomplete'] ) ) {
-		if ( $_POST['_membership_product_autocomplete'] == 'yes' || $_POST['_membership_product_autocomplete'] == 1 ) {
-			$autocomplete = 1;
-		} else {
-			$autocomplete = 0;
-		}
+
+	if ( isset( $_POST['_membership_product_autocomplete'] ) 
+		&& !empty($_POST['_membership_product_autocomplete'] )
+		&& $_POST['_membership_product_autocomplete'] !== 'no' ) {
+		$autocomplete = 1;
+	} else {
+		$autocomplete = 0;
 	}
 	
 	// update array of product levels
