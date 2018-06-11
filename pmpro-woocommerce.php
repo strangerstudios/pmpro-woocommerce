@@ -49,10 +49,10 @@ function pmprowoo_init() {
 	}
 	
 	// Apply Discounts to Subscriptions
-	global $pmprowoo_discounts_on_memberships;
-	$pmprowoo_discounts_on_memberships = get_option( 'pmpro_custom_pmprowoo_discounts_on_memberships' );
-	if ( empty( $pmprowoo_discounts_on_memberships ) ) {
-		$pmprowoo_discounts_on_memberships = false;
+	global $pmprowoo_discounts_on_subscriptions;
+	$pmprowoo_discounts_on_subscriptions = get_option( 'pmprowoo_discounts_on_subscriptions' );
+	if ( empty( $pmprowoo_discounts_on_subscriptions ) ) {
+		$pmprowoo_discounts_on_subscriptions = false;
 	}
 	
 	//load gift levels module if that addon is active
