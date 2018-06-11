@@ -123,7 +123,9 @@ function pmprowoo_cart_has_membership() {
 	global $pmprowoo_product_levels;
 	$has_membership = false;
 	
-	foreach ( WC()->cart->get_cart_contents() as $cart_item ) {
+	$cart_items = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array();
+	
+	foreach ( $cart_items as $cart_item ) {
 		$has_membership = $has_membership || in_array( $cart_item['product_id'], array_keys( $pmprowoo_product_levels ) );
 	}
 	
@@ -291,10 +293,15 @@ function pmprowoo_activated_subscription( $subscription ) {
 		Does this order contain a membership product?
 		Since v2 of WCSubs, we need to check all line items
 	*/
-	$items    = $subscription->get_items();
 	$order_id = $subscription->get_last_order();
-	$order    = wc_get_order( $order_id );
-	$user_id  = $order->get_user_id();
+	if( version_compare( get_option( 'woocommerce_subscriptions_active_version' ), '2.0', '>' ) ) {
+		$user_id = $subscription->get_user_id();
+		$items = $subscription->get_items();
+	} else {
+		$order    = wc_get_order( $order_id );
+		$items    = $order->get_items();
+		$user_id  = $order->get_user_id();
+	}
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
@@ -336,10 +343,15 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		Does this order contain a membership product?
 		Since v2 of WCSubs, we need to check all line items
 	*/
-	$items    = $subscription->get_items();
 	$order_id = $subscription->get_last_order();
-	$order    = wc_get_order( $order_id );
-	$user_id  = $order->get_user_id();
+	if( version_compare( get_option( 'woocommerce_subscriptions_active_version' ), '2.0', '>' ) ) {
+		$user_id = $subscription->get_user_id();
+		$items = $subscription->get_items();
+	} else {
+		$order    = wc_get_order( $order_id );
+		$items    = $order->get_items();
+		$user_id  = $order->get_user_id();
+	}
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
@@ -384,7 +396,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	$discount_price = $price;
 	
 	$product_ids = array_keys( $pmprowoo_product_levels ); // membership product levels
-	$items       = WC()->cart->get_cart_contents(); // items in the cart
+	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 	
 	//ignore membership products and subscriptions if we are set that way
 	if ( ! $pmprowoo_discounts_on_subscriptions && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product->get_id(), array_keys( $pmprowoo_product_levels ), false ) ) ) {
@@ -422,6 +434,8 @@ function pmprowoo_get_membership_price( $price, $product ) {
 			$discount_price = $discount_price - ( $discount_price * $pmprowoo_member_discounts[ $level_id ] );
 		}
 	}
+
+	$discount_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $level_id, $price, $product );
 	
 	return $discount_price;
 }
@@ -501,7 +515,6 @@ function pmprowoo_tab_options() {
 						'id'          => '_membership_product_autocomplete',
 						'label'       => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
 						'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
-						'cbvalue'     => 1,
 					)
 				);
 				?>
