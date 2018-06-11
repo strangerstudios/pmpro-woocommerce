@@ -248,7 +248,7 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $product_ids ) ) {
         //check if another active subscription exists
 			   $has_sub = wcs_user_has_subscription( $user_id, $item['product_id'], 'active' );
-        if( !has_sub ) {
+        if( !$has_sub ) {
 				    //is there a membership level for this product?
 				    //add the user to the level
 				    pmpro_changeMembershipLevel( 0, $user_id );
