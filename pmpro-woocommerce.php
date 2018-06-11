@@ -289,9 +289,14 @@ function pmprowoo_activated_subscription( $subscription ) {
 		Since v2 of WCSubs, we need to check all line items
 	*/
 	$order_id = $subscription->get_last_order();
-	$order    = wc_get_order( $order_id );
-	$items    = $order->get_items();
-	$user_id  = $order->get_user_id();
+	if( version_compare( get_option( 'woocommerce_subscriptions_active_version' ), '2.0', '>' ) ) {
+		$user_id = $subscription->get_user_id();
+		$items = $subscription->get_items();
+	} else {
+		$order    = wc_get_order( $order_id );
+		$items    = $order->get_items();
+		$user_id  = $order->get_user_id();
+	}
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
@@ -334,9 +339,14 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		Since v2 of WCSubs, we need to check all line items
 	*/
 	$order_id = $subscription->get_last_order();
-	$order    = wc_get_order( $order_id );
-	$items    = $order->get_items();
-	$user_id  = $order->get_user_id();
+	if( version_compare( get_option( 'woocommerce_subscriptions_active_version' ), '2.0', '>' ) ) {
+		$user_id = $subscription->get_user_id();
+		$items = $subscription->get_items();
+	} else {
+		$order    = wc_get_order( $order_id );
+		$items    = $order->get_items();
+		$user_id  = $order->get_user_id();
+	}
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
