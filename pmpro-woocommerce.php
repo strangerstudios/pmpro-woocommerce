@@ -418,7 +418,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 		}
 	}
 
-	$discount_price = apply_filters( 'pmprowoo_discount_price', $discount_price, $price, $product );
+	$discount_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $level_id, $price, $product );
 	
 	return $discount_price;
 }
