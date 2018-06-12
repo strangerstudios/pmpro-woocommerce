@@ -927,12 +927,13 @@ function pmprowoo_strike_prices( $price, $product ) {
     global $pmprowoo_member_discounts, $current_user;
 
     $level_id = $current_user->membership_level->id;
+    $product_id = $product->get_id();
 
     // get pricing for simple product
-    if( 'simple' == $product->product_type ) {
+    if( $product->is_type( 'simple' ) ){
 
-        $regular_price = get_post_meta( $product->get_id(), '_regular_price', true );
-        $sale_price = get_post_meta( $product->get_id(), '_sale_price', true );
+        $regular_price = get_post_meta( $product_id, '_regular_price', true );
+        $sale_price = get_post_meta( $product_id, '_sale_price', true );
         $member_price = pmprowoo_get_membership_price( $regular_price, $product );
 
         // If the member price is same as the regular price, just return the default price.
@@ -947,7 +948,6 @@ function pmprowoo_strike_prices( $price, $product ) {
             $price = wc_price( pmprowoo_get_membership_price( $regular_price, $product ) );
 
         }
-
 
         // only show this to members.
         if( isset($level_id) && !empty( $pmprowoo_member_discounts ) && !empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
@@ -964,7 +964,7 @@ function pmprowoo_strike_prices( $price, $product ) {
     }
 
     // get pricing for variable products.
-    if( 'variable' == $product->product_type ) {
+    if( $product->is_type( 'variable' ) ) {
         $prices = $product->get_variation_prices( true );
 
         $min_price = current( $prices['price'] );
