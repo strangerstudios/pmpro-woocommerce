@@ -955,7 +955,7 @@ function pmprowoo_strike_prices( $price, $product ) {
            $formatted_price = '<del>' . wc_price( $regular_price ) . '</del> ';
         }
       
-      	$formatted_price = apply_filters( 'pmprowoo_formatted_simple_pricing', $formatted_price, $regular_price );
+      	$formatted_price = apply_filters( 'pmprowoo_formatted_simple_pricing', $formatted_price, $regular_price, $product );
       	
         $formatted_price .= $price;
 
@@ -976,7 +976,7 @@ function pmprowoo_strike_prices( $price, $product ) {
             $formatted_price = '<del>' . $regular_range . '</del> ';
         }
 
-        $formatted_price = apply_filters( 'pmprowoo_formatted_variation_pricing', $formatted_price, $min_price, $max_price );
+        $formatted_price = apply_filters( 'pmprowoo_formatted_variation_pricing', $formatted_price, $min_price, $max_price, $product );
 
         $formatted_price .= $price;
 
