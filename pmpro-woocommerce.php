@@ -253,12 +253,16 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			//not sure when a product has id 0, but the Woo code checks this
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $product_ids ) ) {
-				//is there a membership level for this product?
-				//add the user to the level
-				pmpro_changeMembershipLevel( 0, $user_id );
+        //check if another active subscription exists
+			   $has_sub = wcs_user_has_subscription( $user_id, $item['product_id'], 'active' );
+        if( !$has_sub ) {
+				    //is there a membership level for this product?
+				    //add the user to the level
+				    pmpro_changeMembershipLevel( 0, $user_id );
 				
-				//only going to process the first membership product, so break the loop
-				break;
+				    //only going to process the first membership product, so break the loop
+				    break;
+        }
 			}
 		}
 	}
@@ -288,6 +292,10 @@ function pmprowoo_activated_subscription( $subscription ) {
 	if ( empty( $pmprowoo_product_levels ) ) {
 		return;
 	}
+	
+	if ( is_numeric( $subscription ) ) {
+        	$subscription = wcs_get_subscription( $subscription );
+    	}
 	
 	/*
 		Does this order contain a membership product?
@@ -339,6 +347,11 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		return;
 	}
 	
+
+  if ( is_numeric( $subscription ) ) {
+        $subscription = wcs_get_subscription( $subscription );
+    }
+      
 	/*
 		Does this order contain a membership product?
 		Since v2 of WCSubs, we need to check all line items
@@ -360,10 +373,13 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		foreach ( $items as $product ) {
 			//does the order have a user id and some products?
 			if ( ! empty( $product['product_id'] ) ) {
-				//is there a membership level for this product?
-				if ( in_array( $product['product_id'], $product_ids ) ) {
-					//add the user to the level
-					pmpro_changeMembershipLevel( 0, $user_id );
+				  //check if another active subscription exists
+			    $has_sub = wcs_user_has_subscription( $user_id, $product['product_id'], 'active' );
+				  //is there a membership level for this product?
+				  if( !$has_sub && in_array($product['product_id'], $product_ids) ){
+					    //add the user to the level
+					    pmpro_changeMembershipLevel( 0, $user_id );
+           }
 				}
 			}
 		}
