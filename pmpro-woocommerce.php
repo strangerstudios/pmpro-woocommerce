@@ -20,8 +20,13 @@ General Idea:
 	NOTE: You can still only have one level per user with PMPro.
 */
 
-//constants and globals
+//constants
 define( 'PMPROWC_DIR', dirname( __FILE__ ) );
+define( 'PMPROWC_BASENAME', plugin_basename( __FILE__ ) );
+
+// Includes
+require_once( PMPROWC_DIR . '/includes/functions.php' );
+require_once( PMPROWC_DIR . '/includes/admin.php' );
 
 /**
  * Loads modules and globals on init
@@ -54,7 +59,7 @@ function pmprowoo_init() {
 	if ( empty( $pmprowoo_discounts_on_subscriptions ) ) {
 		$pmprowoo_discounts_on_subscriptions = false;
 	}
-	
+
 	//load gift levels module if that addon is active
 	if ( function_exists( 'pmprogl_plugin_row_meta' ) ) {
 		require_once( dirname( __FILE__ ) . '/includes/pmpro-gift-levels.php' );
@@ -114,25 +119,6 @@ function pmprowoo_purchase_disabled() {
 }
 
 /**
- * Search the cart for previously selected membership product
- *
- * @return bool
- */
-function pmprowoo_cart_has_membership() {
-	
-	global $pmprowoo_product_levels;
-	$has_membership = false;
-	
-	$cart_items = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array();
-	
-	foreach ( $cart_items as $cart_item ) {
-		$has_membership = $has_membership || in_array( $cart_item['product_id'], array_keys( $pmprowoo_product_levels ) );
-	}
-	
-	return $has_membership;
-}
-
-/**
  * Add users to membership levels after order is completed.
  *
  * @param int $order_id
@@ -154,7 +140,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 		does this order contain a membership product?
 	*/
 	//membership product ids
-	$product_ids = array_keys( $pmprowoo_product_levels );
+	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	
 	//get order
 	$order = new WC_Order( $order_id );
@@ -164,7 +150,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 	if ( ! empty( $user_id ) && sizeof( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
 			if ( ! empty( $item['product_id'] ) &&
-			     in_array( $item['product_id'], $product_ids ) )    //not sure when a product has id 0, but the Woo code checks this
+			     in_array( $item['product_id'], $membership_product_ids ) )    //not sure when a product has id 0, but the Woo code checks this
 			{
 				//is there a membership level for this product?
 				//get user id and level
@@ -242,7 +228,7 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 	}
 	
 	//membership product ids
-	$product_ids = array_keys( $pmprowoo_product_levels );
+	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	
 	//get order
 	$order = new WC_Order( $order_id );
@@ -252,7 +238,7 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 	if ( ! empty( $user_id ) && sizeof( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
 			//not sure when a product has id 0, but the Woo code checks this
-			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $product_ids ) ) {
+			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
         //check if another active subscription exists
 			   $has_sub = wcs_user_has_subscription( $user_id, $item['product_id'], 'active' );
         if( !$has_sub ) {
@@ -312,12 +298,12 @@ function pmprowoo_activated_subscription( $subscription ) {
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
-		$product_ids = array_keys( $pmprowoo_product_levels );
+		$membership_product_ids = array_keys( $pmprowoo_product_levels );
 		
 		//does the order item have a user id and a product?
 		foreach ( $items as $product ) {
 			
-			if ( ! empty( $product['product_id'] ) && in_array( $product['product_id'], $product_ids ) ) {
+			if ( ! empty( $product['product_id'] ) && in_array( $product['product_id'], $membership_product_ids ) ) {
 				//add the user to the level
 				pmpro_changeMembershipLevel( $pmprowoo_product_levels[ $product['product_id'] ], $user_id );
 			}
@@ -367,7 +353,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
-		$product_ids = array_keys( $pmprowoo_product_levels );
+		$membership_product_ids = array_keys( $pmprowoo_product_levels );
 		
 		foreach ( $items as $product ) {
 			//does the order have a user id and some products?
@@ -375,7 +361,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 				//check if another active subscription exists
 			    $has_sub = wcs_user_has_subscription( $user_id, $product['product_id'], 'active' );
 				//is there a membership level for this product?
-				if( !$has_sub && in_array($product['product_id'], $product_ids) ){
+				if( !$has_sub && in_array($product['product_id'], $membership_product_ids) ){
 					//add the user to the level
 					pmpro_changeMembershipLevel( 0, $user_id );
 				}
@@ -409,7 +395,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	$discount_price = $price;
 	
-	$product_ids = array_keys( $pmprowoo_product_levels ); // membership product levels
+	$membership_product_ids = array_keys( $pmprowoo_product_levels ); // membership product levels
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 	
 	//ignore membership products and subscriptions if we are set that way
@@ -419,7 +405,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	// Search for any membership level products. IF found, use first one as the cart membership level.
 	foreach ( $items as $item ) {
-		if ( in_array( $item['product_id'], $product_ids ) ) {
+		if ( in_array( $item['product_id'], $membership_product_ids ) ) {
 			$cart_membership_level = $pmprowoo_product_levels[ $item['product_id'] ];
 			break;
 		}
@@ -702,11 +688,11 @@ function pmprowoo_woocommerce_after_checkout_registration_form() {
 	$items = $woocommerce->cart->cart_contents;
 	
 	//membership product ids
-	$product_ids = array_keys( $pmprowoo_product_levels );
+	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	
 	// Search for any membership level products. IF found, use first one as the cart membership level.
 	foreach ( $items as $item ) {
-		if ( in_array( $item['product_id'], $product_ids ) ) {
+		if ( in_array( $item['product_id'], $membership_product_ids ) ) {
 			$cart_membership_level = $pmprowoo_product_levels[ $item['product_id'] ];
 			break;
 		}
@@ -849,28 +835,6 @@ function pmprowoo_enqueue_css() {
 }
 
 add_action( 'wp_enqueue_scripts', 'pmprowoo_enqueue_css' );
-
-/**
- * Function to add links to the plugin row meta
- *
- * @param array  $links
- * @param string $file
- *
- * @return array
- */
-function pmprowoo_plugin_row_meta( $links, $file ) {
-	if ( strpos( $file, 'pmpro-woocommerce.php' ) !== false ) {
-		$new_links = array(
-			'<a href="' . esc_url( 'http://www.paidmembershipspro.com/add-ons/third-party-integration/pmpro-woocommerce/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
-			'<a href="' . esc_url( 'http://paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
-		);
-		$links     = array_merge( $links, $new_links );
-	}
-	
-	return $links;
-}
-
-add_filter( 'plugin_row_meta', 'pmprowoo_plugin_row_meta', 10, 2 );
 
 /**
  * Check if Autocomplete setting is active for the product.
