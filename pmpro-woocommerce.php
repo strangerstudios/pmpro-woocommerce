@@ -372,13 +372,12 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		foreach ( $items as $product ) {
 			//does the order have a user id and some products?
 			if ( ! empty( $product['product_id'] ) ) {
-				  //check if another active subscription exists
+				//check if another active subscription exists
 			    $has_sub = wcs_user_has_subscription( $user_id, $product['product_id'], 'active' );
-				  //is there a membership level for this product?
-				  if( !$has_sub && in_array($product['product_id'], $product_ids) ){
-					    //add the user to the level
-					    pmpro_changeMembershipLevel( 0, $user_id );
-           }
+				//is there a membership level for this product?
+				if( !$has_sub && in_array($product['product_id'], $product_ids) ){
+					//add the user to the level
+					pmpro_changeMembershipLevel( 0, $user_id );
 				}
 			}
 		}
