@@ -698,7 +698,7 @@ function pmprowoo_woocommerce_after_checkout_registration_form() {
 	$items = $woocommerce->cart->cart_contents;
 	
 	//membership product ids
-	$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
+	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	
 	// Search for any membership level products. IF found, use first one as the cart membership level.
 	foreach ( $items as $item ) {
