@@ -196,12 +196,22 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				if ( ! empty( $pmpro_level->expiration_number ) ) {
 					$custom_level['enddate'] = date( "Y-m-d", strtotime( "+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period, current_time( 'timestamp' ) ) );
 				}
+
+				/** 
+				 * Filter for the level object.
+				 */
+				$custom_level = apply_filters( 'pmprowoo_checkout_level', $custom_level );
 				
-				//let woocommerce handle everything but we can filter if we want to
-				pmpro_changeMembershipLevel( apply_filters( 'pmprowoo_checkout_level', $custom_level ), $user_id );
-				
-				//only going to process the first membership product, so break the loop
-				break;
+				// Is MMPU activated?
+				if ( function_exists( 'pmprommpu_addMembershipLevel' ) ) {
+					// Allow filter to force add levels (ignore MMPU group level settings).
+					$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
+					pmprommpu_addMembershipLevel( $custom_level, $user_id, $mmpu_force_add_level );
+				} else {
+					// Only add the first membership level found.
+					pmpro_changeMembershipLevel( $custom_level, $user_id );
+					break;
+				}
 			}
 		}
 	}
@@ -215,6 +225,8 @@ add_action( "woocommerce_order_status_completed", "pmprowoo_add_membership_from_
  * @param int $order_id
  */
 function pmprowoo_cancel_membership_from_order( $order_id ) {
+	global $pmprowoo_product_levels;
+
 	// quitely exit if PMPro isn't active
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
 		return;
@@ -237,16 +249,16 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			//not sure when a product has id 0, but the Woo code checks this
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
-        //check if another active subscription exists
-			   $has_sub = wcs_user_has_subscription( $user_id, $item['product_id'], 'active' );
-        if( !$has_sub ) {
+	        	//check if another active subscription exists
+				$has_sub = wcs_user_has_subscription( $user_id, $item['product_id'], 'active' );
+	        	if( !$has_sub ) {
 				    //is there a membership level for this product?
 				    //add the user to the level
-				    pmpro_changeMembershipLevel( 0, $user_id );
+				    pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
 				
 				    //only going to process the first membership product, so break the loop
 				    break;
-        }
+	        	}
 			}
 		}
 	}
