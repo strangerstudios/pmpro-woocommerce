@@ -27,11 +27,11 @@ function pmprowoo_get_membership_products_from_order( $order_id ) {
 	}
 
 	// Get membership product IDs.
-	$product_ids = array_keys($pmprowoo_product_levels);
+	$membership_product_ids = array_keys($pmprowoo_product_levels);
 	
 	// Are there any membership products?
 	foreach( $order->get_items() as $item ) {
-		if( $item['product_id'] > 0 && in_array( $item['product_id'], $product_id s) ) 	//not sure when a product has id 0, but the Woo code checks this
+		if( $item['product_id'] > 0 && in_array( $item['product_id'], $membership_product_ids) ) 	//not sure when a product has id 0, but the Woo code checks this
 			$membership_products[] = $item['product_id'];
 	}
 

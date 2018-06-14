@@ -124,7 +124,7 @@ function pmprowoo_purchase_disabled() {
  * @param int $order_id
  */
 function pmprowoo_add_membership_from_order( $order_id ) {
-	global $wpdb, $pmprowoo_product_levels;
+	global $wpdb;
 	
 	// quitely exit if PMPro isn't active
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
@@ -140,7 +140,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 		does this order contain a membership product?
 	*/
 	//membership product ids
-	$membership_product_ids = array_keys( $pmprowoo_product_levels );
+	$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 	
 	//get order
 	$order = new WC_Order( $order_id );
@@ -215,8 +215,6 @@ add_action( "woocommerce_order_status_completed", "pmprowoo_add_membership_from_
  * @param int $order_id
  */
 function pmprowoo_cancel_membership_from_order( $order_id ) {
-	global $pmprowoo_product_levels;
-	
 	// quitely exit if PMPro isn't active
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
 		return;
@@ -228,7 +226,7 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 	}
 	
 	//membership product ids
-	$membership_product_ids = array_keys( $pmprowoo_product_levels );
+	$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 	
 	//get order
 	$order = new WC_Order( $order_id );
@@ -268,7 +266,7 @@ add_action( "woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_fr
  */
 function pmprowoo_activated_subscription( $subscription ) {
 	global $pmprowoo_product_levels;
-	
+
 	// quitely exit if PMPro isn't active
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
 		return;
@@ -298,7 +296,7 @@ function pmprowoo_activated_subscription( $subscription ) {
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
-		$membership_product_ids = array_keys( $pmprowoo_product_levels );
+		$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 		
 		//does the order item have a user id and a product?
 		foreach ( $items as $product ) {
@@ -321,7 +319,7 @@ add_action( 'woocommerce_subscription_status_on-hold_to_active', 'pmprowoo_activ
  */
 function pmprowoo_cancelled_subscription( $subscription ) {
 	global $pmprowoo_product_levels;
-	
+
 	// quitely exit if PMPro isn't active
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
 		return;
@@ -353,7 +351,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 	
 	if ( ! empty( $items ) && ! empty( $user_id ) ) {
 		//membership product ids
-		$membership_product_ids = array_keys( $pmprowoo_product_levels );
+		$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 		
 		foreach ( $items as $product ) {
 			//does the order have a user id and some products?
@@ -395,7 +393,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	$discount_price = $price;
 	
-	$membership_product_ids = array_keys( $pmprowoo_product_levels ); // membership product levels
+	$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 	
 	//ignore membership products and subscriptions if we are set that way
@@ -485,7 +483,7 @@ add_action( 'woocommerce_product_write_panel_tabs', 'pmprowoo_tab_options_tab' )
  */
 function pmprowoo_tab_options() {
 	
-	global $membership_levels, $pmprowoo_product_levels, $post;
+	global $membership_levels, $post;
 	
 	$membership_level_options = array( 'None' );
 	
@@ -688,7 +686,7 @@ function pmprowoo_woocommerce_after_checkout_registration_form() {
 	$items = $woocommerce->cart->cart_contents;
 	
 	//membership product ids
-	$membership_product_ids = array_keys( $pmprowoo_product_levels );
+	$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 	
 	// Search for any membership level products. IF found, use first one as the cart membership level.
 	foreach ( $items as $item ) {
