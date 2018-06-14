@@ -402,6 +402,16 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
 		return $price;
 	}
+
+	// make sure $product is a product object
+	if (! is_object( $product ) ) {
+		$product = wc_get_product( $product );
+	}
+
+	// no product? bail
+	if ( empty( $product ) ) {
+		return $price;
+	}
 	
 	$discount_price = $price;
 	
@@ -467,14 +477,16 @@ if ( ! is_admin() || defined( 'DOING_AJAX' ) ) {
  * @return string
  */
 function pmprowoo_woocommerce_variable_price_html( $variation_range_html, $product ) {
-	
 	$prices = $product->get_variation_prices( true );
-	
+	$prices_product_ids = array_keys( $prices['price']) ;
+
 	$min_price = current( $prices['price'] );
+	$min_price_product_id = current( $prices_product_ids );
 	$max_price = end( $prices['price'] );
+	$max_price_product_id = end( $prices_product_ids );
 	
-	$member_min_price = pmprowoo_get_membership_price( $min_price, $product );
-	$member_max_price = pmprowoo_get_membership_price( $max_price, $product );
+	$member_min_price = pmprowoo_get_membership_price( $min_price, $min_price_product_id );
+	$member_max_price = pmprowoo_get_membership_price( $max_price, $max_price_product_id );
 	
 	return wc_format_price_range( $member_min_price, $member_max_price );
 }
