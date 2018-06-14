@@ -405,7 +405,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	$discount_price = $price;
 	
-	$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
+	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 	
 	//ignore membership products and subscriptions if we are set that way
