@@ -60,9 +60,14 @@ function pmprowoo_init() {
 		$pmprowoo_discounts_on_subscriptions = false;
 	}
 
-	//load gift levels module if that addon is active
+	// Load gift levels module if that addon is active.
 	if ( function_exists( 'pmprogl_plugin_row_meta' ) ) {
 		require_once( dirname( __FILE__ ) . '/includes/pmpro-gift-levels.php' );
+	}
+
+	// If MMPU is active, allow for multiple membership products in your cart
+	if ( defined( 'PMPROMMPU_VER') ) {
+		remove_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
 	}
 }
 
@@ -253,11 +258,8 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 				$has_sub = wcs_user_has_subscription( $user_id, $item['product_id'], 'active' );
 	        	if( !$has_sub ) {
 				    //is there a membership level for this product?
-				    //add the user to the level
+				    //remove the user from the level
 				    pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
-				
-				    //only going to process the first membership product, so break the loop
-				    break;
 	        	}
 			}
 		}
@@ -314,8 +316,16 @@ function pmprowoo_activated_subscription( $subscription ) {
 		foreach ( $items as $product ) {
 			
 			if ( ! empty( $product['product_id'] ) && in_array( $product['product_id'], $membership_product_ids ) ) {
-				//add the user to the level
-				pmpro_changeMembershipLevel( $pmprowoo_product_levels[ $product['product_id'] ], $user_id );
+				// Is MMPU activated?
+				if ( function_exists( 'pmprommpu_addMembershipLevel' ) ) {
+					// Allow filter to force add levels (ignore MMPU group level settings).
+					$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
+					pmprommpu_addMembershipLevel( $pmprowoo_product_levels[ $product['product_id'] ], $user_id, $mmpu_force_add_level );
+				} else {
+					// Only add the first membership level found.
+					pmpro_changeMembershipLevel( $pmprowoo_product_levels[ $product['product_id'] ], $user_id );
+					break;
+				}
 			}
 		}
 	}
@@ -372,8 +382,8 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 			    $has_sub = wcs_user_has_subscription( $user_id, $product['product_id'], 'active' );
 				//is there a membership level for this product?
 				if( !$has_sub && in_array($product['product_id'], $membership_product_ids) ){
-					//add the user to the level
-					pmpro_changeMembershipLevel( 0, $user_id );
+					//remove the user from the level
+					pmpro_cancelMembershipLevel($pmprowoo_product_levels[$product['product_id']], $user_id);
 				}
 			}
 		}
