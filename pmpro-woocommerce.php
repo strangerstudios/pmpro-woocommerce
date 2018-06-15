@@ -454,7 +454,8 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	// use this level to get the price
 	if ( isset( $level_price ) ) {
-		$level_price = get_post_meta( $product->get_id(), $level_price, true );
+		$product_id = $product->get_id();
+		$level_price = get_post_meta( $product_id, $level_price, true );
 		if ( ! empty( $level_price ) || $level_price === '0' || $level_price === '0.00' || $level_price === '0,00' ) {
 			$discount_price = $level_price;
 		}
@@ -466,7 +467,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	}
 
 	$discount_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $level_id, $price, $product );
-	
+
 	return $discount_price;
 }
 
@@ -885,8 +886,9 @@ function pmprowoo_order_autocomplete( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			if ( $item['type'] == 'line_item' ) {
 				//get product info and check if product is marked to autocomplete
-				$_product             = $order->get_product_from_item( $item );
-				$product_autocomplete = get_post_meta( $_product->get_id(), '_membership_product_autocomplete', true );
+				$_product = $order->get_product_from_item( $item );
+				$product_id = $_product->get_id();
+				$product_autocomplete = get_post_meta( $product_id, '_membership_product_autocomplete', true );
 				
 				//if any product is not virtual and not marked for autocomplete, we won't autocomplete
 				if ( ! $_product->is_virtual() && ! $product_autocomplete ) {
