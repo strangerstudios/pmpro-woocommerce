@@ -129,7 +129,7 @@ function pmprowoo_purchase_disabled() {
  * @param int $order_id
  */
 function pmprowoo_add_membership_from_order( $order_id ) {
-	global $wpdb;
+	global $wpdb, $pmprowoo_product_levels;
 	
 	// quitely exit if PMPro isn't active
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
