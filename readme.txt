@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 4.9.6
-Stable tag: 1.5
+Stable tag: 1.6
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -16,6 +16,9 @@ Features:
 * Use WooCommerce Products to Buy PMPro Membership Levels
 * Add Specific Pricing Based on Membership Level for Each Product
 * Apply global discounts based on membership level
+* Works with WooCommerce Subscriptions premium add on for WooCommerce
+* Works with the Multiple Memberships per User add on for PMPro
+* Synchronizes the billing address fields between WooCommerce and Paid Memberships Pro
 
 == Installation ==
 
@@ -34,6 +37,14 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
+= 1.6 =
+* BUG FIX: Fixed bug when deselecting the autocomplete option on a membership product.
+* BUG FIX: Now checking if a user has a different subscription linked to their membership level before removing a user's membership level. Users switching between subscriptions for the same level would have their level removed. (Thanks, Ted Barnett)
+* BUG FIX: Fixed issues when a product with a sale price also has membership pricing.
+* BUG FIX/ENHANCEMENT: Updated to work with the latest versions of WooCommerce (3.4.2) and WooCommerce Subscriptions (2.2.22).
+* ENHANCEMENT: Added a filter pmprowoo_get_membership_price, which can be used to support variable products via custom code (like this https://gist.github.com/ideadude/5c7ed35a50087178a47d92b192933614)
+* ENHANCEMENT: Added support for PMPro Multiple Memberships per User.
+
 = 1.5 =
 * BUG/FIX: Various PHP Warning messages (Deprecated functionality)
 * ENHANCEMENT: Prevents a user from adding more than a single membership product to the shopping cart

@@ -3,21 +3,12 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.5
+Version: 1.6
 WC requires at least: 3.3
-WC tested up to: 3.3.5
+WC tested up to: 3.4.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 Text Domain: pmpro-woocommerce
-
-
-General Idea:
-
-	1. Connect WooCommerce products to PMPro Membership Levels.
-	2. If a user purchases a certain product, give them the corresponding membership level.
-	3. If WooCommerce subscriptions are installed, and a subscription is cancelled, cancel the corresponding PMPro membership level.
-	
-	NOTE: You can still only have one level per user with PMPro.
 */
 
 //constants
