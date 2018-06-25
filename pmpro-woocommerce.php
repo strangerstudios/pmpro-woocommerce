@@ -1,15 +1,16 @@
 <?php
-/*
-Plugin Name: Paid Memberships Pro - WooCommerce Add On
-Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
-Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.6
-WC requires at least: 3.3
-WC tested up to: 3.4.2
-Author: Stranger Studios
-Author URI: http://www.strangerstudios.com
-Text Domain: pmpro-woocommerce
-*/
+/**
+ * Plugin Name: Paid Memberships Pro - WooCommerce Add On
+ * Plugin URI: https://www.paidmembershipspro.com/pmpro-woocommerce/
+ * Description: Integrate WooCommerce with Paid Memberships Pro.
+ * Version: 1.6
+ * WC requires at least: 3.3
+ * WC tested up to: 3.4.2
+ * Author: Stranger Studios
+ * Author URI: https://www.strangerstudios.com
+ * Text Domain: pmpro-woocommerce
+ * Domain Path: /languages
+ */
 
 //constants
 define( 'PMPROWC_DIR', dirname( __FILE__ ) );
@@ -213,7 +214,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 	}
 }
 
-add_action( "woocommerce_order_status_completed", "pmprowoo_add_membership_from_order" );
+add_action( 'woocommerce_order_status_completed', 'pmprowoo_add_membership_from_order' );
 
 /**
  * Cancel memberships when orders go into pending, processing, refunded, failed, or on hold.
@@ -382,11 +383,11 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 }
 
 //WooCommerce Subscriptions v2 hooks
-add_action( "woocommerce_subscription_status_cancelled", "pmprowoo_cancelled_subscription", 10 );
-add_action( "woocommerce_subscription_status_trash", "pmprowoo_cancelled_subscription", 10 );
-add_action( "woocommerce_subscription_status_expired", "pmprowoo_cancelled_subscription", 10 );
-add_action( "woocommerce_subscription_status_on-hold", "pmprowoo_cancelled_subscription", 10 );
-add_action( "woocommerce_scheduled_subscription_end_of_prepaid_term", "pmprowoo_cancelled_subscription", 10 );
+add_action( 'woocommerce_subscription_status_cancelled', 'pmprowoo_cancelled_subscription', 10 );
+add_action( 'woocommerce_subscription_status_trash', 'pmprowoo_cancelled_subscription', 10 );
+add_action( 'woocommerce_subscription_status_expired', 'pmprowoo_cancelled_subscription', 10 );
+add_action( 'woocommerce_subscription_status_on-hold', 'pmprowoo_cancelled_subscription', 10 );
+add_action( 'woocommerce_scheduled_subscription_end_of_prepaid_term', 'pmprowoo_cancelled_subscription', 10 );
 
 /**
  * Update Product Prices with Membership Price and/or Discount
@@ -498,7 +499,7 @@ function pmprowoo_woocommerce_variable_price_html( $variation_range_html, $produ
  */
 function pmprowoo_tab_options_tab() {
 	?>
-    <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><?php esc_html_e( 'Membership', 'pmprowoo' ); ?></a></li>
+    <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><?php esc_html_e( 'Membership', 'pmpro-woocommerce' ); ?></a></li>
 	<?php
 }
 
@@ -854,8 +855,8 @@ add_filter( 'pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_membershi
  */
 function pmprowoo_enqueue_css() {
 	
-	wp_register_style( 'pmprowoo', plugins_url( '/css/style.css', __FILE__ ), null );
-	wp_enqueue_style( 'pmprowoo' );
+	wp_register_style( 'pmpro-woocommerce', plugins_url( '/css/style.css', __FILE__ ), null );
+	wp_enqueue_style( 'pmpro-woocommerce' );
 }
 
 add_action( 'wp_enqueue_scripts', 'pmprowoo_enqueue_css' );
@@ -901,3 +902,8 @@ function pmprowoo_order_autocomplete( $order_id ) {
 }
 
 add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete' );
+
+function pmpro_woocommerce_load_textdomain() {
+  load_plugin_textdomain( 'pmpro-woocommerce', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
+}
+add_action( 'plugins_loaded', 'pmpro_woocommerce_load_textdomain' );
