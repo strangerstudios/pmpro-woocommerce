@@ -3,7 +3,7 @@ Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
 Tested up to: 4.9.6
-Stable tag: 1.6
+Stable tag: 1.6.1
 
 Integrates Paid Memberships Pro with WooCommerce.
 
@@ -37,6 +37,10 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
+= 1.6.1 =
+* BUG FIX: Fixed fatal error in pmprowoo_get_membership_products_from_order() that was happening on some systems.
+* ENHANCEMENT: Localization/GlotPress support.
+
 = 1.6 =
 * BUG FIX: Fixed bug when deselecting the autocomplete option on a membership product.
 * BUG FIX: Now checking if a user has a different subscription linked to their membership level before removing a user's membership level. Users switching between subscriptions for the same level would have their level removed. (Thanks, Ted Barnett)
