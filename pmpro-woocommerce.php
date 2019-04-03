@@ -4,8 +4,9 @@
  * Plugin URI: https://www.paidmembershipspro.com/pmpro-woocommerce/
  * Description: Integrate WooCommerce with Paid Memberships Pro.
  * Version: 1.6.1
+ * Tested up to: 5.1.1
  * WC requires at least: 3.3
- * WC tested up to: 3.4.2
+ * WC tested up to: 3.5.5
  * Author: Stranger Studios
  * Author URI: https://www.strangerstudios.com
  * Text Domain: pmpro-woocommerce

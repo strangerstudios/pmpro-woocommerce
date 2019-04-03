@@ -2,7 +2,7 @@
 Contributors: strangerstudios, jessica o
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 4.9.6
+Tested up to: 5.1.1
 Stable tag: 1.6.1
 
 Integrates Paid Memberships Pro with WooCommerce.
@@ -24,6 +24,8 @@ Features:
 
 1. Upload the `pmpro-woocommerce` directory to the `/wp-content/plugins/` directory of your site.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
+
+Or install directly from the Plugin Repository using the Plugins system in WordPress.
 
 == Frequently Asked Questions ==
 
