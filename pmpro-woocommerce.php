@@ -47,7 +47,7 @@ function pmprowoo_init() {
 	
 	// Apply Discounts to Subscriptions
 	global $pmprowoo_discounts_on_subscriptions;
-	$pmprowoo_discounts_on_subscriptions = get_option( 'pmprowoo_discounts_on_subscriptions' );
+	$pmprowoo_discounts_on_subscriptions = pmpro_getOption( 'pmprowoo_discounts_on_subscriptions' );
 	if ( empty( $pmprowoo_discounts_on_subscriptions ) ) {
 		$pmprowoo_discounts_on_subscriptions = false;
 	}
