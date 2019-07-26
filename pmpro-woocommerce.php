@@ -4,9 +4,9 @@
  * Plugin URI: https://www.paidmembershipspro.com/pmpro-woocommerce/
  * Description: Integrate WooCommerce with Paid Memberships Pro.
  * Version: 1.6.1
- * Tested up to: 5.1.1
+ * Tested up to: 5.2.2
  * WC requires at least: 3.3
- * WC tested up to: 3.5.5
+ * WC tested up to: 3.6.5
  * Author: Stranger Studios
  * Author URI: https://www.strangerstudios.com
  * Text Domain: pmpro-woocommerce
@@ -263,7 +263,7 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 //add_action("woocommerce_order_status_processing", "pmprowoo_cancel_membership_from_order");
 add_action( "woocommerce_order_status_refunded", "pmprowoo_cancel_membership_from_order" );
 add_action( "woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order" );
-add_action( "woocommerce_order_status_on_hold", "pmprowoo_cancel_membership_from_order" );
+add_action( "woocommerce_order_status_on-hold", "pmprowoo_cancel_membership_from_order" );
 add_action( "woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_from_order" );
 
 /**
