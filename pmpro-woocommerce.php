@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
- * Plugin URI: https://www.paidmembershipspro.com/pmpro-woocommerce/
+ * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate WooCommerce with Paid Memberships Pro.
  * Version: 1.6.1
  * WC requires at least: 3.3
  * WC tested up to: 3.7
- * Author: Stranger Studios
- * Author URI: https://www.strangerstudios.com
+ * Author: Paid Memberships Pro
+ * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
  * Domain Path: /languages
  */
