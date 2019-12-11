@@ -247,11 +247,10 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 			//not sure when a product has id 0, but the Woo code checks this
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
 	        	//check if another active subscription exists
-				$has_sub = function_exists( 'wcs_user_has_subscription' ) ? wcs_user_has_subscription( $user_id, $item['product_id'], 'active' ) : false;
-	        	if( !$has_sub ) {
-				    //is there a membership level for this product?
-				    //remove the user from the level
-				    pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
+	        	if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
+					    //is there a membership level for this product?
+					    //remove the user from the level
+					    pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
 	        	}
 			}
 		}
@@ -369,11 +368,9 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		
 		foreach ( $items as $item ) {
 			//does the order have a user id and some products?
-			if ( ! empty( $item['product_id'] ) ) {
+			if ( ! empty( $item['product_id']  && in_array($item['product_id'], $membership_product_ids)) ) {
 				//check if another active subscription exists
-				$has_sub = function_exists( 'wcs_user_has_subscription' ) ? wcs_user_has_subscription( $user_id, $item['product_id'], 'active' ) : false;
-				//is there a membership level for this product?
-				if( !$has_sub && in_array($item['product_id'], $membership_product_ids) ){
+				if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
 					//remove the user from the level
 					pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
 				}
