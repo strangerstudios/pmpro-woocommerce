@@ -5,7 +5,7 @@
  * Description: Integrate WooCommerce with Paid Memberships Pro.
  * Version: 1.6.1
  * WC requires at least: 3.3
- * WC tested up to: 3.7
+ * WC tested up to: 4.0
  * Author: Stranger Studios
  * Author URI: https://www.strangerstudios.com
  * Text Domain: pmpro-woocommerce
