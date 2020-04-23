@@ -58,3 +58,35 @@ function pmprowoo_cart_has_membership() {
 	
 	return $has_membership;
 }
+
+/**
+ * Returns whether a user has an active WooCommerce product that gives membership
+ * access to a given PMPro level.
+ *
+ * @param  int $user_id  user whose orders to check.
+ * @param  int $level_id to search for in active orders.
+ * @return boolean
+ */
+function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level_id ) {
+	global $pmprowoo_product_levels;
+	if ( ! empty( $pmprowoo_product_levels ) ) {
+		$user = get_userdata( intval( $user_id ) );
+		foreach ( $pmprowoo_product_levels as $product_id => $product_level_id ) {
+			if ( intval( $level_id ) === intval( $product_level_id ) ) {
+				$product = get_product( $product_id );
+				if ( ! empty( $product ) && is_object( $product ) && method_exists( $product, 'is_type' ) ) {
+					if ( $product->is_type( 'subscription' ) ) {
+						if ( function_exists( 'wcs_user_has_subscription' ) && wcs_user_has_subscription( $user_id, $product_id, 'active' ) ) {
+							return true;
+						}
+					} else {
+						if ( wc_customer_bought_product( $user->ID, $user->data->user_email, intval( $product_id ) ) ) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
