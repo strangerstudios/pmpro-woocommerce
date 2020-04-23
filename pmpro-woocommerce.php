@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
- * Plugin URI: https://www.paidmembershipspro.com/pmpro-woocommerce/
+ * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate WooCommerce with Paid Memberships Pro.
  * Version: 1.6.1
  * WC requires at least: 3.3
- * WC tested up to: 3.7
- * Author: Stranger Studios
- * Author URI: https://www.strangerstudios.com
+ * WC tested up to: 4.0
+ * Author: Paid Memberships Pro
+ * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
  * Domain Path: /languages
  */
@@ -47,7 +47,7 @@ function pmprowoo_init() {
 	
 	// Apply Discounts to Subscriptions
 	global $pmprowoo_discounts_on_subscriptions;
-	$pmprowoo_discounts_on_subscriptions = get_option( 'pmprowoo_discounts_on_subscriptions' );
+	$pmprowoo_discounts_on_subscriptions = get_option( 'pmpro_pmprowoo_discounts_on_subscriptions' );	
 	if ( empty( $pmprowoo_discounts_on_subscriptions ) ) {
 		$pmprowoo_discounts_on_subscriptions = false;
 	}
@@ -246,13 +246,13 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			//not sure when a product has id 0, but the Woo code checks this
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
-	        	//check if another active subscription exists
-	        	if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
-					    //is there a membership level for this product?
-					    //remove the user from the level
-					    pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
-	        	}
-			}
+	      //check if another active subscription exists
+				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
+           //is there a membership level for this product?
+           //remove the user from the level
+           pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
+        }
+      }
 		}
 	}
 }
@@ -261,7 +261,7 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 //add_action("woocommerce_order_status_processing", "pmprowoo_cancel_membership_from_order");
 add_action( "woocommerce_order_status_refunded", "pmprowoo_cancel_membership_from_order" );
 add_action( "woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order" );
-add_action( "woocommerce_order_status_on_hold", "pmprowoo_cancel_membership_from_order" );
+add_action( 'woocommerce_subscription_status_on-hold_to_active', 'pmprowoo_activated_subscription' );
 add_action( "woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_from_order" );
 
 /**
@@ -369,12 +369,15 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		foreach ( $items as $item ) {
 			//does the order have a user id and some products?
 			if ( ! empty( $item['product_id']  && in_array($item['product_id'], $membership_product_ids)) ) {
-				//check if another active subscription exists
-				if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
-					//remove the user from the level
-					pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
-				}
-			}
+        //check if another active subscription exists
+        if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {	
+          //is there a membership level for this product?
+          if( !$has_sub && in_array($item['product_id'], $membership_product_ids) ){
+            //remove the user from the level
+            pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
+          }
+        }
+      }
 		}
 	}
 }
@@ -668,8 +671,8 @@ function pmprowoo_save_membership_level( $level_id ) {
 	global $pmprowoo_member_discounts;
 	
 	//convert % to decimal
-	$member_discount                        = (isset($_POST['membership_discount']) ? sanitize_text_field( $_POST['membership_discount'] ) : 0 )/100;
-	$pmprowoo_member_discounts[ $level_id ] = $member_discount;
+	$member_discount = ( isset($_POST['membership_discount']) ? sanitize_text_field( $_POST['membership_discount'] ) : 0 )/100;
+	$pmprowoo_member_discounts[$level_id] = $member_discount;
 	update_option( '_pmprowoo_member_discounts', $pmprowoo_member_discounts );
 }
 
