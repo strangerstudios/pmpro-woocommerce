@@ -6,7 +6,7 @@
  * Version: 1.6.1
  * Tested up to: 5.2.2
  * WC requires at least: 3.3
- * WC tested up to: 3.6.5
+ * WC tested up to: 3.7
  * Author: Stranger Studios
  * Author URI: https://www.strangerstudios.com
  * Text Domain: pmpro-woocommerce
