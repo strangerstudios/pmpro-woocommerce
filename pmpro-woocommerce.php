@@ -62,7 +62,6 @@ function pmprowoo_init() {
 		remove_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
 	}
 }
-
 add_action( 'init', 'pmprowoo_init' );
 
 /**
@@ -93,7 +92,6 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 	
 	return $is_purchasable;
 }
-
 add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
 
 /**
@@ -213,7 +211,6 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 		}
 	}
 }
-
 add_action( 'woocommerce_order_status_completed', 'pmprowoo_add_membership_from_order' );
 
 /**
@@ -246,19 +243,16 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			//not sure when a product has id 0, but the Woo code checks this
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
-	      //check if another active subscription exists
+				//check if another active subscription exists
 				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
-           //is there a membership level for this product?
-           //remove the user from the level
-           pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
-        }
-      }
+					//is there a membership level for this product?
+					//remove the user from the level
+					pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
+				}
+			}
 		}
 	}
 }
-
-//add_action("woocommerce_order_status_pending", "pmprowoo_cancel_membership_from_order");
-//add_action("woocommerce_order_status_processing", "pmprowoo_cancel_membership_from_order");
 add_action( "woocommerce_order_status_refunded", "pmprowoo_cancel_membership_from_order" );
 add_action( "woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order" );
 add_action( 'woocommerce_subscription_status_on-hold_to_active', 'pmprowoo_activated_subscription' );
@@ -321,7 +315,6 @@ function pmprowoo_activated_subscription( $subscription ) {
 		}
 	}
 }
-
 add_action( 'woocommerce_subscription_status_active', 'pmprowoo_activated_subscription' );
 add_action( 'woocommerce_subscription_status_on-hold_to_active', 'pmprowoo_activated_subscription' );
 
@@ -343,8 +336,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		return;
 	}
 	
-
-  if ( is_numeric( $subscription ) ) {
+	if ( is_numeric( $subscription ) ) {
         $subscription = wcs_get_subscription( $subscription );
     }
       
@@ -369,15 +361,15 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		foreach ( $items as $item ) {
 			//does the order have a user id and some products?
 			if ( ! empty( $item['product_id']  && in_array($item['product_id'], $membership_product_ids)) ) {
-        //check if another active subscription exists
-        if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {	
-          //is there a membership level for this product?
-          if( !$has_sub && in_array($item['product_id'], $membership_product_ids) ){
-            //remove the user from the level
-            pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
-          }
-        }
-      }
+				//check if another active subscription exists
+				if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {	
+					//is there a membership level for this product?
+					if( !$has_sub && in_array($item['product_id'], $membership_product_ids) ){
+						//remove the user from the level
+						pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
+					}
+				}
+			}
 		}
 	}
 }
@@ -624,14 +616,12 @@ function pmprowoo_process_product_meta() {
 		update_post_meta( $post_id, '_membership_product_autocomplete', $autocomplete );
 	}
 }
-
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta' );
 
 /**
  * Add Membership Discount Field to Edit Membership Page
  */
 function pmprowoo_add_membership_discount() {
-	
 	global $pmprowoo_member_discounts;
 	$level_id = intval( $_REQUEST['edit'] );
 	if ( $level_id > 0 && ! empty( $pmprowoo_member_discounts ) && ! empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
@@ -656,10 +646,8 @@ function pmprowoo_add_membership_discount() {
         </tr>
         </tbody>
     </table>
-	
 	<?php
 }
-
 add_action( "pmpro_membership_level_after_other_settings", "pmprowoo_add_membership_discount" );
 
 /**
@@ -675,7 +663,6 @@ function pmprowoo_save_membership_level( $level_id ) {
 	$pmprowoo_member_discounts[$level_id] = $member_discount;
 	update_option( '_pmprowoo_member_discounts', $pmprowoo_member_discounts );
 }
-
 add_action( "pmpro_save_membership_level", "pmprowoo_save_membership_level" );
 
 /**
@@ -700,7 +687,6 @@ function pmprowoo_custom_settings( $fields ) {
 	
 	return $fields;
 }
-
 add_filter( 'pmpro_custom_advanced_settings', 'pmprowoo_custom_settings' );
 
 /**
@@ -732,7 +718,6 @@ function pmprowoo_woocommerce_after_checkout_registration_form() {
 		<?php
 	}
 }
-
 add_action( 'woocommerce_after_checkout_registration_form', 'pmprowoo_woocommerce_after_checkout_registration_form' );
 
 /**
@@ -785,7 +770,6 @@ function pmprowoo_update_user_meta( $meta_id, $object_id, $meta_key, $meta_value
 		}
 	}
 }
-
 add_action( 'update_user_meta', 'pmprowoo_update_user_meta', 10, 4 );
 
 /**
@@ -798,7 +782,6 @@ add_action( 'update_user_meta', 'pmprowoo_update_user_meta', 10, 4 );
 function pmprowoo_add_user_meta( $object_id, $meta_key, $meta_value ) {
 	pmprowoo_update_user_meta( null, $object_id, $meta_key, $meta_value );
 }
-
 add_action( 'add_user_meta', 'pmprowoo_add_user_meta', 10, 3 );
 
 /**
@@ -847,7 +830,6 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 	
 	return $level_array;
 }
-
 add_filter( 'pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships' );
 
 /**
@@ -858,7 +840,6 @@ function pmprowoo_enqueue_css() {
 	wp_register_style( 'pmpro-woocommerce', plugins_url( '/css/style.css', __FILE__ ), null );
 	wp_enqueue_style( 'pmpro-woocommerce' );
 }
-
 add_action( 'wp_enqueue_scripts', 'pmprowoo_enqueue_css' );
 
 /**
@@ -900,7 +881,6 @@ function pmprowoo_order_autocomplete( $order_id ) {
 		$order->update_status( 'completed', __( 'Autocomplete via PMPro WooCommerce.', 'pmpro-woocommerce' ) );
 	}
 }
-
 add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete' );
 
 function pmpro_woocommerce_load_textdomain() {
