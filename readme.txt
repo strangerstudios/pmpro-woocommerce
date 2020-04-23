@@ -158,7 +158,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 = 1.1 =
 * Fixed adding/updating membership when order status is changed to completed
 
-= 1.0 - 2019-02-26 =
+= 1.0 - 2014-02-26 =
 * Released to the WordPress repository.
 
 = .3.2 =
