@@ -5,20 +5,24 @@ Requires at least: 3.8
 Tested up to: 5.3.2
 Stable tag: 1.6.1
 
-Integrates Paid Memberships Pro with WooCommerce.
+Integrates Paid Memberships Pro with WooCommerce to sell Membership products and set members-only product discounts.
 
 == Description ==
 
-This plugin requires Paid Memberships Pro and WooCommerce be installed, activated, and configured.
+Integrates Paid Memberships Pro with WooCommerce to sell Memberships as a product, set a global % discount on products by level or set a per-product members-only price.
 
-Features:
+= Several Key Features Including =
 
-* Use WooCommerce Products to Buy PMPro Membership Levels
-* Add Specific Pricing Based on Membership Level for Each Product
-* Apply global discounts based on membership level
-* Works with WooCommerce Subscriptions premium add on for WooCommerce
-* Works with the Multiple Memberships per User add on for PMPro
-* Synchronizes the billing address fields between WooCommerce and Paid Memberships Pro
+* Sell a Membership in Paid Memberships Pro as a WooCommerce Product (WooCommerce Subscriptions required for recurring subscriptions).
+* Set Custom Product Pricing based on Membership Level.
+* Set a Global Percentage Discount for All Products Based on Membership Level.
+* Works with WooCommerce Subscriptions Premium Add On for WooCommerce.
+* Works with the Multiple Memberships Per User Add On for Paid Memberships Pro.
+* Synchronizes the Billing Address Fields Between WooCommerce and Paid Memberships Pro.
+
+= Official Paid Memberships Pro Add On =
+
+This is an official Add On for [Paid Memberships Pro](https://www.paidmembershipspro.com), the most complete member management and membership subscriptions plugin for WordPress.
 
 == Installation ==
 
