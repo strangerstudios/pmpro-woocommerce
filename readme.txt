@@ -1,15 +1,15 @@
 === Paid Memberships Pro - WooCommerce Add On ===
-Contributors: strangerstudios, jessica o
+Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 5.3.2
-Stable tag: 1.6.1
+Tested up to: 5.4
+Stable tag: 1.7
 
-Integrates Paid Memberships Pro with WooCommerce to sell Membership products and set members-only product discounts.
+Integrates Paid Memberships Pro with WooCommerce to sell Membership as a product and set members-only product discounts.
 
 == Description ==
 
-Integrates Paid Memberships Pro with WooCommerce to sell Memberships as a product, set a global % discount on products by level or set a per-product members-only price.
+Integrates Paid Memberships Pro with WooCommerce to sell Memberships as a product, set a global % discount on products by level, or set a per-product members-only price.
 
 = Several Key Features Including =
 
@@ -27,7 +27,7 @@ This is an official Add On for [Paid Memberships Pro](https://www.paidmembership
 == Installation ==
 
 1. Upload the `pmpro-woocommerce` directory to the `/wp-content/plugins/` directory of your site.
-2. Activate the plugin through the 'Plugins' menu in WordPress.
+2. Activate the plugin through the `Plugins` menu in WordPress.
 
 Or install directly from the Plugin Repository using the Plugins system in WordPress.
 
@@ -43,11 +43,21 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
 
 == Changelog ==
-= 1.6.1 =
+
+= 1.7 - 2020-04-23 = 
+* BUG FIX: Fixed bug where marking an order expired or cancelled could impact other subscriptions.
+* BUG FIX: Fixed typo with `woocommerce_order_status_on-hold`.
+* BUG FIX: Fixed bug that kept the "Apply Member Discounts to WC Subscription Products?" setting (under Memberships -> Settings -> Advanced) from working properly.
+* BUG FIX/ENHANCEMENT: Checked that $product is actually a `product` post_type when checking if user has active membership for level.
+* BUG FIX/ENHANCEMENT: Improved checks for cancelling membership if membership product expires.
+* ENHANCEMENT: Added function `pmprowoo_user_has_active_membership_product_for_level` to return whether a user has an active WooCommerce product that gives membership.
+* ENHANCEMENT: Updated tested up to value for WooCommerce to v4.0 and WordPress to v5.4
+
+= 1.6.1 - 2018-06-25 =
 * BUG FIX: Fixed fatal error in pmprowoo_get_membership_products_from_order() that was happening on some systems.
 * ENHANCEMENT: Localization/GlotPress support.
 
-= 1.6 =
+= 1.6 - 2018-06-19 =
 * BUG FIX: Fixed bug when deselecting the autocomplete option on a membership product.
 * BUG FIX: Now checking if a user has a different subscription linked to their membership level before removing a user's membership level. Users switching between subscriptions for the same level would have their level removed. (Thanks, Ted Barnett)
 * BUG FIX: Fixed issues when a product with a sale price also has membership pricing.
@@ -139,7 +149,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 = 1.2.1 =
 * Fixed updating of WooCommerce billing address user meta when brand new users checkout with PMPro.
 
-= 1.2 =
+= 1.2 - 2014-04-23 =
 * Updating user meta for billing address when the Woo Commerce billing address is updated and vice versa.
 
 = 1.1.1 =
@@ -148,7 +158,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 = 1.1 =
 * Fixed adding/updating membership when order status is changed to completed
 
-= 1.0 =
+= 1.0 - 2019-02-26 =
 * Released to the WordPress repository.
 
 = .3.2 =
