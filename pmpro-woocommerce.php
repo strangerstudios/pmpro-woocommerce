@@ -831,15 +831,6 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 add_filter( 'pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships' );
 
 /**
- * Enqueue CSS
- */
-function pmprowoo_enqueue_css() {
-	wp_register_style( 'pmpro-woocommerce', plugins_url( '/css/style.css', __FILE__ ), null );
-	wp_enqueue_style( 'pmpro-woocommerce' );
-}
-add_action( 'wp_enqueue_scripts', 'pmprowoo_enqueue_css' );
-
-/**
  * Enqueue Admin CSS
  */
 function pmprowoo_admin_enqueue_css() {

@@ -40,7 +40,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Screenshots ==
 
 1. The "Membership" meta box on a single product. Optionally use this WooCommerce Product to buy a PMPro Membership Level or set specific pricing based on membership level for each product.
-2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
+2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
 
