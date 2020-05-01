@@ -20,6 +20,8 @@ Integrates Paid Memberships Pro with WooCommerce to sell Memberships as a produc
 * Works with the Multiple Memberships Per User Add On for Paid Memberships Pro.
 * Synchronizes the Billing Address Fields Between WooCommerce and Paid Memberships Pro.
 
+[Watch the tutorial video to learn more](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/).
+
 = Official Paid Memberships Pro Add On =
 
 This is an official Add On for [Paid Memberships Pro](https://www.paidmembershipspro.com), the most complete member management and membership subscriptions plugin for WordPress.
@@ -31,6 +33,24 @@ This is an official Add On for [Paid Memberships Pro](https://www.paidmembership
 
 Or install directly from the Plugin Repository using the Plugins system in WordPress.
 
+= Create a Membership Product =
+1. Edit a product or add a new product.
+2. Select the "Membership" tab in the "Product Data" metabox.
+3. Select a level from the "Membership Product" dropdown.
+4. Save changes.
+
+= Set Member Discount Pricing" on a Product =
+1. Edit a product or add a new product.
+2. Select the "Membership" tab in the "Product Data" metabox.
+3. Set a price for one or more levels in the "Member Discount Pricing" section.
+4. Save changes.
+
+= Set a Global Shop Discount for Members =
+1. Edit a membership level under Membership > Settings.
+2. Locate the "Set Membership Discount" section.
+3. Add a percent discount to the field.
+4. Save changes.
+
 == Frequently Asked Questions ==
 
 = I found a bug in the plugin. =
@@ -40,7 +60,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Screenshots ==
 
 1. The "Membership" meta box on a single product. Optionally use this WooCommerce Product to buy a PMPro Membership Level or set specific pricing based on membership level for each product.
-2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Membership Levels > Edit).
+2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
 

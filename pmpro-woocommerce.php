@@ -491,7 +491,7 @@ function pmprowoo_woocommerce_variable_price_html( $variation_range_html, $produ
  */
 function pmprowoo_tab_options_tab() {
 	?>
-    <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><?php esc_html_e( 'Membership', 'pmpro-woocommerce' ); ?></a></li>
+    <li class="pmprowoo_tab"><a href="#pmprowoo_tab_data"><span><?php esc_html_e( 'Membership', 'pmpro-woocommerce' ); ?></span></a></li>
 	<?php
 }
 
@@ -513,58 +513,55 @@ function pmprowoo_tab_options() {
 	?>
     <div id="pmprowoo_tab_data" class="panel woocommerce_options_panel">
 
-        <div class="options_group">
-            <p class="form-field">
-                <strong><?php _e( 'Give Customers a Membership Level', 'pmpro-woocommerce' ); ?></strong><br/>
-				<?php
-				// Membership Product
-				woocommerce_wp_select(
-					array(
-						'id'      => '_membership_product_level',
-						'label'   => __( 'Membership Product', 'pmpro-woocommerce' ),
-						'options' => $membership_level_options,
-					)
-				);
-				
-				// Membership Product
-				if( !empty( $post->ID ) ) {
-					$cbvalue = get_post_meta( $post->ID, '_membership_product_autocomplete', true );
-				}
-				if( empty( $cbvalue ) ) {
-					$cbvalue = NULL;
-				}
+		<div class="options_group pmprowoo_options_group-membership_product">
+			<h3><?php _e( 'Give Customers a Membership Level', 'pmpro-woocommerce' ); ?></h3>
+			<?php
+			// Membership Product
+			woocommerce_wp_select(
+				array(
+					'id'      => '_membership_product_level',
+					'label'   => __( 'Membership Product', 'pmpro-woocommerce' ),
+					'options' => $membership_level_options,
+				)
+			);
 
-				woocommerce_wp_checkbox(
+			// Membership Product
+			if( !empty( $post->ID ) ) {
+				$cbvalue = get_post_meta( $post->ID, '_membership_product_autocomplete', true );
+			}
+			if( empty( $cbvalue ) ) {
+				$cbvalue = NULL;
+			}
+
+			woocommerce_wp_checkbox(
+				array(
+					'id'          => '_membership_product_autocomplete',
+					'label'       => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
+					'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
+					'cbvalue'	  => $cbvalue,
+				)
+			);
+			?>
+        </div> <!-- end pmprowoo_options_group-membership_product -->
+		<div class="options-group pmprowoo_options_group-membership_discount">
+			<h3><?php _e( 'Member Discount Pricing', 'pmpro-woocommerce' ); ?></h3>
+			<p><?php printf( __( 'Set the custom price based on Membership Level. <a href="%s">Edit your membership levels</a> to set a global percent discount for all products.', 'pmpro-woocommerce' ), admin_url( 'admin.php?page=pmpro-membershiplevels' ) ); ?></p>
+            <?php
+			// For each membership level, create respective price field
+			foreach ( $membership_levels as $level ) {
+				woocommerce_wp_text_input(
 					array(
-						'id'          => '_membership_product_autocomplete',
-						'label'       => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
-						'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
-						'cbvalue'	  => $cbvalue,
+						'id'          => '_level_' . $level->id . '_price',
+						'label'       => __( $level->name . " Price", 'pmpro-woocommerce' ) . ' (' . get_woocommerce_currency_symbol() . ')',
+						'placeholder' => '',
+						'type'        => 'text',
+						'desc_tip'    => 'true',
+						'data_type'   => 'price',
 					)
 				);
-				?>
-            </p>
-        </div>
-        <div class="options-group">
-            <p class="form-field">
-                <strong><?php _e( 'Member Discount Pricing', 'pmpro-woocommerce' ); ?></strong><br/>
-				<?php
-				// For each membership level, create respective price field
-				foreach ( $membership_levels as $level ) {
-					woocommerce_wp_text_input(
-						array(
-							'id'          => '_level_' . $level->id . '_price',
-							'label'       => __( $level->name . " Price", 'pmpro-woocommerce' ),
-							'placeholder' => '',
-							'type'        => 'text',
-							'desc_tip'    => 'true',
-							'data_type'   => 'price',
-						)
-					);
-				}
-				?>
-            </p>
-        </div>
+			}
+			?>
+        </div> <!-- end pmprowoo_options_group-membership_discount -->
 		<?php do_action( 'pmprowoo_extra_tab_options' ); ?>
     </div>
 	<?php
@@ -631,7 +628,8 @@ function pmprowoo_add_membership_discount() {
 		$membership_discount = '';
 	}
 	?>
-    <h3 class="topborder"><?php _e( "Set Membership Discount", "pmpro-woocommerce" ); ?></h3>
+	<hr />
+    <h2 class="title"><?php _e( "Set Membership Discount", "pmpro-woocommerce" ); ?></h2>
     <p><?php _e( "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page.", "pmpro-woocommerce" ); ?></p>
     <table>
         <tbody class="form-table">
@@ -833,14 +831,13 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 add_filter( 'pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships' );
 
 /**
- * Enqueue CSS
+ * Enqueue Admin CSS
  */
-function pmprowoo_enqueue_css() {
-	
-	wp_register_style( 'pmpro-woocommerce', plugins_url( '/css/style.css', __FILE__ ), null );
-	wp_enqueue_style( 'pmpro-woocommerce' );
+function pmprowoo_admin_enqueue_css() {
+	wp_register_style( 'pmpro-woocommerce-admin', plugins_url( '/css/admin.css', __FILE__ ), null );
+	wp_enqueue_style( 'pmpro-woocommerce-admin' );
 }
-add_action( 'wp_enqueue_scripts', 'pmprowoo_enqueue_css' );
+add_action( 'admin_enqueue_scripts', 'pmprowoo_admin_enqueue_css' );
 
 /**
  * Check if Autocomplete setting is active for the product.
