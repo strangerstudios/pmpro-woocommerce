@@ -2,7 +2,7 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 3.8
-Tested up to: 5.4
+Tested up to: 5.4.1
 Stable tag: 1.7
 
 Integrates Paid Memberships Pro with WooCommerce to sell Membership as a product and set members-only product discounts.
@@ -64,7 +64,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 
 == Changelog ==
 
-= 1.7 - 2020-04-23 = 
+= 1.7 - 2020-05-01 =
 * BUG FIX: Fixed bug where marking an order expired or cancelled could impact other subscriptions.
 * BUG FIX: Fixed typo with `woocommerce_order_status_on-hold`.
 * BUG FIX: Fixed bug that kept the "Apply Member Discounts to WC Subscription Products?" setting (under Memberships -> Settings -> Advanced) from working properly.
@@ -137,7 +137,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 * Using current_time('timestamp') in a couple strtotime calls.
 * Added links to docs and support in the "plugin row meta".
 
-= 1.2.7 = 
+= 1.2.7 =
 * Fixed bug where startdate was not being set correctly for new users. (Thanks, liferaft) This script can be used to fix startdates for old members: https://gist.github.com/strangerstudios/4604f62e9812cf3afde7
 
 = 1.2.6 =
