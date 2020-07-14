@@ -25,8 +25,11 @@ add_filter('pmpro_email_data', 'pmprowoo_gift_levels_pmpro_email_data');
  */
 function pmprowoo_gift_levels_add_recipient_fields() {
     global $product;	
-    $gift_membership_code = get_post_meta( $product->get_id(), '_gift_membership_code', true);
-    $gift_membership_email_option = get_post_meta($product->get_id(), '_gift_membership_email_option', true);
+    $product_id = $product->get_id();
+	
+    $gift_membership_code = get_post_meta( $product_id, '_gift_membership_code', true);
+    $gift_membership_email_option = get_post_meta($product_id, '_gift_membership_email_option', true);
+	
     if(!empty($gift_membership_code) && !empty($gift_membership_email_option)){
       if($gift_membership_email_option == '1'){
           echo '<table class="variations gift-membership-fields" cellspacing="0">
@@ -249,7 +252,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
                      // Send Email to Recipient
                      $pmproemail = new PMProEmail();
                      $pmproemail->email = $recipient_email;
-	             $pmproemail->subject = sprintf(__("A Gift from %s", "pmpro"), get_option("blogname"));
+	             $pmproemail->subject = sprintf(__("A Gift from %s", 'pmpro-woocommerce'), get_option('blogname'));
                      $pmproemail->template = 'gift_membership_code';
                      
                      $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $recipient_name, "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $recipient_name, "user_email" => $recipient_email, "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
@@ -270,7 +273,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
                      // If no Recipient Send Email to Customer
                      $pmproemail = new PMProEmail();
                      $pmproemail->email = $order->billing_email;
-	             $pmproemail->subject = sprintf(__("A Gift from %s", "pmpro"), get_option("blogname"));
+                     $pmproemail->subject = sprintf(__("A Gift from %s", 'pmpro-woocommerce'), get_option("blogname"));
                      $pmproemail->template = 'gift_membership_code';
                      
                      $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $order->billing_first_name, "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $order->billing_first_name, "user_email" => $order->billing_email, "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		

@@ -1,0 +1,10 @@
+
+#woocommerce-product-data ul.wc-tabs li.pmprowoo_tab a::before {
+	font-family: Dashicons;
+    content: "\f307";
+}
+
+.pmprowoo_options_group-membership_product h3,
+.pmprowoo_options_group-membership_discount h3 {
+	padding: 0 12px;
+}
