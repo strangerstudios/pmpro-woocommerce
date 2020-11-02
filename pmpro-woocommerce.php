@@ -602,8 +602,9 @@ function pmprowoo_process_product_meta() {
 		update_option( '_pmprowoo_product_levels', $pmprowoo_product_levels );
 		
 		// Save each membership level price
+		$decimal_separator = wc_get_price_decimal_separator();
 		foreach ( $membership_levels as $level ) {
-			$price = $_POST[ '_level_' . $level->id . "_price" ];
+			$price = str_replace( $decimal_separator, '.', $_POST[ '_level_' . $level->id . "_price" ] );
 			update_post_meta( $post_id, '_level_' . $level->id . '_price', $price );
 		}
 	}
