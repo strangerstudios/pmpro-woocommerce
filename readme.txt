@@ -63,6 +63,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.7.1 - 2020-01-13 =
+* BUG FIX: Fixed issue where discount for membership products would be applied when shouldn't.
+* ENHANCEMENT: Improved wording on the Advanced Settings area for Membership and WooCommerce Subscriptions discount option.
 
 = 1.7 - 2020-05-01 =
 * BUG FIX: Fixed bug where marking an order expired or cancelled could impact other subscriptions.
