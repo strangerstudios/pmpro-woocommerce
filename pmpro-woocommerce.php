@@ -3,9 +3,9 @@
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate WooCommerce with Paid Memberships Pro.
- * Version: 1.7
+ * Version: 1.7.1
  * WC requires at least: 3.3
- * WC tested up to: 4.3.0
+ * WC tested up to: 4.9.0
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
@@ -678,7 +678,7 @@ function pmprowoo_custom_settings( $fields ) {
 	$fields[] = array(
 		'field_name' => 'pmprowoo_discounts_on_subscriptions',
 		'field_type' => 'select',
-		'label'      => __( 'Apply Member Discounts to WC Subscription Products?', 'pmpro-woocommerce' ),
+		'label'      => __( 'Apply Member Discounts to WooCommerce Subscription and Membership Products?', 'pmpro-woocommerce' ),
 		'value'      => __( 'No', 'pmpro-woocommerce' ),
 		'options'    => array( __( 'Yes', 'pmpro-woocommerce' ), __( 'No', 'pmpro-woocommerce' ) ),
 	);
