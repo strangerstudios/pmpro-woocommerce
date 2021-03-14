@@ -861,7 +861,7 @@ function pmprowoo_order_autocomplete( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			if ( $item['type'] == 'line_item' ) {
 				//get product info and check if product is marked to autocomplete
-				$_product = $order->get_product_from_item( $item );
+				$_product = $item->get_product();
 				$product_id = $_product->get_id();
 				$product_autocomplete = get_post_meta( $product_id, '_membership_product_autocomplete', true );
 				
