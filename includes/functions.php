@@ -76,7 +76,7 @@ function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level
 				$product = get_product( $product_id );
 				if ( ! empty( $product ) && is_object( $product ) && method_exists( $product, 'is_type' ) ) {
 					if ( $product->is_type( 'subscription' ) ) {
-						if ( function_exists( 'wcs_user_has_subscription' ) && wcs_user_has_subscription( $user_id, $product_id, 'active' ) ) {
+						if ( function_exists( 'wcs_user_has_subscription' ) && wcs_user_has_subscription( $user_id, $product_id, array( 'active', 'pending-cancel' ) ) ) {
 							return true;
 						}
 					} else {
