@@ -1,9 +1,9 @@
 === Paid Memberships Pro - WooCommerce Add On ===
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
-Requires at least: 3.8
-Tested up to: 5.6
-Stable tag: 1.7.1
+Requires at least: 5
+Tested up to: 5.7
+Stable tag: 1.7.2
 
 Integrates Paid Memberships Pro with WooCommerce to sell Membership as a product and set members-only product discounts.
 
@@ -63,7 +63,14 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
-= 1.7.1 - 2020-01-13 =
+= 1.7.2 - 2021-03-13 =
+* ENHANCEMENT: Tested up to WooCommerce 5.1.0.
+* ENHANCEMENT: Added .pot file and British English po/mo files.
+* BUG FIX: Fixed issue where memberships associated with subscriptions in pending-cancel status were cancelled. We now wait for the full canceled status.
+* BUG FIX: When variable products are used, we will look for a membership price on the parent product. No support for member prices on variations yet.
+* BUG FIX: Removed use of deprecated $order->get_product_from_item() method. (Thanks, ogiebobogh on GitHub)
+
+= 1.7.1 - 2021-01-13 =
 * BUG FIX: Fixed issue where discount for membership products would be applied when shouldn't.
 * ENHANCEMENT: Improved wording on the Advanced Settings area for Membership and WooCommerce Subscriptions discount option.
 
