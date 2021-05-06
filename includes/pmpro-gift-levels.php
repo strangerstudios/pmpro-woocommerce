@@ -266,7 +266,10 @@ function pmprowoo_add_gift_code_from_order($order_id)
                     } else {
                        $message = "Gift Email Sent To Recipient ". $recipient_email;
                     }
-                    wc_add_notice( $message, $notice_type = 'success' );
+
+                    if ( function_exists('wc_add_notice') ) {
+                        wc_add_notice( $message, $notice_type = 'success' );
+                    }
 
                   } else {
 
@@ -287,7 +290,11 @@ function pmprowoo_add_gift_code_from_order($order_id)
                     } else {
                        $message = "Gift Email Sent To ". $order->billing_email;
                     }
-                    wc_add_notice( $message, $notice_type = 'success' );
+                   
+                    if ( function_exists('wc_add_notice') ) {
+                        wc_add_notice( $message, $notice_type = 'success' );
+                    }
+                    
                   }
 
    	        }
