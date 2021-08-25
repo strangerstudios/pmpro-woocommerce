@@ -153,7 +153,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				
 				//if checking out for the same level they have, keep their old start date
 				$sqlQuery = $wpdb->prepare(
-					"SELECT startdate, enddate
+					"SELECT startdate
                                 FROM {$wpdb->pmpro_memberships_users}
                                 WHERE user_id = %d
                                   AND membership_id = %d
@@ -164,19 +164,11 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 					$pmpro_level->id
 				);
 				
-				$membership_date = $wpdb->get_row( $sqlQuery );
-				
-				if ( ! empty( $membership_date->startdate ) ) {
-					$startdate = "'" . $membership_date->startdate . "'";
+				$old_startdate = $wpdb->get_var( $sqlQuery );
+				if ( ! empty( $old_startdate ) ) {
+					$startdate = "'" . $old_startdate . "'";
 				} else {
 					$startdate = "'" . current_time( 'mysql' ) . "'";
-				}
-
-				if ( ! empty( $membership_date->enddate ) ) {
-					//Extend it if there is an expiration date
-					$enddate = "'" . $membership_date->enddate . "'";
-				} else {
-					$enddate = "'0000-00-00 00:00:00'";
 				}
 				
 				//create custom level to mimic PMPro checkout
@@ -192,7 +184,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 					'trial_amount'    => '',
 					'trial_limit'     => '',
 					'startdate'       => $startdate,
-					'enddate'         => $enddate,
+					'enddate'         => '0000-00-00 00:00:00',
 				);
 				
 				//set enddate
