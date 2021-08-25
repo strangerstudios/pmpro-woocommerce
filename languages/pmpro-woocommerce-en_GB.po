@@ -1,24 +1,26 @@
+# Copyright (C) 2021 Paid Memberships Pro
+# This file is distributed under the same license as the Paid Memberships Pro - WooCommerce Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-11 16:07+0000\n"
-"PO-Revision-Date: 2020-11-11 18:09+0200\n"
-"Last-Translator: First Last\n"
-"Language-Team: \n"
-"Language: en_GB\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.7.3\n"
+"Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
+"Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
-"X-Loco-Version: 2.4.4; wp-5.5.3\n"
+"POT-Creation-Date: 2021-08-25T13:55:44+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: pmpro-woocommerce\n"
 
 #: pmpro-woocommerce.php:555
 msgid " Price"
 msgstr " Price"
 
-#: includes/pmpro-gift-levels.php:255 includes/pmpro-gift-levels.php:276
+#: includes/pmpro-gift-levels.php:255
+#: includes/pmpro-gift-levels.php:276
+#: includes/pmpro-gift-levels.php:279
 #, php-format
 msgid "A Gift from %s"
 msgstr "A Gift from %s"
@@ -28,10 +30,12 @@ msgid "Apply Member Discounts to WC Subscription Products?"
 msgstr "Apply Member Discounts to WC Subscription Products?"
 
 #: pmpro-woocommerce.php:539
+#: pmpro-woocommerce.php:548
 msgid "Autocomplete Order Status"
 msgstr "Autocomplete Order Status"
 
 #: pmpro-woocommerce.php:878
+#: pmpro-woocommerce.php:892
 msgid "Autocomplete via PMPro WooCommerce."
 msgstr "Autocomplete via PMPro WooCommerce."
 
@@ -40,34 +44,31 @@ msgid "Cart"
 msgstr "Cart"
 
 #: pmpro-woocommerce.php:540
-msgid ""
-"Check this to mark the order as completed immediately after checkout to "
-"activate the associated membership."
-msgstr ""
-"Check this to mark the order as completed immediately after checkout to "
-"activate the associated membership."
+#: pmpro-woocommerce.php:549
+msgid "Check this to mark the order as completed immediately after checkout to activate the associated membership."
+msgstr "Check this to mark the order as completed immediately after checkout to activate the associated membership."
 
 #: includes/pmpro-gift-levels.php:350
-msgid ""
-"Decide if a recipient email is entered and the code is emailed upon "
-"successful purchase."
-msgstr ""
-"Decide if a recipient email is entered and the code is emailed upon "
-"successful purchase."
+#: includes/pmpro-gift-levels.php:357
+msgid "Decide if a recipient email is entered and the code is emailed upon successful purchase."
+msgstr "Decide if a recipient email is entered and the code is emailed upon successful purchase."
 
 #: includes/admin.php:13
 msgid "Docs"
 msgstr "Docs"
 
 #: includes/pmpro-gift-levels.php:343
+#: includes/pmpro-gift-levels.php:350
 msgid "Email Recipient"
 msgstr "Email Recipient"
 
 #: includes/pmpro-gift-levels.php:326
+#: includes/pmpro-gift-levels.php:333
 msgid "Gift a Membership"
 msgstr "Gift a Membership"
 
 #: pmpro-woocommerce.php:517
+#: pmpro-woocommerce.php:526
 msgid "Give Customers a Membership Level"
 msgstr "Give Customers a Membership Level"
 
@@ -76,6 +77,7 @@ msgid "https://www.paidmembershipspro.com/"
 msgstr "https://www.paidmembershipspro.com/"
 
 #. URI of the plugin
+#. Plugin URI of the plugin
 msgid "https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/"
 msgstr "https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/"
 
@@ -84,22 +86,29 @@ msgid "Integrate WooCommerce with Paid Memberships Pro."
 msgstr "Integrate WooCommerce with Paid Memberships Pro."
 
 #: pmpro-woocommerce.php:547
+#: pmpro-woocommerce.php:556
 msgid "Member Discount Pricing"
 msgstr "Member Discount Pricing"
 
 #: pmpro-woocommerce.php:494
+#: pmpro-woocommerce.php:503
 msgid "Membership"
 msgstr "Membership"
 
 #: pmpro-woocommerce.php:638
+#: pmpro-woocommerce.php:648
 msgid "Membership Discount (%):"
 msgstr "Membership Discount (%):"
 
 #: pmpro-woocommerce.php:523
+#: pmpro-woocommerce.php:532
 msgid "Membership Product"
 msgstr "Membership Product"
 
-#: pmpro-woocommerce.php:682 pmpro-woocommerce.php:683
+#: pmpro-woocommerce.php:682
+#: pmpro-woocommerce.php:683
+#: pmpro-woocommerce.php:692
+#: pmpro-woocommerce.php:693
 msgid "No"
 msgstr "No"
 
@@ -108,6 +117,7 @@ msgid "Paid Memberships Pro"
 msgstr "Paid Memberships Pro"
 
 #. Name of the plugin
+#. Plugin Name of the plugin
 msgid "Paid Memberships Pro - WooCommerce Add On"
 msgstr "Paid Memberships Pro - WooCommerce Add On"
 
@@ -119,17 +129,20 @@ msgstr "Please enter a EMAIL of Recipient"
 msgid "Please enter a NAME of Recipient"
 msgstr "Please enter a NAME of Recipient"
 
-#: includes/pmpro-gift-levels.php:42 includes/pmpro-gift-levels.php:63
+#: includes/pmpro-gift-levels.php:42
+#: includes/pmpro-gift-levels.php:63
 #: includes/pmpro-gift-levels.php:148
 msgid "Recipient Email"
 msgstr "Recipient Email"
 
-#: includes/pmpro-gift-levels.php:38 includes/pmpro-gift-levels.php:59
+#: includes/pmpro-gift-levels.php:38
+#: includes/pmpro-gift-levels.php:59
 #: includes/pmpro-gift-levels.php:145
 msgid "Recipient Name"
 msgstr "Recipient Name"
 
 #: includes/pmpro-gift-levels.php:332
+#: includes/pmpro-gift-levels.php:339
 msgid "Select Discount Code"
 msgstr "Select Discount Code"
 
@@ -138,41 +151,29 @@ msgid "Send Email to Recipient?"
 msgstr "Send Email to Recipient?"
 
 #: pmpro-woocommerce.php:633
-msgid ""
-"Set a membership discount for this level which will be applied when a user "
-"with this membership level is logged in. The discount is applied to the "
-"product's regular price, sale price, or level-specific price set on the edit "
-"product page."
-msgstr ""
-"Set a membership discount for this level which will be applied when a user "
-"with this membership level is logged in. The discount is applied to the "
-"product's regular price, sale price, or level-specific price set on the edit "
-"product page."
+#: pmpro-woocommerce.php:643
+msgid "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page."
+msgstr "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page."
 
 #: pmpro-woocommerce.php:632
+#: pmpro-woocommerce.php:642
 msgid "Set Membership Discount"
 msgstr "Set Membership Discount"
 
 #: pmpro-woocommerce.php:548
+#: pmpro-woocommerce.php:557
 #, php-format
-msgid ""
-"Set the custom price based on Membership Level. <a href=\"%s\">Edit your "
-"membership levels</a> to set a global percent discount for all products."
-msgstr ""
-"Set the custom price based on Membership Level. <a href=\"%s\">Edit your "
-"membership levels</a> to set a global percent discount for all products."
+msgid "Set the custom price based on Membership Level. <a href=\"%s\">Edit your membership levels</a> to set a global percent discount for all products."
+msgstr "Set the custom price based on Membership Level. <a href=\"%s\">Edit your membership levels</a> to set a global percent discount for all products."
 
 #: includes/admin.php:14
 msgid "Support"
 msgstr "Support"
 
 #: includes/pmpro-gift-levels.php:335
-msgid ""
-"Upon each purchase a new one-time use code (which start with \"GIFT\") will "
-"be created from the code selected here."
-msgstr ""
-"Upon each purchase a new one-time use code (which start with \"GIFT\") will "
-"be created from the code selected here."
+#: includes/pmpro-gift-levels.php:342
+msgid "Upon each purchase a new one-time use code (which start with \"GIFT\") will be created from the code selected here."
+msgstr "Upon each purchase a new one-time use code (which start with \"GIFT\") will be created from the code selected here."
 
 #: includes/admin.php:13
 msgid "View Documentation"
@@ -183,6 +184,7 @@ msgid "Visit Customer Support Forum"
 msgstr "Visit Customer Support Forum"
 
 #: pmpro-woocommerce.php:683
+#: pmpro-woocommerce.php:693
 msgid "Yes"
 msgstr "Yes"
 
@@ -190,3 +192,7 @@ msgstr "Yes"
 #, php-format
 msgid "You may only add one membership to your %scart%s."
 msgstr "You may only add one membership to your %scart%s."
+
+#: pmpro-woocommerce.php:691
+msgid "Apply Member Discounts to WooCommerce Subscription and Membership Products?"
+msgstr ""
