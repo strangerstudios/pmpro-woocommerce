@@ -820,8 +820,12 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 			//convert to days and add to the expiration date (assumes expiration was 1 year)
 			$days_left = floor( $time_left / ( 60 * 60 * 24 ) );
 			
+			$date_string = "Day";
 			//figure out days based on period
-			if ( $level_obj->expiration_period == "Day" ) {
+			if ( $level_obj->expiration_period == "Hour" ) {
+				$date_string = "Hour";
+				$total_days = $level_obj->expiration_number;
+			} else if ( $level_obj->expiration_period == "Day" ) {
 				$total_days = $days_left + $level_obj->expiration_number;
 			} else if ( $level_obj->expiration_period == "Week" ) {
 				$total_days = $days_left + $level_obj->expiration_number * 7;
@@ -830,9 +834,9 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 			} else if ( $level_obj->expiration_period == "Year" ) {
 				$total_days = $days_left + $level_obj->expiration_number * 365;
 			}
-			
+
 			//update the end date
-			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days Days", $todays_date ) );
+			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days $date_string", $expiration_date ) );
 		}
 	}
 	
