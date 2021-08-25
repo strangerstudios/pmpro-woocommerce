@@ -153,7 +153,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				
 				//if checking out for the same level they have, keep their old start date
 				$sqlQuery = $wpdb->prepare(
-					"SELECT startdate
+					"SELECT startdate, enddate
                                 FROM {$wpdb->pmpro_memberships_users}
                                 WHERE user_id = %d
                                   AND membership_id = %d
@@ -164,11 +164,19 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 					$pmpro_level->id
 				);
 				
-				$old_startdate = $wpdb->get_var( $sqlQuery );
-				if ( ! empty( $old_startdate ) ) {
-					$startdate = "'" . $old_startdate . "'";
+				$membership_date = $wpdb->get_row( $sqlQuery );
+				
+				if ( ! empty( $membership_date->startdate ) ) {
+					$startdate = "'" . $membership_date->startdate . "'";
 				} else {
 					$startdate = "'" . current_time( 'mysql' ) . "'";
+				}
+
+				if ( ! empty( $membership_date->enddate ) ) {
+					//Extend it if there is an expiration date
+					$enddate = "'" . $membership_date->enddate . "'";
+				} else {
+					$enddate = "'0000-00-00 00:00:00'";
 				}
 				
 				//create custom level to mimic PMPro checkout
@@ -184,7 +192,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 					'trial_amount'    => '',
 					'trial_limit'     => '',
 					'startdate'       => $startdate,
-					'enddate'         => '0000-00-00 00:00:00',
+					'enddate'         => $enddate,
 				);
 				
 				//set enddate
@@ -820,8 +828,12 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 			//convert to days and add to the expiration date (assumes expiration was 1 year)
 			$days_left = floor( $time_left / ( 60 * 60 * 24 ) );
 			
+			$date_string = "Day";
 			//figure out days based on period
-			if ( $level_obj->expiration_period == "Day" ) {
+			if ( $level_obj->expiration_period == "Hour" ) {
+				$date_string = "Hour";
+				$total_days = $level_obj->expiration_number;
+			} else if ( $level_obj->expiration_period == "Day" ) {
 				$total_days = $days_left + $level_obj->expiration_number;
 			} else if ( $level_obj->expiration_period == "Week" ) {
 				$total_days = $days_left + $level_obj->expiration_number * 7;
@@ -830,9 +842,9 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 			} else if ( $level_obj->expiration_period == "Year" ) {
 				$total_days = $days_left + $level_obj->expiration_number * 365;
 			}
-			
+
 			//update the end date
-			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days Days", $todays_date ) );
+			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days $date_string", $expiration_date ) );
 		}
 	}
 	
