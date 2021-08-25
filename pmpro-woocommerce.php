@@ -487,6 +487,11 @@ function pmprowoo_woocommerce_variable_price_html( $variation_range_html, $produ
 	$member_min_price = pmprowoo_get_membership_price( $min_price, $min_price_product_id );
 	$member_max_price = pmprowoo_get_membership_price( $max_price, $max_price_product_id );
 	
+	// If variation price for min and max price are identical, show one price only.
+	if ( $member_min_price === $member_max_price ) {
+		return wc_price( $member_max_price );
+	}
+
 	return wc_format_price_range( $member_min_price, $member_max_price );
 }
 
