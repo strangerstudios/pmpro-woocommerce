@@ -189,7 +189,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				
 				//set enddate
 				if ( ! empty( $pmpro_level->expiration_number ) ) {
-					$custom_level['enddate'] = date( "Y-m-d", strtotime( "+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period, current_time( 'timestamp' ) ) );
+					$custom_level['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period, current_time( 'timestamp' ) ) );
 				}
 
 				/** 
@@ -827,7 +827,7 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 			}
 			
 			//update the end date
-			$level_array['enddate'] = date( "Y-m-d", strtotime( "+ $total_days Days", $todays_date ) );
+			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days Days", $todays_date ) );
 		}
 	}
 	
