@@ -275,20 +275,20 @@ function pmprowoo_add_gift_code_from_order($order_id)
 
                      // If no Recipient Send Email to Customer
                      $pmproemail = new PMProEmail();
-                     $pmproemail->email = $order->billing_email;
+                     $pmproemail->email = $order->get_billing_email();
                      $pmproemail->subject = sprintf(__("A Gift from %s", 'pmpro-woocommerce'), get_option("blogname"));
                      $pmproemail->template = 'gift_membership_code';
                      
-                     $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $order->billing_first_name, "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $order->billing_first_name, "user_email" => $order->billing_email, "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
+                     $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $order->get_billing_first_name(), "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $order->get_billing_first_name(), "user_email" => $order->get_billing_email(), "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
 			
 	            if($pmproemail->sendEmail() == false){
-                       $message = "Gift Email FAILED To ". $order->billing_email .". Contact Site Admin. ";
+                       $message = "Gift Email FAILED To ". $order->get_billing_email() .". Contact Site Admin. ";
                        global $phpmailer;
                        if (isset($phpmailer)) {
                           $message .= $phpmailer->ErrorInfo;
                        }
                     } else {
-                       $message = "Gift Email Sent To ". $order->billing_email;
+                       $message = "Gift Email Sent To ". $order->get_billing_email();
                     }
                    
                     if ( function_exists('wc_add_notice') ) {
