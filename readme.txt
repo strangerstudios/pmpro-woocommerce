@@ -68,6 +68,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 * ENHANCEMENT: Added support for time in expiration dates when extending or renewing a level and checking out for a new membership level.
 * BUG FIX: Fixed an issue where variation prices would show twice if the min and max price was identical. (Thanks, ArdiNEC on GitHub)
 * BUG FIX: Fixed an issue of a non-numeric warning value when discount was empty.
+* BUG FIX: Fixed deprecated function warnings.
 
 = 1.7.2 - 2021-03-13 =
 * ENHANCEMENT: Tested up to WooCommerce 5.1.0.
