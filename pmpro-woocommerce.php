@@ -777,7 +777,7 @@ function pmprowoo_update_user_meta( $meta_id, $object_id, $meta_key, $meta_value
 		// Check if billing fields are passed through via a different method just in case such as Address For Free Levels Add On etc.
 		$pmpro_bfield_found = false;
 		foreach ( $pmpro_bfields as $key => $field ) {
-			if ( array_key_exists( $field, $_REQUEST ) ) {
+			if ( isset( $_REQUEST[ $field ] ) ) {
 				$pmpro_bfield_found = true;
 				break;
 			}
