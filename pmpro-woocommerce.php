@@ -752,7 +752,18 @@ function pmprowoo_update_user_meta( $meta_id, $object_id, $meta_key, $meta_value
 	 */
 	if ( ( $_REQUEST['level'] || is_page( $pmpro_pages['checkout'] ) ) && ! $pmpro_requirebilling ) {
 		
-		$pmpro_bfields = array( 'bfirstname', 'blastname', 'baddress1', 'baddress2', 'bcity',	'bzipcode', 'bstate', 'bcountry', 'bphone',	'bemail' );
+		$pmpro_bfields = array(
+			'bfirstname',
+			'blastname',
+			'baddress1',
+			'baddress2',
+			'bcity',
+			'bzipcode',
+			'bstate',
+			'bcountry',
+			'bphone',
+			'bemail',
+		);
 
 		// Check if billing fields are passed through via a different method just in case such as Address For Free Levels Add On etc.
 		$pmpro_bfield_found = false;
