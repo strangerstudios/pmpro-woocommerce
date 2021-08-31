@@ -738,12 +738,35 @@ add_action( 'woocommerce_after_checkout_registration_form', 'pmprowoo_woocommerc
  */
 function pmprowoo_update_user_meta( $meta_id, $object_id, $meta_key, $meta_value ) {
 	//tracks updates that are made
-	global $pmprowoo_updated_user_meta;
+	global $pmprowoo_updated_user_meta, $pmpro_pages, $pmpro_requirebilling;
 	if ( empty( $pmprowoo_updated_user_meta ) ) {
 		$pmprowoo_updated_user_meta = array();
 	}
 	if ( empty( $pmprowoo_updated_user_meta[ $object_id ] ) ) {
 		$pmprowoo_updated_user_meta[ $object_id ] = array();
+	}
+
+	/**
+	 * Check to see if customer is purchasing on the PMPro checkout page. Make sure that billing fields are required.
+	 * Check if custom fields are also present via RH or another solution and then allow updating of WooCommerce billing details.
+	 */
+	if ( ( $_REQUEST['level'] || is_page( $pmpro_pages['checkout'] ) ) && ! $pmpro_requirebilling ) {
+		
+		$pmpro_bfields = array( 'bfirstname', 'blastname', 'baddress1', 'baddress2', 'bcity',	'bzipcode', 'bstate', 'bcountry', 'bphone',	'bemail' );
+
+		// Check if billing fields are passed through via a different method just in case such as Address For Free Levels Add On etc.
+		$pmpro_bfield_found = false;
+		foreach ( $pmpro_bfields as $key => $field ) {
+			if ( array_key_exists( $field, $_REQUEST ) ) {
+				$pmpro_bfield_found = true;
+				break;
+			}
+		}
+
+		// If no default field is found in the REQUEST array of the PMPro checkout page, just bail from trying to update data.
+		if ( ! $pmpro_bfield_found ) {
+			return;
+		}
 	}
 	
 	//array of user meta to mirror
