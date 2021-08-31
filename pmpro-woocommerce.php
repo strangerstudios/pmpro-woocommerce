@@ -750,7 +750,16 @@ function pmprowoo_update_user_meta( $meta_id, $object_id, $meta_key, $meta_value
 	 * Check to see if customer is purchasing on the PMPro checkout page. Make sure that billing fields are required.
 	 * Check if custom fields are also present via RH or another solution and then allow updating of WooCommerce billing details.
 	 */
-	if ( ( $_REQUEST['level'] || is_page( $pmpro_pages['checkout'] ) ) && ! $pmpro_requirebilling ) {
+	if (
+		(
+			! empty( $_REQUEST['level'] )
+			|| (
+				! empty( $pmpro_pages['checkout'] )
+				&& is_page( $pmpro_pages['checkout'] )
+			)
+		)
+		&& ! $pmpro_requirebilling
+	) {
 		
 		$pmpro_bfields = array(
 			'bfirstname',
