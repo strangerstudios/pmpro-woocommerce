@@ -3,9 +3,9 @@
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate WooCommerce with Paid Memberships Pro.
- * Version: 1.7
+ * Version: 1.7.3
  * WC requires at least: 3.3
- * WC tested up to: 4.3.0
+ * WC tested up to: 5.6.0
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
@@ -189,7 +189,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				
 				//set enddate
 				if ( ! empty( $pmpro_level->expiration_number ) ) {
-					$custom_level['enddate'] = date( "Y-m-d", strtotime( "+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period, current_time( 'timestamp' ) ) );
+					$custom_level['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period, current_time( 'timestamp' ) ) );
 				}
 
 				/** 
@@ -413,7 +413,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 	
 	//ignore membership products and subscriptions if we are set that way
-	if ( ! $pmprowoo_discounts_on_subscriptions && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product->get_id(), array_keys( $pmprowoo_product_levels ), false ) ) ) {
+	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product->get_id(), array_keys( $pmprowoo_product_levels ), false ) ) ) {
 		return $price;
 	}
 	
@@ -438,7 +438,11 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	// use this level to get the price
 	if ( isset( $level_price ) ) {
-		$product_id = $product->get_id();
+		if( $product->get_type() === 'variation' ){
+			$product_id = $product->get_parent_id(); //for variations	
+		} else {
+			$product_id = $product->get_id();
+		}
 		$level_price = get_post_meta( $product_id, $level_price, true );
 		if ( ! empty( $level_price ) || $level_price === '0' || $level_price === '0.00' || $level_price === '0,00' ) {
 			$discount_price = $level_price;
@@ -483,6 +487,11 @@ function pmprowoo_woocommerce_variable_price_html( $variation_range_html, $produ
 	$member_min_price = pmprowoo_get_membership_price( $min_price, $min_price_product_id );
 	$member_max_price = pmprowoo_get_membership_price( $max_price, $max_price_product_id );
 	
+	// If variation price for min and max price are identical, show one price only.
+	if ( $member_min_price === $member_max_price ) {
+		return wc_price( $member_max_price );
+	}
+
 	return wc_format_price_range( $member_min_price, $member_max_price );
 }
 
@@ -602,8 +611,9 @@ function pmprowoo_process_product_meta() {
 		update_option( '_pmprowoo_product_levels', $pmprowoo_product_levels );
 		
 		// Save each membership level price
+		$decimal_separator = wc_get_price_decimal_separator();
 		foreach ( $membership_levels as $level ) {
-			$price = $_POST[ '_level_' . $level->id . "_price" ];
+			$price = str_replace( $decimal_separator, '.', $_POST[ '_level_' . $level->id . "_price" ] );
 			update_post_meta( $post_id, '_level_' . $level->id . '_price', $price );
 		}
 	}
@@ -657,7 +667,7 @@ function pmprowoo_save_membership_level( $level_id ) {
 	global $pmprowoo_member_discounts;
 	
 	//convert % to decimal
-	$member_discount = ( isset($_POST['membership_discount']) ? sanitize_text_field( $_POST['membership_discount'] ) : 0 )/100;
+	$member_discount = ! empty( $_POST['membership_discount'] ) ? ( (float) sanitize_text_field( $_POST['membership_discount'] ) / 100 ) : 0;
 	$pmprowoo_member_discounts[$level_id] = $member_discount;
 	update_option( '_pmprowoo_member_discounts', $pmprowoo_member_discounts );
 }
@@ -678,7 +688,7 @@ function pmprowoo_custom_settings( $fields ) {
 	$fields[] = array(
 		'field_name' => 'pmprowoo_discounts_on_subscriptions',
 		'field_type' => 'select',
-		'label'      => __( 'Apply Member Discounts to WC Subscription Products?', 'pmpro-woocommerce' ),
+		'label'      => __( 'Apply Member Discounts to WooCommerce Subscription and Membership Products?', 'pmpro-woocommerce' ),
 		'value'      => __( 'No', 'pmpro-woocommerce' ),
 		'options'    => array( __( 'Yes', 'pmpro-woocommerce' ), __( 'No', 'pmpro-woocommerce' ) ),
 	);
@@ -810,8 +820,12 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 			//convert to days and add to the expiration date (assumes expiration was 1 year)
 			$days_left = floor( $time_left / ( 60 * 60 * 24 ) );
 			
+			$date_string = "Day";
 			//figure out days based on period
-			if ( $level_obj->expiration_period == "Day" ) {
+			if ( $level_obj->expiration_period == "Hour" ) {
+				$date_string = "Hour";
+				$total_days = $level_obj->expiration_number;
+			} else if ( $level_obj->expiration_period == "Day" ) {
 				$total_days = $days_left + $level_obj->expiration_number;
 			} else if ( $level_obj->expiration_period == "Week" ) {
 				$total_days = $days_left + $level_obj->expiration_number * 7;
@@ -820,9 +834,9 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 			} else if ( $level_obj->expiration_period == "Year" ) {
 				$total_days = $days_left + $level_obj->expiration_number * 365;
 			}
-			
+
 			//update the end date
-			$level_array['enddate'] = date( "Y-m-d", strtotime( "+ $total_days Days", $todays_date ) );
+			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days $date_string", $expiration_date ) );
 		}
 	}
 	
@@ -856,7 +870,7 @@ function pmprowoo_order_autocomplete( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			if ( $item['type'] == 'line_item' ) {
 				//get product info and check if product is marked to autocomplete
-				$_product = $order->get_product_from_item( $item );
+				$_product = $item->get_product();
 				$product_id = $_product->get_id();
 				$product_autocomplete = get_post_meta( $product_id, '_membership_product_autocomplete', true );
 				
