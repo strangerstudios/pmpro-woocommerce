@@ -154,15 +154,16 @@ add_filter( 'woocommerce_get_item_data', 'pmprowoo_gift_levels_render_on_cart_an
 /*
 	Add Frontend fields for Gift Membership to Order meta.
 */
-function gift_membership_order_meta_handler( $item_id, $values, $cart_item_key ) {
-    if( isset( $values['gift_recipient_name'] ) ) {
-        wc_add_order_item_meta( $item_id, "Recipient Name", $values['gift_recipient_name'] );
+function gift_membership_order_meta_handler( $item_id, $cart_item, $order_id ) {
+    
+    if( isset( $cart_item->legacy_values['gift_recipient_name'] ) ) {
+        wc_add_order_item_meta( $item_id, 'Recipient Name', $cart_item->legacy_values['gift_recipient_name'] );
     }
-    if( isset( $values['gift_recipient_email'] ) ) {
-        wc_add_order_item_meta( $item_id, "Recipient Email", $values['gift_recipient_email'] );
+    if( isset( $cart_item->legacy_values['gift_recipient_email'] ) ) {
+        wc_add_order_item_meta( $item_id, 'Recipient Email', $cart_item->legacy_values['gift_recipient_email'] );
     }
 }
-add_action( 'woocommerce_new_order_item', 'gift_membership_order_meta_handler', 1, 3 );
+add_action( 'woocommerce_new_order_item', 'gift_membership_order_meta_handler', 10, 3 );
 
 /*
 	Add gift membership code after order is completed.
