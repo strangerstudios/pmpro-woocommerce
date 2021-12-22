@@ -125,12 +125,16 @@ add_action( 'woocommerce_add_to_cart_validation', 'pmprowoo_gift_levels_recipien
 function pmprowoo_gift_levels_save_recipient_fields( $cart_item_data, $product_id ) {
 
     if( isset( $_REQUEST['gift-recipient-name'] ) ) {
+	if( !empty( $_REQUEST['gift-recipient-name'] ) ){
         $cart_item_data[ 'gift_recipient_name' ] = $_REQUEST['gift-recipient-name'];
         $cart_item_data['unique_key'] = md5( microtime().rand() );
+	}
     }
     if( isset( $_REQUEST['gift-recipient-email'] ) ) {
+	if( !empty( $_REQUEST['gift-recipient-email'] ) ){
         $cart_item_data[ 'gift_recipient_email' ] = $_REQUEST['gift-recipient-email'];
         $cart_item_data['unique_key'] = md5( microtime().rand() );
+	}
     }
     return $cart_item_data;
 }
