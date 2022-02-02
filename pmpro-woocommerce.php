@@ -808,35 +808,14 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 	if ( ! empty( $level_obj ) && ! empty( $level_obj->expiration_number ) && pmpro_hasMembershipLevel( $level_obj->id, $level_array['user_id'] ) ) {
 		//get the current enddate of their membership
 		$user                   = get_userdata( $level_array['user_id'] );
-		$user->membership_level = pmpro_getMembershipLevelForUser( $user->ID );
+		$user->membership_level = pmpro_getSpecificMembershipLevelForUser( $user->ID, $level_obj->id );
 		$expiration_date        = $user->membership_level->enddate;
-		
-		//calculate days left
-		$todays_date = current_time( 'timestamp' );
-		$time_left   = $expiration_date - $todays_date;
-		
-		//time left?
-		if ( $time_left > 0 ) {
-			//convert to days and add to the expiration date (assumes expiration was 1 year)
-			$days_left = floor( $time_left / ( 60 * 60 * 24 ) );
-			
-			$date_string = "Day";
-			//figure out days based on period
-			if ( $level_obj->expiration_period == "Hour" ) {
-				$date_string = "Hour";
-				$total_days = $level_obj->expiration_number;
-			} else if ( $level_obj->expiration_period == "Day" ) {
-				$total_days = $days_left + $level_obj->expiration_number;
-			} else if ( $level_obj->expiration_period == "Week" ) {
-				$total_days = $days_left + $level_obj->expiration_number * 7;
-			} else if ( $level_obj->expiration_period == "Month" ) {
-				$total_days = $days_left + $level_obj->expiration_number * 30;
-			} else if ( $level_obj->expiration_period == "Year" ) {
-				$total_days = $days_left + $level_obj->expiration_number * 365;
-			}
 
-			//update the end date
-			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days $date_string", $expiration_date ) );
+		
+		// Is user renewing an existing membership?
+		if ( ! empty( $expiration_date ) && $expiration_date > current_time( 'timestamp' ) ) {
+			// Extend membership
+			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $level_obj->expiration_number $level_obj->expiration_period", $expiration_date ) );
 		}
 	}
 	
