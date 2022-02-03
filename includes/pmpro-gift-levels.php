@@ -99,11 +99,11 @@ function pmprowoo_gift_levels_recipient_fields_validation($passed, $product_id) 
     $gift_membership_email_option = get_post_meta($product_id, '_gift_membership_email_option', true);
 
     if(!empty($gift_membership_code) && !empty($gift_membership_email_option)){
-     if($gift_membership_email_option == '3' && $_REQUEST['gift-send-email'] == ''){
+     if($gift_membership_email_option == '3' && ( ! isset( $_REQUEST['gift-send-email'] ) || $_REQUEST['gift-send-email'] == '' ) ){
            wc_add_notice( __( 'Please select option for Send Email to Recipient', 'pmpro-woocommerce' ), 'error' );
            return false;
      }
-     if(($gift_membership_email_option == '1') || ($_REQUEST['gift-send-email'] == '1')){
+     if(($gift_membership_email_option == '1') || (  $_REQUEST['gift-send-email'] == '1' ) ){
        if ( empty( $_REQUEST['gift-recipient-name'] ) ) {
            wc_add_notice( __( 'Please enter a NAME of Recipient', 'pmpro-woocommerce' ), 'error' );
            return false;
