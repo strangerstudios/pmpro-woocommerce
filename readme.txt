@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 5.0
-Tested up to: 5.8
-Stable tag: 1.7.3
+Tested up to: 5.9
+Stable tag: 1.7.4
 
 Integrates Paid Memberships Pro with WooCommerce to sell Membership as a product and set members-only product discounts.
 
@@ -63,6 +63,10 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.7.4 - 2022-02-03 =
+* BUG FIX: Fixed issue where renewal purchases was extending member's expiration date by double. (@dparker1005)
+* BUG FIX/ENHANCEMENT: Fixed issues with the Gift Recipient not saving in newer WooCommerce versions. (@contemplate)
+
 = 1.7.3 - 2021-08-25 =
 * ENHANCEMENT: Tested up to WooCommerce 5.6.0.
 * ENHANCEMENT: Added support for time in expiration dates when extending or renewing a level and checking out for a new membership level.
