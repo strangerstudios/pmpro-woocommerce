@@ -1,17 +1,17 @@
-# Copyright (C) 2021 Paid Memberships Pro
+# Copyright (C) 2022 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - WooCommerce Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.7.3\n"
+"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.7.4\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-08-25T13:55:44+00:00\n"
+"POT-Creation-Date: 2022-02-03T11:27:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: pmpro-woocommerce\n"
 
 #: pmpro-woocommerce.php:555
@@ -21,6 +21,8 @@ msgstr " Price"
 #: includes/pmpro-gift-levels.php:255
 #: includes/pmpro-gift-levels.php:276
 #: includes/pmpro-gift-levels.php:279
+#: includes/pmpro-gift-levels.php:264
+#: includes/pmpro-gift-levels.php:288
 #, php-format
 msgid "A Gift from %s"
 msgstr "A Gift from %s"
@@ -36,6 +38,7 @@ msgstr "Autocomplete Order Status"
 
 #: pmpro-woocommerce.php:878
 #: pmpro-woocommerce.php:892
+#: pmpro-woocommerce.php:871
 msgid "Autocomplete via PMPro WooCommerce."
 msgstr "Autocomplete via PMPro WooCommerce."
 
@@ -50,6 +53,7 @@ msgstr "Check this to mark the order as completed immediately after checkout to 
 
 #: includes/pmpro-gift-levels.php:350
 #: includes/pmpro-gift-levels.php:357
+#: includes/pmpro-gift-levels.php:366
 msgid "Decide if a recipient email is entered and the code is emailed upon successful purchase."
 msgstr "Decide if a recipient email is entered and the code is emailed upon successful purchase."
 
@@ -59,11 +63,13 @@ msgstr "Docs"
 
 #: includes/pmpro-gift-levels.php:343
 #: includes/pmpro-gift-levels.php:350
+#: includes/pmpro-gift-levels.php:359
 msgid "Email Recipient"
 msgstr "Email Recipient"
 
 #: includes/pmpro-gift-levels.php:326
 #: includes/pmpro-gift-levels.php:333
+#: includes/pmpro-gift-levels.php:342
 msgid "Gift a Membership"
 msgstr "Gift a Membership"
 
@@ -122,27 +128,32 @@ msgid "Paid Memberships Pro - WooCommerce Add On"
 msgstr "Paid Memberships Pro - WooCommerce Add On"
 
 #: includes/pmpro-gift-levels.php:108
+#: includes/pmpro-gift-levels.php:112
 msgid "Please enter a EMAIL of Recipient"
 msgstr "Please enter a EMAIL of Recipient"
 
 #: includes/pmpro-gift-levels.php:104
+#: includes/pmpro-gift-levels.php:108
 msgid "Please enter a NAME of Recipient"
 msgstr "Please enter a NAME of Recipient"
 
 #: includes/pmpro-gift-levels.php:42
 #: includes/pmpro-gift-levels.php:63
 #: includes/pmpro-gift-levels.php:148
+#: includes/pmpro-gift-levels.php:156
 msgid "Recipient Email"
 msgstr "Recipient Email"
 
 #: includes/pmpro-gift-levels.php:38
 #: includes/pmpro-gift-levels.php:59
 #: includes/pmpro-gift-levels.php:145
+#: includes/pmpro-gift-levels.php:153
 msgid "Recipient Name"
 msgstr "Recipient Name"
 
 #: includes/pmpro-gift-levels.php:332
 #: includes/pmpro-gift-levels.php:339
+#: includes/pmpro-gift-levels.php:348
 msgid "Select Discount Code"
 msgstr "Select Discount Code"
 
@@ -172,6 +183,7 @@ msgstr "Support"
 
 #: includes/pmpro-gift-levels.php:335
 #: includes/pmpro-gift-levels.php:342
+#: includes/pmpro-gift-levels.php:351
 msgid "Upon each purchase a new one-time use code (which start with \"GIFT\") will be created from the code selected here."
 msgstr "Upon each purchase a new one-time use code (which start with \"GIFT\") will be created from the code selected here."
 
@@ -195,4 +207,8 @@ msgstr "You may only add one membership to your %scart%s."
 
 #: pmpro-woocommerce.php:691
 msgid "Apply Member Discounts to WooCommerce Subscription and Membership Products?"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:103
+msgid "Please select option for Send Email to Recipient"
 msgstr ""
