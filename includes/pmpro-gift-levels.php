@@ -99,6 +99,10 @@ function pmprowoo_gift_levels_recipient_fields_validation($passed, $product_id) 
     $gift_membership_email_option = get_post_meta($product_id, '_gift_membership_email_option', true);
 
     if(!empty($gift_membership_code) && !empty($gift_membership_email_option)){
+     if($gift_membership_email_option == '3' && $_REQUEST['gift-send-email'] == ''){
+           wc_add_notice( __( 'Please select option for Send Email to Recipient', 'pmpro-woocommerce' ), 'error' );
+           return false;
+     }
      if(($gift_membership_email_option == '1') || ($_REQUEST['gift-send-email'] == '1')){
        if ( empty( $_REQUEST['gift-recipient-name'] ) ) {
            wc_add_notice( __( 'Please enter a NAME of Recipient', 'pmpro-woocommerce' ), 'error' );
@@ -121,12 +125,16 @@ add_action( 'woocommerce_add_to_cart_validation', 'pmprowoo_gift_levels_recipien
 function pmprowoo_gift_levels_save_recipient_fields( $cart_item_data, $product_id ) {
 
     if( isset( $_REQUEST['gift-recipient-name'] ) ) {
+	if( !empty( $_REQUEST['gift-recipient-name'] ) ){
         $cart_item_data[ 'gift_recipient_name' ] = $_REQUEST['gift-recipient-name'];
         $cart_item_data['unique_key'] = md5( microtime().rand() );
+	}
     }
     if( isset( $_REQUEST['gift-recipient-email'] ) ) {
+	if( !empty( $_REQUEST['gift-recipient-email'] ) ){
         $cart_item_data[ 'gift_recipient_email' ] = $_REQUEST['gift-recipient-email'];
         $cart_item_data['unique_key'] = md5( microtime().rand() );
+	}
     }
     return $cart_item_data;
 }
@@ -154,15 +162,16 @@ add_filter( 'woocommerce_get_item_data', 'pmprowoo_gift_levels_render_on_cart_an
 /*
 	Add Frontend fields for Gift Membership to Order meta.
 */
-function gift_membership_order_meta_handler( $item_id, $values, $cart_item_key ) {
-    if( isset( $values['gift_recipient_name'] ) ) {
-        wc_add_order_item_meta( $item_id, "Recipient Name", $values['gift_recipient_name'] );
+function gift_membership_order_meta_handler( $item_id, $cart_item, $order_id ) {
+    
+    if( isset( $cart_item->legacy_values['gift_recipient_name'] ) ) {
+        wc_add_order_item_meta( $item_id, 'Recipient Name', $cart_item->legacy_values['gift_recipient_name'] );
     }
-    if( isset( $values['gift_recipient_email'] ) ) {
-        wc_add_order_item_meta( $item_id, "Recipient Email", $values['gift_recipient_email'] );
+    if( isset( $cart_item->legacy_values['gift_recipient_email'] ) ) {
+        wc_add_order_item_meta( $item_id, 'Recipient Email', $cart_item->legacy_values['gift_recipient_email'] );
     }
 }
-add_action( 'woocommerce_new_order_item', 'gift_membership_order_meta_handler', 1, 3 );
+add_action( 'woocommerce_new_order_item', 'gift_membership_order_meta_handler', 10, 3 );
 
 /*
 	Add gift membership code after order is completed.
