@@ -1,37 +1,100 @@
-=== Paid Memberships Pro - WooCommerce Add On ===
+=== Sell WooCommerce Memberships, Restrict Store Access, Set Members Only Prices, & Global Discounts with Paid Memberships Pro ===
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
-Requires at least: 5.0
+Requires at least: 5.2
 Tested up to: 5.9
+Requires PHP: 5.6
 Stable tag: 1.7.4
 
-Integrates Paid Memberships Pro with WooCommerce to sell Membership as a product and set members-only product discounts.
+Memberships for WooCommerce: Sell membership products & set members-only pricing by product or percent discount by level with Paid Memberships Pro.
 
 == Description ==
 
-Integrates Paid Memberships Pro with WooCommerce to sell Memberships as a product, set a global % discount on products by level, or set a per-product members-only price.
+### The best way to add memberships and members-only discounts in your WooCommerce store.
 
-= Several Key Features Including =
+Sell memberships as a WooCommerce product and set members-only discounts in your ecommerce store. This free plugin integrates Paid Memberships Pro with WooCommerce with three key features:
 
-* Sell a Membership in Paid Memberships Pro as a WooCommerce Product (WooCommerce Subscriptions required for recurring subscriptions).
-* Set Custom Product Pricing based on Membership Level.
-* Set a Global Percentage Discount for All Products Based on Membership Level.
-* Works with WooCommerce Subscriptions Premium Add On for WooCommerce.
-* Works with the Multiple Memberships Per User Add On for Paid Memberships Pro.
-* Synchronizes the Billing Address Fields Between WooCommerce and Paid Memberships Pro.
+### 1. Sell Membership as a WooCommerce Product
 
-[Watch the tutorial video to learn more](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/).
+Each product can be assigned as a "Membership Product". Customers that purchase this product in WooCommerce will be assigned a membership level in Paid Memberships Pro. Using the features of PMPro, you can restrict member access to all types of premium content, courses, and community features.
 
-= Official Paid Memberships Pro Add On =
+While [Paid Memberships Pro](https://wordpress.org/plugins/paid-memberships-pro/) has recurring subscriptions built-in, the default WooCommerce plugin only allows products to have a one-time payment. If you must use this plugin to sell recurring memberships through WooCommerce, you will also need WooCommerce Subscriptions.
 
-This is an official Add On for [Paid Memberships Pro](https://www.paidmembershipspro.com), the most complete member management and membership subscriptions plugin for WordPress.
+### 2. Set Custom Product Pricing Based on Membership Level
+
+Each product in WooCommerce can have unique pricing set for your members only.
+
+When a logged in member views the product page, they will see their custom pricing and be able to purchase your products at this special price.
+
+### 3. Set a Storewide Discount for Members by Level
+
+Each membership level in Paid Memberships Pro can have a unique global percentage discount for your ecommerce store.
+
+When a logged in member views the product page, they will see their adjusted pricing based on this storewide discount.
+
+https://www.youtube.com/watch?v=BAA56eTRt4Q
+
+Learn more about [WooCommerce memberships and subscriptions](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/#membership-product?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) and [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/#member-discount?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) in our documentation site.
+
+### Bonus Features of the WooCommerce Integration for Paid Memberships Pro
+
+= Members Only Products =
+If you'd like to offer certain products to members only, see the [Custom Post Type Membership Access Add On](
+https://www.paidmembershipspro.com/add-ons/custom-post-type-membership-access/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce
+).
+
+= Members Only Store =
+If your entire store is locked for members only, see this post on [Locking Your Entire eCommerce Shop for Members-Only](https://www.paidmembershipspro.com/lock-entire-ecommerce-shop-members/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce
+).
+
+= Catalog Mode for Non-Members =
+If you would like non-members the ability to see your store items but restrict them from seeing prices and ability to purchase, see this post on [Turn your WooCommerce Store into a Catalog for Non Members](https://www.paidmembershipspro.com/turn-your-woocommerce-store-into-a-catalog-for-non-members/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
+
+### About Paid Memberships Pro
+
+[Paid Memberships Pro is a WordPress membership plugin](https://www.paidmembershipspro.com/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) that puts you in control. Create what you want and release in whatever format works best for your business.
+
+* Courses & E-Learning
+* Private podcasts
+* Premium Newsletters
+* Private Communities
+* Sell physical & digital goods
+
+Paid Memberships Pro allows anyone to build a membership site—for free. Restrict content, accept payment, and manage subscriptions right from your WordPress admin.
+
+Paid Memberships Pro is built "the WordPress way" with a lean core plugin and over 75 Add Ons to enhance every aspect of your membership site. Each business is different and we encourage customization. For our members we have a library of 300+ recipes to personalize your membership site.
+
+Paid Memberships Pro is the flagship product of Stranger Studios. We are a bootstrapped company which grows when membership sites like yours grow. That means we focus our entire company towards helping you succeed.
+
+[Try Paid Memberships Pro entirely for free on WordPress.org](https://wordpress.org/plugins/paid-memberships-pro/) and see why 100,000+ sites trust us to help them #GetPaid.
+
+### Read More
+
+Want more information on private forums, premium discussion boards, and WordPress membership sites? Have a look at:
+
+* The [Paid Memberships Pro](https://www.paidmembershipspro.com/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) official homepage.
+* The [WooCommerce Integration for PMPro documentation page](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
+* Also follow PMPro on [Twitter](https://twitter.com/pmproplugin), [YouTube](https://www.youtube.com/channel/UCFtMIeYJ4_YVidi1aq9kl5g) & [Facebook](https://www.facebook.com/PaidMembershipsPro/).
 
 == Installation ==
 
-1. Upload the `pmpro-woocommerce` directory to the `/wp-content/plugins/` directory of your site.
-2. Activate the plugin through the `Plugins` menu in WordPress.
+Note: You must have [Paid Memberships Pro](https://wordpress.org/plugins/paid-memberships-pro/) and [WooCommerce](https://wordpress.org/plugins/woocommerce/) installed and activated on your site.
 
-Or install directly from the Plugin Repository using the Plugins system in WordPress.
+### Install PMPro WooCommerce from within WordPress
+
+1. Visit the plugins page within your dashboard and select "Add New"
+1. Search for "PMPro WooCommerce"
+1. Locate this plugin and click "Install"
+1. Activate "Paid Memberships Pro - WooCommerce Add On" through the "Plugins" menu in WordPress
+1. Go to "after activation" below.
+
+### Install PMPro WooCommerce Manually
+
+1. Upload the `pmpro-woocommerce` folder to the `/wp-content/plugins/` directory
+1. Activate "Paid Memberships Pro - WooCommerce" through the "Plugins" menu in WordPress
+1. Go to "after activation" below.
+
+### After Activation: Configure Plugin Settings
 
 = Create a Membership Product =
 1. Edit a product or add a new product.
@@ -39,7 +102,7 @@ Or install directly from the Plugin Repository using the Plugins system in WordP
 3. Select a level from the "Membership Product" dropdown.
 4. Save changes.
 
-= Set Member Discount Pricing" on a Product =
+= Set Member Discount Pricing on a Product =
 1. Edit a product or add a new product.
 2. Select the "Membership" tab in the "Product Data" metabox.
 3. Set a price for one or more levels in the "Member Discount Pricing" section.
@@ -50,6 +113,8 @@ Or install directly from the Plugin Repository using the Plugins system in WordP
 2. Locate the "Set Membership Discount" section.
 3. Add a percent discount to the field.
 4. Save changes.
+
+Visit our documentation site to [learn more about the settings, access custom code recipes and tutorials, and view a list of compatibility with other Paid Memberships Pro Add Ons](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
 
 == Frequently Asked Questions ==
 
