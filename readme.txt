@@ -1,6 +1,6 @@
 === Sell WooCommerce Memberships, Restrict Store Access, Set Members Only Prices, & Global Discounts with Paid Memberships Pro ===
-Contributors: strangerstudios
-Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
+Contributors: strangerstudios, paidmembershipspro
+Tags: woocommerce membership, member pricing, woocommerce, paid memberships pro, woocommerce subscription, pmpro
 Requires at least: 5.2
 Tested up to: 5.9
 Requires PHP: 5.6
