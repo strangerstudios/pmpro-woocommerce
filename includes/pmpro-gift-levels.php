@@ -267,13 +267,13 @@ function pmprowoo_add_gift_code_from_order($order_id)
                      $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $recipient_name, "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $recipient_name, "user_email" => $recipient_email, "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
 			
 	            if($pmproemail->sendEmail() == false){
-                       $message = "Gift Email FAILED To Recipient ". $recipient_email .". Contact Site Admin. ";
+                       $message = sprintf( __( 'Gift Email FAILED To Recipient %s Contact Site Admin.', 'pmpro-woocommerce' ), $recipient_email );
                        global $phpmailer;
                        if (isset($phpmailer)) {
-                          $message .= $phpmailer->ErrorInfo;
+                          $message .= ' ' . $phpmailer->ErrorInfo;
                        }
                     } else {
-                       $message = "Gift Email Sent To Recipient ". $recipient_email;
+                       $message = sprintf( __( 'Gift Email Sent To Recipient %s', 'pmpro-woocommerce' ), $recipient_email );
                     }
 
                     if ( function_exists('wc_add_notice') ) {
@@ -291,13 +291,13 @@ function pmprowoo_add_gift_code_from_order($order_id)
                      $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $order->get_billing_first_name(), "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $order->get_billing_first_name(), "user_email" => $order->get_billing_email(), "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
 			
 	            if($pmproemail->sendEmail() == false){
-                       $message = "Gift Email FAILED To ". $order->get_billing_email() .". Contact Site Admin. ";
+                       $message = sprintf( __( 'Gift Email FAILED To %s Contact Site Admin.', 'pmpro-woocommerce' ), $order->get_billing_email() );
                        global $phpmailer;
                        if (isset($phpmailer)) {
-                          $message .= $phpmailer->ErrorInfo;
+                          $message .= ' ' . $phpmailer->ErrorInfo;
                        }
                     } else {
-                       $message = "Gift Email Sent To ". $order->get_billing_email();
+                       $message = sprintf( __( 'Gift Email Sent To %s', 'pmpro-woocommerce' ), $order->get_billing_email() );
                     }
                    
                     if ( function_exists('wc_add_notice') ) {
@@ -328,9 +328,9 @@ function pmprowoo_extra_tab_options_for_gift_levels() {
 		
 	$gift_membership_code_options = array();
 	if(!$codes) {
-		$gift_membership_code_options[0] = 'No Discount Codes Created';
+		$gift_membership_code_options[0] = __( 'No Discount Codes Created', 'pmpro-woocommerce' );
 	} else {
-		$gift_membership_code_options[0] = 'None';
+		$gift_membership_code_options[0] = __( 'None', 'pmpro-woocommerce' );
 		foreach($codes as $code) {
 			$key = $code->id;
 			$gift_membership_code_options[$key] = $code->code;            
@@ -358,9 +358,9 @@ function pmprowoo_extra_tab_options_for_gift_levels() {
 				'id'      => '_gift_membership_email_option',
 				'label'   => __( 'Email Recipient', 'pmpro-woocommerce' ),
 				'options' => array(
-				 '1' => 'Yes',
-				 '0' => 'No',
-				 '3' => 'Customer Decides'
+				 '1' => __( 'Yes', 'pmpro-woocommerce' ),
+				 '0' => __( 'No', 'pmpro-woocommerce' ),
+				 '3' => __( 'Customer Decides', 'pmpro-woocommerce' )
 							 ),
 				'desc_tip' => 'true',
 		'description' => __( 'Decide if a recipient email is entered and the code is emailed upon successful purchase.', 'pmpro-woocommerce' ) 

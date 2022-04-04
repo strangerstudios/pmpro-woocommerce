@@ -561,7 +561,7 @@ function pmprowoo_tab_options() {
 				woocommerce_wp_text_input(
 					array(
 						'id'          => '_level_' . $level->id . '_price',
-						'label'       => __( $level->name . " Price", 'pmpro-woocommerce' ) . ' (' . get_woocommerce_currency_symbol() . ')',
+						'label'       => sprintf( __( '%s Price', 'pmpro-woocommerce' ), $level->name ) . ' (' . get_woocommerce_currency_symbol() . ')',
 						'placeholder' => '',
 						'type'        => 'text',
 						'desc_tip'    => 'true',
