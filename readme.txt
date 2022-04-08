@@ -34,14 +34,13 @@ When a logged in member views the product page, they will see their adjusted pri
 
 https://www.youtube.com/watch?v=BAA56eTRt4Q
 
-Learn more about [WooCommerce memberships and subscriptions](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/#membership-product?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) and [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/#member-discount?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) in our documentation site.
+Learn more about [WooCommerce memberships and subscriptions](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#membership-product) and [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#member-discount) in our documentation site.
 
 ### Bonus Features of the WooCommerce Integration for Paid Memberships Pro
 
 = Members Only Products =
 If you'd like to offer certain products to members only, see the [Custom Post Type Membership Access Add On](
-https://www.paidmembershipspro.com/add-ons/custom-post-type-membership-access/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce
-).
+https://www.paidmembershipspro.com/add-ons/custom-post-type-membership-access/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
 
 = Members Only Store =
 If your entire store is locked for members only, see this post on [Locking Your Entire eCommerce Shop for Members-Only](https://www.paidmembershipspro.com/lock-entire-ecommerce-shop-members/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce
@@ -70,7 +69,7 @@ Paid Memberships Pro is the flagship product of Stranger Studios. We are a boots
 
 ### Read More
 
-Want more information on private forums, premium discussion boards, and WordPress membership sites? Have a look at:
+Want more information on selling memberships and subscriptions with WooCommerce, members-only product pricing, and WordPress membership sites? Have a look at:
 
 * The [Paid Memberships Pro](https://www.paidmembershipspro.com/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) official homepage.
 * The [WooCommerce Integration for PMPro documentation page](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
