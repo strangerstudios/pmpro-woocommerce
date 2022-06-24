@@ -1,0 +1,23 @@
+name: Sync labels
+on:
+  # You can run this with every type of event, but it's better to run it only when you actually need it.
+  workflow_dispatch:
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: strangerstudios/label-sync@v2
+        with:
+          # If you want to use a source repo, you can put is name here (only the owner/repo format is accepted)
+          source-repo: strangerstudios/paid-memberships-pro
+
+          # If you want to delete any additional label, set this to true
+          delete-other-labels: true
+
+          #If you want the action just to show you the preview of the changes, without actually editing the labels, set this to tru
+          dry-run: false
+
+          # You can change the token used to change the labels, this is the default one
+          token: ${{ secrets.GITHUB_TOKEN }}
