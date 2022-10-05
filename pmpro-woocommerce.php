@@ -257,6 +257,8 @@ add_action( "woocommerce_order_status_refunded", "pmprowoo_cancel_membership_fro
 add_action( "woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order" );
 add_action( 'woocommerce_subscription_status_on-hold_to_active', 'pmprowoo_activated_subscription' );
 add_action( "woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_from_order" );
+add_action( 'woocommerce_order_status_on-hold', 'pmprowoo_cancel_membership_from_order' );
+add_action( "woocommerce_subscription_status_on-hold", "pmprowoo_cancel_membership_from_order" );
 
 /**
  * Activate memberships when WooCommerce subscriptions change status.
