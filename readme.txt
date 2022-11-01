@@ -2,7 +2,7 @@
 Contributors: strangerstudios
 Tags: pmpro, paid memberships pro, woocommerce, member, prices, pricing, membership, subscription
 Requires at least: 5.0
-Tested up to: 5.9
+Tested up to: 6.1
 Stable tag: 1.7.4
 
 Integrates Paid Memberships Pro with WooCommerce to sell Membership as a product and set members-only product discounts.
