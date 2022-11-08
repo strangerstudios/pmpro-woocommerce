@@ -364,7 +364,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 				//check if another active subscription exists
 				if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {	
 					//is there a membership level for this product?
-					if( !$has_sub && in_array($item['product_id'], $membership_product_ids) ){
+					if( in_array($item['product_id'], $membership_product_ids) ){
 						//remove the user from the level
 						pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
 					}
