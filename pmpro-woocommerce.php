@@ -197,6 +197,94 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				 */
 				$custom_level = apply_filters( 'pmprowoo_checkout_level', $custom_level );
 				
+
+				//Adds support for Woocommerce Bundles
+				if( class_exists( 'WC_Product_Bundle' ) ) {
+
+					$bundle = new WC_Product_Bundle( $item['product_id'] ); 
+
+					//Are we giving a subscription based on the bundle's membership or each product in the bundle?
+					if( ! empty( $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
+
+						$pmpro_level = pmpro_getLevel( $pmprowoo_product_levels[ $item['product_id'] ] );
+
+						// Is MMPU activated? This needs to change when MMPU is in core
+						if ( function_exists( 'pmprommpu_addMembershipLevel' ) ) {
+
+							$custom_level = array(
+								'user_id'         => $user_id,
+								'membership_id'   => $pmpro_level->id,
+								'code_id'         => '', //will support PMPro discount codes later
+								'initial_payment' => $item['line_total'],
+								'billing_amount'  => '',
+								'cycle_number'    => '',
+								'cycle_period'    => '',
+								'billing_limit'   => '',
+								'trial_amount'    => '',
+								'trial_limit'     => '',
+								'startdate'       => $startdate,
+								'enddate'         => '0000-00-00 00:00:00',
+							);
+
+							$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
+							pmprommpu_addMembershipLevel( $custom_level, $user_id, $mmpu_force_add_level );
+						} else {
+							// Only add the first membership level found.
+							pmpro_changeMembershipLevel( $custom_level, $user_id );
+							break;
+						}
+						
+					} else {
+
+						if( ! empty( $bundle ) ) {
+							//This is a bundle product, get the level for each product
+							$bundle_items = $bundle->get_bundled_items();
+
+							if( ! empty( $bundle_items ) ) {
+
+								foreach( $bundle_items as $b_item ) {
+
+									$bproduct_id = $b_item->get_product_id();
+
+									$pmpro_level = pmpro_getLevel( $pmprowoo_product_levels[ $bproduct_id ] );
+
+									// Is MMPU activated? This needs to change when MMPU is in core
+									if ( function_exists( 'pmprommpu_addMembershipLevel' ) ) {
+
+										$custom_level = array(
+											'user_id'         => $user_id,
+											'membership_id'   => $pmpro_level->id,
+											'code_id'         => '', //will support PMPro discount codes later
+											'initial_payment' => $item['line_total'],
+											'billing_amount'  => '',
+											'cycle_number'    => '',
+											'cycle_period'    => '',
+											'billing_limit'   => '',
+											'trial_amount'    => '',
+											'trial_limit'     => '',
+											'startdate'       => $startdate,
+											'enddate'         => '0000-00-00 00:00:00',
+										);
+
+										$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
+										pmprommpu_addMembershipLevel( $custom_level, $user_id, $mmpu_force_add_level );
+									} else {
+										// Only add the first membership level found.
+										pmpro_changeMembershipLevel( $custom_level, $user_id );
+										break;
+									}
+								
+								}
+
+							}
+
+						}
+
+
+					}
+										
+				}
+				
 				// Is MMPU activated?
 				if ( function_exists( 'pmprommpu_addMembershipLevel' ) ) {
 					// Allow filter to force add levels (ignore MMPU group level settings).
