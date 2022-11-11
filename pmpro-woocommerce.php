@@ -407,56 +407,65 @@ function pmprowoo_get_membership_price( $price, $product ) {
 		return $price;
 	}
 	
-	$discount_price = $price;
-	
 	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 	
 	//ignore membership products and subscriptions if we are set that way
-	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product->get_id(), array_keys( $pmprowoo_product_levels ), false ) ) ) {
+	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" ) ) {
 		return $price;
 	}
-	
-	// Search for any membership level products. IF found, use first one as the cart membership level.
+
+	// Get all membership level ids that will be given to the user after checkout.
+	// Ignore the product that we are currently getting a membership price for.
+	$cart_level_ids = array();
 	foreach ( $items as $item ) {
-		if ( in_array( $item['product_id'], $membership_product_ids ) ) {
-			$cart_membership_level = $pmprowoo_product_levels[ $item['product_id'] ];
-			break;
+		if ( $item['product_id'] != $product->get_id() && in_array( $item['product_id'], $membership_product_ids ) ) {
+			$cart_level_ids[] = $pmprowoo_product_levels[ $item['product_id'] ];
 		}
 	}
-	
-	// use cart membership level price if set, otherwise use current member level
-	if ( isset( $cart_membership_level ) ) {
-		$level_price = '_level_' . $cart_membership_level . '_price';
-		$level_id    = $cart_membership_level;
-	} else if ( pmpro_hasMembershipLevel() ) {
-		$level_price = '_level_' . $current_user->membership_level->id . '_price';
-		$level_id    = $current_user->membership_level->id;
+
+	// Get the membership level ids that the user already has.
+	$user_levels = pmpro_getMembershipLevelsForUser( $current_user->ID );
+	$user_level_ids = empty( $user_levels ) ? array() : wp_list_pluck( $user_levels, 'id' );
+
+	// Merge the cart levels and user levels and remove duplicates to get all levels that could discount this product.
+	$discount_level_ids = array_unique( array_merge( $cart_level_ids, $user_level_ids ) );
+
+	// Get the ID for the product that we are currently getting a membership price for.
+	if( $product->get_type() === 'variation' ){
+		$product_id = $product->get_parent_id(); //for variations	
 	} else {
-		return $price;
+		$product_id = $product->get_id();
 	}
-	
-	// use this level to get the price
-	if ( isset( $level_price ) ) {
-		if( $product->get_type() === 'variation' ){
-			$product_id = $product->get_parent_id(); //for variations	
-		} else {
-			$product_id = $product->get_id();
-		}
-		$level_price = get_post_meta( $product_id, $level_price, true );
+
+	// Find the lowest membership price for this product.
+	$lowest_price = (float) $price;
+	$lowest_price_level = null; // Needed for backwards compatibility for pmprowoo_get_membership_price filter.
+	foreach ( $discount_level_ids as $level_id ) {
+		$level_price = get_post_meta( $product_id, '_level_' . $level_id . '_price', true );
 		if ( ! empty( $level_price ) || $level_price === '0' || $level_price === '0.00' || $level_price === '0,00' ) {
-			$discount_price = $level_price;
-		}
-		
-		// apply discounts if there are any for this level
-		if ( isset( $level_id ) && ! empty( $pmprowoo_member_discounts ) && ! empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
-			$discount_price = $discount_price - ( $discount_price * $pmprowoo_member_discounts[ $level_id ] );
+			$level_price = (float) $level_price;
+			if ( $level_price < $lowest_price ) {
+				$lowest_price = $level_price;
+				$lowest_price_level = $level_id;
+			}
 		}
 	}
 
-	$discount_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $level_id, $price, $product );
+	// Find the highest membership discount for this product.
+	$highest_discount = 0;
+	foreach ( $discount_level_ids as $level_id ) {
+		if ( ! empty( $pmprowoo_member_discounts ) && ! empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
+			$level_discount = (float) $pmprowoo_member_discounts[ $level_id ];
+			if ( $level_discount > $highest_discount ) {
+				$highest_discount = $level_discount;
+			}
+		}
+	}
+	$discount_price = $lowest_price - ( $lowest_price * $highest_discount );
 
-	return $discount_price;
+	// Filter the result.
+	return apply_filters( 'pmprowoo_get_membership_price', $discount_price, $lowest_price_level, $price, $product );
 }
 
 
