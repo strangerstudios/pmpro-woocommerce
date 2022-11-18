@@ -850,6 +850,10 @@ function pmprowoo_order_autocomplete( $order_id ) {
 			if ( $item['type'] == 'line_item' ) {
 				//get product info and check if product is marked to autocomplete
 				$_product = $item->get_product();
+				if( ! $_product instanceof \WC_Product ) {
+					continue;
+				}
+
 				$product_id = $_product->get_id();
 				$product_autocomplete = get_post_meta( $product_id, '_membership_product_autocomplete', true );
 				
