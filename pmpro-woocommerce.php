@@ -147,15 +147,15 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 
 			$_product = $item->get_product();
 
-			if( $_product->is_type( 'variation' ) ){
+			if ( $_product->is_type( 'variation' ) ) {
 			    $product_id = $_product->get_parent_id();
 			} else {
 			    $product_id = $_product->get_id();
 			}
 
 			if ( ! empty( $product_id ) &&
-			     in_array( $product_id, $membership_product_ids ) )    //not sure when a product has id 0, but the Woo code checks this
-			{
+			     in_array( $product_id, $membership_product_ids ) ) {    //not sure when a product has id 0, but the Woo code checks this
+			
 				//is there a membership level for this product?
 				//get user id and level
 				$pmpro_level = pmpro_getLevel( $pmprowoo_product_levels[ $product_id ] );
@@ -447,7 +447,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	// use this level to get the price
 	if ( isset( $level_price ) ) {
-		if( $product->get_type() === 'variation' ){
+		if ( $product->get_type() === 'variation' ) {
 			$product_id = $product->get_parent_id(); //for variations	
 		} else {
 			$product_id = $product->get_id();
@@ -860,7 +860,7 @@ function pmprowoo_order_autocomplete( $order_id ) {
 				//get product info and check if product is marked to autocomplete
 				$_product = $item->get_product();
 				
-				if( $_product->is_type( 'variation' ) ){
+				if ( $_product->is_type( 'variation' ) ) {
 				    $product_id = $_product->get_parent_id();
 				} else {
 				    $product_id = $_product->get_id();
