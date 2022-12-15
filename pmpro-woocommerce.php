@@ -197,6 +197,13 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				 */
 				$custom_level = apply_filters( 'pmprowoo_checkout_level', $custom_level );
 				
+				/**
+				 * Force adding a level with MMPU
+				 * 
+				 * @param bool false MMPU to force add a level to a members profile
+				 * 
+				 */
+				$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
 
 				//Adds support for Woocommerce Bundles
 				if( class_exists( 'WC_Product_Bundle' ) ) {
@@ -225,8 +232,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 								'startdate'       => $startdate,
 								'enddate'         => '0000-00-00 00:00:00',
 							);
-
-							$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
+							
 							pmprommpu_addMembershipLevel( $custom_level, $user_id, $mmpu_force_add_level );
 						} else {
 							// Only add the first membership level found.
@@ -265,8 +271,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 											'startdate'       => $startdate,
 											'enddate'         => '0000-00-00 00:00:00',
 										);
-
-										$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
+									
 										pmprommpu_addMembershipLevel( $custom_level, $user_id, $mmpu_force_add_level );
 									} else {
 										// Only add the first membership level found.
