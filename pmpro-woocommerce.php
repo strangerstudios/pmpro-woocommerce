@@ -406,12 +406,19 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	if ( empty( $product ) ) {
 		return $price;
 	}
+
+	// Get the ID for the product that we are currently getting a membership price for.
+	if ( $product->get_type() === 'variation' ) {
+		$product_id = $product->get_parent_id(); //for variations	
+	} else {
+		$product_id = $product->get_id();
+	}
 	
 	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
-	
+
 	//ignore membership products and subscriptions if we are set that way
-	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" ) ) {
+	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product_id, $membership_product_ids, false ) ) ) {
 		return $price;
 	}
 
@@ -430,13 +437,6 @@ function pmprowoo_get_membership_price( $price, $product ) {
 
 	// Merge the cart levels and user levels and remove duplicates to get all levels that could discount this product.
 	$discount_level_ids = array_unique( array_merge( $cart_level_ids, $user_level_ids ) );
-
-	// Get the ID for the product that we are currently getting a membership price for.
-	if( $product->get_type() === 'variation' ){
-		$product_id = $product->get_parent_id(); //for variations	
-	} else {
-		$product_id = $product->get_id();
-	}
 
 	// Find the lowest membership price for this product.
 	$lowest_price = (float) $price;
