@@ -127,6 +127,12 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.7.5 - TBD =
+* ENHANCEMENT: Support Multiple Memberships Per User. If a member holds more than one level, give the member the best discount available to their levels.
+* ENHANCEMENT: Added functionality to autocomplete variation products.
+* ENHANCEMENT: Improved localization on strings in the plugin.
+* BUG FIX: Fixed a fatal error when the product item would be false in some cases and we tried to get the product ID.
+
 = 1.7.4 - 2022-02-03 =
 * BUG FIX: Fixed issue where renewal purchases was extending member's expiration date by double. (@dparker1005)
 * BUG FIX/ENHANCEMENT: Fixed issues with the Gift Recipient not saving in newer WooCommerce versions. (@contemplate)
