@@ -868,7 +868,11 @@ function pmprowoo_order_autocomplete( $order_id ) {
 			if ( $item['type'] == 'line_item' ) {
 				//get product info and check if product is marked to autocomplete
 				$_product = $item->get_product();
-				
+
+				if( ! $_product instanceof \WC_Product ) {
+					continue;
+				}
+
 				if ( $_product->is_type( 'variation' ) ) {
 				    $product_id = $_product->get_parent_id();
 				} else {
