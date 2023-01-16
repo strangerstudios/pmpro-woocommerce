@@ -144,12 +144,21 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 	$user_id = $order->get_user_id();
 	if ( ! empty( $user_id ) && sizeof( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
-			if ( ! empty( $item['product_id'] ) &&
-			     in_array( $item['product_id'], $membership_product_ids ) )    //not sure when a product has id 0, but the Woo code checks this
-			{
+
+			$_product = $item->get_product();
+
+			if ( $_product->is_type( 'variation' ) ) {
+			    $product_id = $_product->get_parent_id();
+			} else {
+			    $product_id = $_product->get_id();
+			}
+
+			if ( ! empty( $product_id ) &&
+			     in_array( $product_id, $membership_product_ids ) ) {    //not sure when a product has id 0, but the Woo code checks this
+			
 				//is there a membership level for this product?
 				//get user id and level
-				$pmpro_level = pmpro_getLevel( $pmprowoo_product_levels[ $item['product_id'] ] );
+				$pmpro_level = pmpro_getLevel( $pmprowoo_product_levels[ $product_id ] );
 				
 				//if checking out for the same level they have, keep their old start date
 				$sqlQuery = $wpdb->prepare(
@@ -438,7 +447,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	
 	// use this level to get the price
 	if ( isset( $level_price ) ) {
-		if( $product->get_type() === 'variation' ){
+		if ( $product->get_type() === 'variation' ) {
 			$product_id = $product->get_parent_id(); //for variations	
 		} else {
 			$product_id = $product->get_id();
@@ -850,9 +859,15 @@ function pmprowoo_order_autocomplete( $order_id ) {
 			if ( $item['type'] == 'line_item' ) {
 				//get product info and check if product is marked to autocomplete
 				$_product = $item->get_product();
-				$product_id = $_product->get_id();
-				$product_autocomplete = get_post_meta( $product_id, '_membership_product_autocomplete', true );
 				
+				if ( $_product->is_type( 'variation' ) ) {
+				    $product_id = $_product->get_parent_id();
+				} else {
+				    $product_id = $_product->get_id();
+				}
+
+				$product_autocomplete = get_post_meta( $product_id, '_membership_product_autocomplete', true );
+
 				//if any product is not virtual and not marked for autocomplete, we won't autocomplete
 				if ( ! $_product->is_virtual() && ! $product_autocomplete ) {
 					//found a non-virtual, non-membership product in the cart
