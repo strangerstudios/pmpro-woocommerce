@@ -1,15 +1,15 @@
-# Copyright (C) 2022 Paid Memberships Pro
+# Copyright (C) 2023 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - WooCommerce Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.7.4\n"
+"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.7.5\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-11-01T14:01:39+00:00\n"
+"POT-Creation-Date: 2023-01-17T14:12:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: pmpro-woocommerce\n"
@@ -83,6 +83,30 @@ msgstr ""
 msgid "A Gift from %s"
 msgstr ""
 
+#: includes/pmpro-gift-levels.php:270
+msgid "Gift Email FAILED To Recipient %s. Contact Site Admin."
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:276
+msgid "Gift Email Sent To Recipient %s"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:294
+msgid "Gift Email FAILED To %s. Contact Site Admin."
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:300
+msgid "Gift Email Sent To %s"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:331
+msgid "No Discount Codes Created"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:333
+msgid "None"
+msgstr ""
+
 #: includes/pmpro-gift-levels.php:342
 msgid "Gift a Membership"
 msgstr ""
@@ -99,6 +123,21 @@ msgstr ""
 msgid "Email Recipient"
 msgstr ""
 
+#: includes/pmpro-gift-levels.php:361
+#: pmpro-woocommerce.php:712
+msgid "Yes"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:362
+#: pmpro-woocommerce.php:711
+#: pmpro-woocommerce.php:712
+msgid "No"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:363
+msgid "Customer Decides"
+msgstr ""
+
 #: includes/pmpro-gift-levels.php:366
 msgid "Decide if a recipient email is entered and the code is emailed upon successful purchase."
 msgstr ""
@@ -111,59 +150,54 @@ msgstr ""
 msgid "Cart"
 msgstr ""
 
-#: pmpro-woocommerce.php:503
+#: pmpro-woocommerce.php:522
 msgid "Membership"
 msgstr ""
 
-#: pmpro-woocommerce.php:526
+#: pmpro-woocommerce.php:545
 msgid "Give Customers a Membership Level"
 msgstr ""
 
-#: pmpro-woocommerce.php:532
+#: pmpro-woocommerce.php:551
 msgid "Membership Product"
 msgstr ""
 
-#: pmpro-woocommerce.php:548
+#: pmpro-woocommerce.php:567
 msgid "Autocomplete Order Status"
 msgstr ""
 
-#: pmpro-woocommerce.php:549
+#: pmpro-woocommerce.php:568
 msgid "Check this to mark the order as completed immediately after checkout to activate the associated membership."
 msgstr ""
 
-#: pmpro-woocommerce.php:556
+#: pmpro-woocommerce.php:575
 msgid "Member Discount Pricing"
 msgstr ""
 
-#: pmpro-woocommerce.php:557
+#: pmpro-woocommerce.php:576
 msgid "Set the custom price based on Membership Level. <a href=\"%s\">Edit your membership levels</a> to set a global percent discount for all products."
 msgstr ""
 
-#: pmpro-woocommerce.php:642
+#: pmpro-woocommerce.php:583
+msgid "%s Price (%s)"
+msgstr ""
+
+#: pmpro-woocommerce.php:661
 msgid "Set Membership Discount"
 msgstr ""
 
-#: pmpro-woocommerce.php:643
+#: pmpro-woocommerce.php:662
 msgid "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page."
 msgstr ""
 
-#: pmpro-woocommerce.php:648
+#: pmpro-woocommerce.php:667
 msgid "Membership Discount (%):"
 msgstr ""
 
-#: pmpro-woocommerce.php:691
+#: pmpro-woocommerce.php:710
 msgid "Apply Member Discounts to WooCommerce Subscription and Membership Products?"
 msgstr ""
 
-#: pmpro-woocommerce.php:692
-#: pmpro-woocommerce.php:693
-msgid "No"
-msgstr ""
-
-#: pmpro-woocommerce.php:693
-msgid "Yes"
-msgstr ""
-
-#: pmpro-woocommerce.php:871
+#: pmpro-woocommerce.php:901
 msgid "Autocomplete via PMPro WooCommerce."
 msgstr ""
