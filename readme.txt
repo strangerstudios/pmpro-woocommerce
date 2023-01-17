@@ -127,7 +127,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
-= 1.7.5 - TBD =
+= 1.7.5 - 2023-01-17 =
 * ENHANCEMENT: Support Multiple Memberships Per User. If a member holds more than one level, give the member the best discount available to their levels.
 * ENHANCEMENT: Added functionality to autocomplete variation products.
 * ENHANCEMENT: Improved localization on strings in the plugin.

@@ -144,8 +144,8 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 	$user_id = $order->get_user_id();
 	if ( ! empty( $user_id ) && sizeof( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
-
-			$_product = $item->get_product();
+			// Get the product object from the ID of the item in the order.
+			$_product = wc_get_product( $item['product_id'] );
 
 			if ( $_product->is_type( 'variation' ) ) {
 			    $product_id = $_product->get_parent_id();
@@ -252,11 +252,12 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			//not sure when a product has id 0, but the Woo code checks this
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
+	
 				//check if another active subscription exists
 				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
 					//is there a membership level for this product?
 					//remove the user from the level
-					pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
+					pmpro_cancelMembershipLevel( $pmprowoo_product_levels[$item['product_id']], $user_id, 'cancelled' );
 				}
 			}
 		}
@@ -866,8 +867,9 @@ function pmprowoo_order_autocomplete( $order_id ) {
 	if ( count( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
 			if ( $item['type'] == 'line_item' ) {
+
 				//get product info and check if product is marked to autocomplete
-				$_product = $item->get_product();
+				$_product = wc_get_product( $item['product_id'] );
 
 				if( ! $_product instanceof \WC_Product ) {
 					continue;
