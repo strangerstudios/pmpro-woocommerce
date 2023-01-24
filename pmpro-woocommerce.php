@@ -2,10 +2,10 @@
 /**
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
- * Description: Integrate WooCommerce with Paid Memberships Pro.
- * Version: 1.7.3
- * WC requires at least: 3.3
- * WC tested up to: 5.6.0
+ * Description: Integrate Paid Memberships Pro With WooCommerce.
+ * Version: 1.7.5
+ * WC requires at least: 6.0.0
+ * WC tested up to: 7.3.0
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
@@ -144,12 +144,21 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 	$user_id = $order->get_user_id();
 	if ( ! empty( $user_id ) && sizeof( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
-			if ( ! empty( $item['product_id'] ) &&
-			     in_array( $item['product_id'], $membership_product_ids ) )    //not sure when a product has id 0, but the Woo code checks this
-			{
+			// Get the product object from the ID of the item in the order.
+			$_product = wc_get_product( $item['product_id'] );
+
+			if ( $_product->is_type( 'variation' ) ) {
+			    $product_id = $_product->get_parent_id();
+			} else {
+			    $product_id = $_product->get_id();
+			}
+
+			if ( ! empty( $product_id ) &&
+			     in_array( $product_id, $membership_product_ids ) ) {    //not sure when a product has id 0, but the Woo code checks this
+			
 				//is there a membership level for this product?
 				//get user id and level
-				$pmpro_level = pmpro_getLevel( $pmprowoo_product_levels[ $item['product_id'] ] );
+				$pmpro_level = pmpro_getLevel( $pmprowoo_product_levels[ $product_id ] );
 				
 				//if checking out for the same level they have, keep their old start date
 				$sqlQuery = $wpdb->prepare(
@@ -243,11 +252,12 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 		foreach ( $order->get_items() as $item ) {
 			//not sure when a product has id 0, but the Woo code checks this
 			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
+	
 				//check if another active subscription exists
 				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
 					//is there a membership level for this product?
 					//remove the user from the level
-					pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
+					pmpro_cancelMembershipLevel( $pmprowoo_product_levels[$item['product_id']], $user_id, 'cancelled' );
 				}
 			}
 		}
@@ -364,7 +374,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 				//check if another active subscription exists
 				if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {	
 					//is there a membership level for this product?
-					if( !$has_sub && in_array($item['product_id'], $membership_product_ids) ){
+					if( in_array($item['product_id'], $membership_product_ids) ){
 						//remove the user from the level
 						pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
 					}
@@ -406,57 +416,66 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	if ( empty( $product ) ) {
 		return $price;
 	}
-	
-	$discount_price = $price;
+
+	// Get the ID for the product that we are currently getting a membership price for.
+	if ( $product->get_type() === 'variation' ) {
+		$product_id = $product->get_parent_id(); //for variations	
+	} else {
+		$product_id = $product->get_id();
+	}
 	
 	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
-	
+
 	//ignore membership products and subscriptions if we are set that way
-	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product->get_id(), array_keys( $pmprowoo_product_levels ), false ) ) ) {
+	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->get_type() == "subscription" || $product->get_type() == "variable-subscription" || in_array( $product_id, $membership_product_ids, false ) ) ) {
 		return $price;
 	}
-	
-	// Search for any membership level products. IF found, use first one as the cart membership level.
+
+	// Get all membership level ids that will be given to the user after checkout.
+	// Ignore the product that we are currently getting a membership price for.
+	$cart_level_ids = array();
 	foreach ( $items as $item ) {
-		if ( in_array( $item['product_id'], $membership_product_ids ) ) {
-			$cart_membership_level = $pmprowoo_product_levels[ $item['product_id'] ];
-			break;
+		if ( $item['product_id'] != $product->get_id() && in_array( $item['product_id'], $membership_product_ids ) ) {
+			$cart_level_ids[] = $pmprowoo_product_levels[ $item['product_id'] ];
 		}
 	}
-	
-	// use cart membership level price if set, otherwise use current member level
-	if ( isset( $cart_membership_level ) ) {
-		$level_price = '_level_' . $cart_membership_level . '_price';
-		$level_id    = $cart_membership_level;
-	} else if ( pmpro_hasMembershipLevel() ) {
-		$level_price = '_level_' . $current_user->membership_level->id . '_price';
-		$level_id    = $current_user->membership_level->id;
-	} else {
-		return $price;
-	}
-	
-	// use this level to get the price
-	if ( isset( $level_price ) ) {
-		if( $product->get_type() === 'variation' ){
-			$product_id = $product->get_parent_id(); //for variations	
-		} else {
-			$product_id = $product->get_id();
-		}
-		$level_price = get_post_meta( $product_id, $level_price, true );
+
+	// Get the membership level ids that the user already has.
+	$user_levels = pmpro_getMembershipLevelsForUser( $current_user->ID );
+	$user_level_ids = empty( $user_levels ) ? array() : wp_list_pluck( $user_levels, 'id' );
+
+	// Merge the cart levels and user levels and remove duplicates to get all levels that could discount this product.
+	$discount_level_ids = array_unique( array_merge( $cart_level_ids, $user_level_ids ) );
+
+	// Find the lowest membership price for this product.
+	$lowest_price = (float) $price;
+	$lowest_price_level = null; // Needed for backwards compatibility for pmprowoo_get_membership_price filter.
+	foreach ( $discount_level_ids as $level_id ) {
+		$level_price = get_post_meta( $product_id, '_level_' . $level_id . '_price', true );
 		if ( ! empty( $level_price ) || $level_price === '0' || $level_price === '0.00' || $level_price === '0,00' ) {
-			$discount_price = $level_price;
-		}
-		
-		// apply discounts if there are any for this level
-		if ( isset( $level_id ) && ! empty( $pmprowoo_member_discounts ) && ! empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
-			$discount_price = $discount_price - ( $discount_price * $pmprowoo_member_discounts[ $level_id ] );
+			$level_price = (float) $level_price;
+			if ( $level_price < $lowest_price ) {
+				$lowest_price = $level_price;
+				$lowest_price_level = $level_id;
+			}
 		}
 	}
 
-	$discount_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $level_id, $price, $product );
+	// Find the highest membership discount for this product.
+	$highest_discount = 0;
+	foreach ( $discount_level_ids as $level_id ) {
+		if ( ! empty( $pmprowoo_member_discounts ) && ! empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
+			$level_discount = (float) $pmprowoo_member_discounts[ $level_id ];
+			if ( $level_discount > $highest_discount ) {
+				$highest_discount = $level_discount;
+			}
+		}
+	}
+	$discount_price = $lowest_price - ( $lowest_price * $highest_discount );
 
-	return $discount_price;
+	// Filter the result.
+	return apply_filters( 'pmprowoo_get_membership_price', $discount_price, $lowest_price_level, $price, $product );
 }
 
 
@@ -561,7 +580,7 @@ function pmprowoo_tab_options() {
 				woocommerce_wp_text_input(
 					array(
 						'id'          => '_level_' . $level->id . '_price',
-						'label'       => __( $level->name . " Price", 'pmpro-woocommerce' ) . ' (' . get_woocommerce_currency_symbol() . ')',
+						'label'       => sprintf( __( '%s Price (%s)', 'pmpro-woocommerce' ), $level->name, get_woocommerce_currency_symbol() ),
 						'placeholder' => '',
 						'type'        => 'text',
 						'desc_tip'    => 'true',
@@ -808,35 +827,14 @@ function pmprowoo_checkout_level_extend_memberships( $level_array ) {
 	if ( ! empty( $level_obj ) && ! empty( $level_obj->expiration_number ) && pmpro_hasMembershipLevel( $level_obj->id, $level_array['user_id'] ) ) {
 		//get the current enddate of their membership
 		$user                   = get_userdata( $level_array['user_id'] );
-		$user->membership_level = pmpro_getMembershipLevelForUser( $user->ID );
+		$user->membership_level = pmpro_getSpecificMembershipLevelForUser( $user->ID, $level_obj->id );
 		$expiration_date        = $user->membership_level->enddate;
-		
-		//calculate days left
-		$todays_date = current_time( 'timestamp' );
-		$time_left   = $expiration_date - $todays_date;
-		
-		//time left?
-		if ( $time_left > 0 ) {
-			//convert to days and add to the expiration date (assumes expiration was 1 year)
-			$days_left = floor( $time_left / ( 60 * 60 * 24 ) );
-			
-			$date_string = "Day";
-			//figure out days based on period
-			if ( $level_obj->expiration_period == "Hour" ) {
-				$date_string = "Hour";
-				$total_days = $level_obj->expiration_number;
-			} else if ( $level_obj->expiration_period == "Day" ) {
-				$total_days = $days_left + $level_obj->expiration_number;
-			} else if ( $level_obj->expiration_period == "Week" ) {
-				$total_days = $days_left + $level_obj->expiration_number * 7;
-			} else if ( $level_obj->expiration_period == "Month" ) {
-				$total_days = $days_left + $level_obj->expiration_number * 30;
-			} else if ( $level_obj->expiration_period == "Year" ) {
-				$total_days = $days_left + $level_obj->expiration_number * 365;
-			}
 
-			//update the end date
-			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $total_days $date_string", $expiration_date ) );
+		
+		// Is user renewing an existing membership?
+		if ( ! empty( $expiration_date ) && $expiration_date > current_time( 'timestamp' ) ) {
+			// Extend membership
+			$level_array['enddate'] = date( "Y-m-d H:i:00", strtotime( "+ $level_obj->expiration_number $level_obj->expiration_period", $expiration_date ) );
 		}
 	}
 	
@@ -869,11 +867,22 @@ function pmprowoo_order_autocomplete( $order_id ) {
 	if ( count( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
 			if ( $item['type'] == 'line_item' ) {
+
 				//get product info and check if product is marked to autocomplete
-				$_product = $item->get_product();
-				$product_id = $_product->get_id();
+				$_product = wc_get_product( $item['product_id'] );
+
+				if( ! $_product instanceof \WC_Product ) {
+					continue;
+				}
+
+				if ( $_product->is_type( 'variation' ) ) {
+				    $product_id = $_product->get_parent_id();
+				} else {
+				    $product_id = $_product->get_id();
+				}
+
 				$product_autocomplete = get_post_meta( $product_id, '_membership_product_autocomplete', true );
-				
+
 				//if any product is not virtual and not marked for autocomplete, we won't autocomplete
 				if ( ! $_product->is_virtual() && ! $product_autocomplete ) {
 					//found a non-virtual, non-membership product in the cart
