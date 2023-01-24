@@ -1,4 +1,4 @@
-=== Sell WooCommerce Memberships, Restrict Store Access, Set Members Only Prices, & Global Discounts with Paid Memberships Pro ===
+=== Paid Memberships Pro Integration with WooCommerce ===
 Contributors: strangerstudios, paidmembershipspro
 Tags: woocommerce membership, member pricing, woocommerce, paid memberships pro, woocommerce subscription, pmpro
 Requires at least: 5.2
@@ -6,7 +6,7 @@ Tested up to: 6.1
 Requires PHP: 5.6
 Stable tag: 1.7.4
 
-Memberships for WooCommerce: Sell membership products & set members-only pricing by product or percent discount by level with Paid Memberships Pro.
+Integrates Paid Memberships Pro with WooCommerce to offer a global members-only discount, set member price by product, or sell membership as a product.
 
 == Description ==
 
