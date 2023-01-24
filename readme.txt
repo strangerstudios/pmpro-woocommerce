@@ -14,19 +14,13 @@ Integrates Paid Memberships Pro with WooCommerce to offer a global members-only 
 
 Sell memberships as a WooCommerce product and set members-only discounts in your ecommerce store. This free plugin integrates Paid Memberships Pro with WooCommerce with three key features:
 
-### 1. Sell Membership as a WooCommerce Product
-
-Each product can be assigned as a "Membership Product". Customers that purchase this product in WooCommerce will be assigned a membership level in Paid Memberships Pro. Using the features of PMPro, you can restrict member access to all types of premium content, courses, and community features.
-
-While [Paid Memberships Pro](https://wordpress.org/plugins/paid-memberships-pro/) has recurring subscriptions built-in, the default WooCommerce plugin only allows products to have a one-time payment. If you must use this plugin to sell recurring memberships through WooCommerce, you will also need WooCommerce Subscriptions.
-
-### 2. Set Custom Product Pricing Based on Membership Level
+### 1. Set Custom Product Pricing Based on Membership Level
 
 Each product in WooCommerce can have unique pricing set for your members only.
 
 When a logged in member views the product page, they will see their custom pricing and be able to purchase your products at this special price.
 
-### 3. Set a Storewide Discount for Members by Level
+### 2. Set a Storewide Discount for Members by Level
 
 Each membership level in Paid Memberships Pro can have a unique global percentage discount for your ecommerce store.
 
@@ -34,9 +28,15 @@ When a logged in member views the product page, they will see their adjusted pri
 
 https://www.youtube.com/watch?v=BAA56eTRt4Q
 
-Learn more about [WooCommerce memberships and subscriptions](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#membership-product) and [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#member-discount) in our documentation site.
+### 3. Sell Membership as a WooCommerce Product
 
-### Bonus Features of the WooCommerce Integration for Paid Memberships Pro
+Each product can be assigned as a "Membership Product". Customers that purchase this product in WooCommerce will be assigned a membership level in Paid Memberships Pro. Using the features of PMPro, you can restrict member access to all types of premium content, courses, and community features.
+
+While [Paid Memberships Pro](https://wordpress.org/plugins/paid-memberships-pro/) has recurring subscriptions built-in, the default WooCommerce plugin only allows products to have a one-time payment. If you must use this plugin to sell recurring memberships through WooCommerce, you will also need WooCommerce Subscriptions.
+
+Learn more about how to [sell memberships using PMPro and WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#membership-product) and [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#member-discount) in our documentation site.
+
+### Bonus Features of the Paid Memberships Pro Integration with WooCommerce
 
 = Members Only Products =
 If you'd like to offer certain products to members only, see the [Custom Post Type Membership Access Add On](
