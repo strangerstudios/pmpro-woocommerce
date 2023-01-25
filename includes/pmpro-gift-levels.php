@@ -150,7 +150,8 @@ function pmprowoo_gift_levels_render_on_cart_and_checkout( $cart_data, $cart_ite
         $custom_items = $cart_data;
     }
     if( isset( $cart_item['gift_recipient_name'] ) ) {
-        $custom_items[] = array( "name" => esc_html__( 'Recipient Name', 'pmpro-woocommerce' ), "value" => esc_html( $cart_item['gift_recipient_name'] ) );
+        $custom_items[] = array( "name" => esc_html__( 'Recipient Name', 'pmpro-woocommerce' ), "value" => $cart_item['gift_recipient_name'] );
+
     }
     if( isset( $cart_item['gift_recipient_email'] ) ) {
         $custom_items[] = array( "name" => esc_html__( 'Recipient Email', 'pmpro-woocommerce' ), "value" => esc_html( $cart_item['gift_recipient_email'] ) );
