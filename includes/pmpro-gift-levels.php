@@ -395,11 +395,9 @@ function pmprowoo_process_product_meta_for_gift_levels() {
         update_option('_pmprowoo_gift_codes', $pmprowoo_gift_codes);
     }
 
-    // Save gift membership email option
-    $email_opt = $_POST['_gift_membership_email_option'];
-
-    if( isset( $email_opt ) ) {
-        update_post_meta( $post_id, '_gift_membership_email_option', esc_attr( $email_opt ));
+    // Save gift membership email option    
+    if( isset( $_POST['_gift_membership_email_option'] ) ) {
+        update_post_meta( $post_id, '_gift_membership_email_option', intval( $_POST['_gift_membership_email_option'] ) );
     }
 }
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta_for_gift_levels' );
