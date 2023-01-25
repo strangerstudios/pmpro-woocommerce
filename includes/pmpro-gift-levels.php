@@ -3,7 +3,8 @@
  * Load Email Template
  */
 function pmprowoo_gift_levels_email_path($default_templates, $page_name, $type = 'email', $where = 'local', $ext = 'html') {
-  $default_templates[] = PMPROWC_DIR . "/email/{$page_name}.{$ext}";
+  $default_templates[] = PMPROWC_DIR . '/email/' . sanitize_file_name( $page_name . '.' . $ext );
+
   return $default_templates;
 }
 add_filter('pmpro_email_custom_template_path', 'pmprowoo_gift_levels_email_path', 10, 5 );
@@ -35,11 +36,11 @@ function pmprowoo_gift_levels_add_recipient_fields() {
           echo '<table class="variations gift-membership-fields" cellspacing="0">
                 <tbody>
                 <tr>
-                <td class="label"><label for="gift-recipient-name">'. __( 'Recipient Name', 'pmpro-woocommerce' ).'</label></td>
+                <td class="label"><label for="gift-recipient-name">'. esc_html__( 'Recipient Name', 'pmpro-woocommerce' ).'</label></td>
                 <td class="value"><input type="text" name="gift-recipient-name" value="" style="margin:0;" /></td>
                 </tr> 
                 <tr>
-                <td class="label"><label for="gift-recipient-email">'. __( 'Recipient Email', 'pmpro-woocommerce' ).'</label></td>
+                <td class="label"><label for="gift-recipient-email">'. esc_html__( 'Recipient Email', 'pmpro-woocommerce' ).'</label></td>
                 <td class="value"><input type="text" name="gift-recipient-email" value="" style="margin:0;" /></td>
                 </tr>                               
                 </tbody>
@@ -48,19 +49,19 @@ function pmprowoo_gift_levels_add_recipient_fields() {
           echo '<table class="variations gift-membership-fields" cellspacing="0">
                 <tbody>
                 <tr>
-                <td class="label"><label for="gift-recipient-email">'. __( 'Send Email to Recipient?', 'pmpro-woocommerce' ).'</label></td>
+                <td class="label"><label for="gift-recipient-email">'. esc_html__( 'Send Email to Recipient?', 'pmpro-woocommerce' ) . '</label></td>
                 <td class="value"><select id="pa_send-email" class="" name="gift-send-email"> 
-                   <option selected="selected" value="">Choose an option</option>
-                   <option class="attached enabled" value="1">YES</option>
-                   <option class="attached enabled" value="0">NO</option>
+                   <option selected="selected" value="">' . esc_html__( 'Choose an option', 'pmpro-woocommerce' ) . '</option>
+                   <option class="attached enabled" value="1">' . esc_html( 'YES', 'pmpro-woocommerce' ) . '</option>
+                   <option class="attached enabled" value="0">' . esc_html( 'NO', 'pmpro-woocommerce' ) . '</option>
                 </select></td>
                 </tr> 
                 <tr id="recipient-name" style="display:none;">
-                <td class="label"><label for="gift-recipient-name">'. __( 'Recipient Name', 'pmpro-woocommerce' ).'</label></td>
+                <td class="label"><label for="gift-recipient-name">'. esc_html__( 'Recipient Name', 'pmpro-woocommerce' ).'</label></td>
                 <td class="value"><input type="text" name="gift-recipient-name" value="" style="margin:0;" /></td>
                 </tr>
                 <tr id="recipient-email" style="display:none;">
-                <td class="label"><label for="gift-recipient-email">'. __( 'Recipient Email', 'pmpro-woocommerce' ).'</label></td>
+                <td class="label"><label for="gift-recipient-email">'. esc_html__( 'Recipient Email', 'pmpro-woocommerce' ).'</label></td>
                 <td class="value"><input type="text" name="gift-recipient-email" value="" style="margin:0;" /></td>
                 </tr>                               
                 </tbody>
@@ -100,16 +101,16 @@ function pmprowoo_gift_levels_recipient_fields_validation($passed, $product_id) 
 
     if(!empty($gift_membership_code) && !empty($gift_membership_email_option)){
      if($gift_membership_email_option == '3' && ( ! isset( $_REQUEST['gift-send-email'] ) || $_REQUEST['gift-send-email'] == '' ) ){
-           wc_add_notice( __( 'Please select option for Send Email to Recipient', 'pmpro-woocommerce' ), 'error' );
+           wc_add_notice( esc_html__( 'Please select option for Send Email to Recipient', 'pmpro-woocommerce' ), 'error' );
            return false;
      }
      if(($gift_membership_email_option == '1') || (  $_REQUEST['gift-send-email'] == '1' ) ){
        if ( empty( $_REQUEST['gift-recipient-name'] ) ) {
-           wc_add_notice( __( 'Please enter a NAME of Recipient', 'pmpro-woocommerce' ), 'error' );
+           wc_add_notice( esc_html__( 'Please enter a NAME of Recipient', 'pmpro-woocommerce' ), 'error' );
            return false;
        }
        if ( empty( $_REQUEST['gift-recipient-email'] ) ) {
-           wc_add_notice( __( 'Please enter a EMAIL of Recipient', 'pmpro-woocommerce' ), 'error' );
+           wc_add_notice( esc_html__( 'Please enter a EMAIL of Recipient', 'pmpro-woocommerce' ), 'error' );
            return false;
        }
      }
@@ -126,13 +127,13 @@ function pmprowoo_gift_levels_save_recipient_fields( $cart_item_data, $product_i
 
     if( isset( $_REQUEST['gift-recipient-name'] ) ) {
 	if( !empty( $_REQUEST['gift-recipient-name'] ) ){
-        $cart_item_data[ 'gift_recipient_name' ] = $_REQUEST['gift-recipient-name'];
+        $cart_item_data[ 'gift_recipient_name' ] = sanitize_text_field( $_REQUEST['gift-recipient-name'] );
         $cart_item_data['unique_key'] = md5( microtime().rand() );
 	}
     }
     if( isset( $_REQUEST['gift-recipient-email'] ) ) {
 	if( !empty( $_REQUEST['gift-recipient-email'] ) ){
-        $cart_item_data[ 'gift_recipient_email' ] = $_REQUEST['gift-recipient-email'];
+        $cart_item_data[ 'gift_recipient_email' ] = sanitize_email( $_REQUEST['gift-recipient-email'] );
         $cart_item_data['unique_key'] = md5( microtime().rand() );
 	}
     }
@@ -150,10 +151,12 @@ function pmprowoo_gift_levels_render_on_cart_and_checkout( $cart_data, $cart_ite
         $custom_items = $cart_data;
     }
     if( isset( $cart_item['gift_recipient_name'] ) ) {
-        $custom_items[] = array( "name" => __( 'Recipient Name', 'pmpro-woocommerce' ), "value" => $cart_item['gift_recipient_name'] );
+        $custom_items[] = array( "name" => esc_html__( 'Recipient Name', 'pmpro-woocommerce' ), "value" => $cart_item['gift_recipient_name'] );
+
     }
     if( isset( $cart_item['gift_recipient_email'] ) ) {
-        $custom_items[] = array( "name" => __( 'Recipient Email', 'pmpro-woocommerce' ), "value" => $cart_item['gift_recipient_email'] );
+        $custom_items[] = array( "name" => esc_html__( 'Recipient Email', 'pmpro-woocommerce' ), "value" => $cart_item['gift_recipient_email'] );
+
     }
     return $custom_items;
 }
@@ -213,7 +216,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
 	           $gift_code_id = $pmprowoo_gift_codes[$item['product_id']];
 
                    // get discount code level to copy
-                   $gift_level = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . $gift_code_id . "' LIMIT 1");
+                   $gift_level = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . esc_sql( $gift_code_id ) . "' LIMIT 1");
                    if(!$gift_level){ 
                            //possibly add an error if coupon code doesn't exist
                            return; 
@@ -224,7 +227,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
 	           $code = "GIFT" . rand(1, 99) . pmpro_getDiscountCode(); //added rand to code to make it unique for multiple gift orders
 	           $starts = current_time( 'Y-m-d', 0 );
 	           $expires = date("Y-m-d", strtotime("+1 year"));		
-	           $sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($code) . "', '" . $starts . "', '" . $expires . "', '1')";
+	           $sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($code) . "', '" . esc_sql( $starts ) . "', '" . esc_sql( $expires ) . "', '1')";
 	
   	          if($wpdb->query($sqlQuery) !== false){
 		      //get id of new code
@@ -261,7 +264,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
                      // Send Email to Recipient
                      $pmproemail = new PMProEmail();
                      $pmproemail->email = $recipient_email;
-	             $pmproemail->subject = sprintf(__("A Gift from %s", 'pmpro-woocommerce'), get_option('blogname'));
+	             $pmproemail->subject = sprintf( esc_html__("A Gift from %s", 'pmpro-woocommerce'), get_option('blogname'));
                      $pmproemail->template = 'gift_membership_code';
                      
                      $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $recipient_name, "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $recipient_name, "user_email" => $recipient_email, "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
@@ -273,7 +276,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
                           $message .= ' ' . $phpmailer->ErrorInfo;
                        }
                     } else {
-                       $message = sprintf( __( 'Gift Email Sent To Recipient %s', 'pmpro-woocommerce' ), $recipient_email );
+                       $message = sprintf( esc_html__( 'Gift Email Sent To Recipient %s', 'pmpro-woocommerce' ), $recipient_email );
                     }
 
                     if ( function_exists('wc_add_notice') ) {
@@ -285,7 +288,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
                      // If no Recipient Send Email to Customer
                      $pmproemail = new PMProEmail();
                      $pmproemail->email = $order->get_billing_email();
-                     $pmproemail->subject = sprintf(__("A Gift from %s", 'pmpro-woocommerce'), get_option("blogname"));
+                     $pmproemail->subject = sprintf( esc_html__("A Gift from %s", 'pmpro-woocommerce'), get_option("blogname"));
                      $pmproemail->template = 'gift_membership_code';
                      
                      $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $order->get_billing_first_name(), "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $order->get_billing_first_name(), "user_email" => $order->get_billing_email(), "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
@@ -297,7 +300,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
                           $message .= ' ' . $phpmailer->ErrorInfo;
                        }
                     } else {
-                       $message = sprintf( __( 'Gift Email Sent To %s', 'pmpro-woocommerce' ), $order->get_billing_email() );
+                       $message = sprintf( esc_html__( 'Gift Email Sent To %s', 'pmpro-woocommerce' ), $order->get_billing_email() );
                     }
                    
                     if ( function_exists('wc_add_notice') ) {
@@ -328,9 +331,9 @@ function pmprowoo_extra_tab_options_for_gift_levels() {
 		
 	$gift_membership_code_options = array();
 	if(!$codes) {
-		$gift_membership_code_options[0] = __( 'No Discount Codes Created', 'pmpro-woocommerce' );
+		$gift_membership_code_options[0] = esc_html__( 'No Discount Codes Created', 'pmpro-woocommerce' );
 	} else {
-		$gift_membership_code_options[0] = __( 'None', 'pmpro-woocommerce' );
+		$gift_membership_code_options[0] = esc_html__( 'None', 'pmpro-woocommerce' );
 		foreach($codes as $code) {
 			$key = $code->id;
 			$gift_membership_code_options[$key] = $code->code;            
@@ -339,16 +342,16 @@ function pmprowoo_extra_tab_options_for_gift_levels() {
 ?>
 <div class="options_group">
 	<p class="form-field">
-		<strong><?php _e('Gift a Membership', 'pmpro-woocommerce');?></strong><br />
+		<strong><?php esc_html_e('Gift a Membership', 'pmpro-woocommerce');?></strong><br />
 		<?php                   
 			// Load Membership Discounts
 			woocommerce_wp_select(
 				array(
 				'id'      => '_gift_membership_code',
-				'label'   => __( 'Select Discount Code', 'pmpro-woocommerce' ),
-				'options' => $gift_membership_code_options,
+				'label'   => esc_html__( 'Select Discount Code', 'pmpro-woocommerce' ),
+				'options' => $gift_membership_code_options, //Escaped further up.
 				'desc_tip' => 'true',
-		'description' => __( 'Upon each purchase a new one-time use code (which start with "GIFT") will be created from the code selected here.', 'pmpro-woocommerce' ) 
+		'description' => esc_html__( 'Upon each purchase a new one-time use code (which start with "GIFT") will be created from the code selected here.', 'pmpro-woocommerce' ) 
 				)
 			);
 
@@ -356,14 +359,14 @@ function pmprowoo_extra_tab_options_for_gift_levels() {
 			woocommerce_wp_select(
 				array(
 				'id'      => '_gift_membership_email_option',
-				'label'   => __( 'Email Recipient', 'pmpro-woocommerce' ),
+				'label'   => esc_html__( 'Email Recipient', 'pmpro-woocommerce' ),
 				'options' => array(
-				 '1' => __( 'Yes', 'pmpro-woocommerce' ),
-				 '0' => __( 'No', 'pmpro-woocommerce' ),
-				 '3' => __( 'Customer Decides', 'pmpro-woocommerce' )
+				 '1' => esc_html__( 'Yes', 'pmpro-woocommerce' ),
+				 '0' => esc_html__( 'No', 'pmpro-woocommerce' ),
+				 '3' => esc_html__( 'Customer Decides', 'pmpro-woocommerce' )
 							 ),
 				'desc_tip' => 'true',
-		'description' => __( 'Decide if a recipient email is entered and the code is emailed upon successful purchase.', 'pmpro-woocommerce' ) 
+		'description' => esc_html__( 'Decide if a recipient email is entered and the code is emailed upon successful purchase.', 'pmpro-woocommerce' ) 
 				)
 			);
 		?>
@@ -379,7 +382,7 @@ add_action('pmprowoo_extra_tab_options', 'pmprowoo_extra_tab_options_for_gift_le
 function pmprowoo_process_product_meta_for_gift_levels() {
 	global $post_id, $pmprowoo_gift_codes;
 	// Save gift membership discount
-    $code = $_POST['_gift_membership_code'];
+    $code = sanitize_text_field( $_POST['_gift_membership_code'] );
 
     // update array of gift codes
     if(!empty($code))

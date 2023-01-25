@@ -104,7 +104,7 @@ function pmprowoo_purchase_disabled() {
         <div class="woocommerce-info wc-nonpurchasable-message">
 			<?php printf(
 				__( "You may only add one membership to your %scart%s.", 'pmpro-woocommerce' ),
-				sprintf( '<a href="%1$s" title="%2$s">', $cart_url, __( 'Cart', 'pmpro-woocommerce' ) ),
+				sprintf( '<a href="%1$s" title="%2$s">', esc_url( $cart_url ), esc_html__( 'Cart', 'pmpro-woocommerce' ) ),
 				'</a>'
 			);
 			?>
@@ -192,7 +192,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 					'billing_limit'   => '',
 					'trial_amount'    => '',
 					'trial_limit'     => '',
-					'startdate'       => $startdate,
+					'startdate'       => sanitize_text_field( $startdate ),
 					'enddate'         => '0000-00-00 00:00:00',
 				);
 				
@@ -542,13 +542,13 @@ function pmprowoo_tab_options() {
     <div id="pmprowoo_tab_data" class="panel woocommerce_options_panel">
 
 		<div class="options_group pmprowoo_options_group-membership_product">
-			<h3><?php _e( 'Give Customers a Membership Level', 'pmpro-woocommerce' ); ?></h3>
+			<h3><?php esc_html_e( 'Give Customers a Membership Level', 'pmpro-woocommerce' ); ?></h3>
 			<?php
 			// Membership Product
 			woocommerce_wp_select(
 				array(
 					'id'      => '_membership_product_level',
-					'label'   => __( 'Membership Product', 'pmpro-woocommerce' ),
+					'label'   => esc_html__( 'Membership Product', 'pmpro-woocommerce' ),
 					'options' => $membership_level_options,
 				)
 			);
@@ -564,23 +564,23 @@ function pmprowoo_tab_options() {
 			woocommerce_wp_checkbox(
 				array(
 					'id'          => '_membership_product_autocomplete',
-					'label'       => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
-					'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
-					'cbvalue'	  => $cbvalue,
+					'label'       => esc_html__( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
+					'description' => esc_html__( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
+					'cbvalue'	  => esc_attr( $cbvalue ),
 				)
 			);
 			?>
         </div> <!-- end pmprowoo_options_group-membership_product -->
 		<div class="options-group pmprowoo_options_group-membership_discount">
-			<h3><?php _e( 'Member Discount Pricing', 'pmpro-woocommerce' ); ?></h3>
-			<p><?php printf( __( 'Set the custom price based on Membership Level. <a href="%s">Edit your membership levels</a> to set a global percent discount for all products.', 'pmpro-woocommerce' ), admin_url( 'admin.php?page=pmpro-membershiplevels' ) ); ?></p>
+			<h3><?php esc_html_e( 'Member Discount Pricing', 'pmpro-woocommerce' ); ?></h3>
+			<p><?php printf( __( 'Set the custom price based on Membership Level. <a href="%s">Edit your membership levels</a> to set a global percent discount for all products.', 'pmpro-woocommerce' ), esc_url( admin_url( 'admin.php?page=pmpro-membershiplevels' ) ) ); ?></p>
             <?php
 			// For each membership level, create respective price field
 			foreach ( $membership_levels as $level ) {
 				woocommerce_wp_text_input(
 					array(
 						'id'          => '_level_' . $level->id . '_price',
-						'label'       => sprintf( __( '%s Price (%s)', 'pmpro-woocommerce' ), $level->name, get_woocommerce_currency_symbol() ),
+						'label'       => sprintf( esc_html__( '%s Price (%s)', 'pmpro-woocommerce' ), $level->name, get_woocommerce_currency_symbol() ),
 						'placeholder' => '',
 						'type'        => 'text',
 						'desc_tip'    => 'true',
@@ -632,7 +632,7 @@ function pmprowoo_process_product_meta() {
 		// Save each membership level price
 		$decimal_separator = wc_get_price_decimal_separator();
 		foreach ( $membership_levels as $level ) {
-			$price = str_replace( $decimal_separator, '.', $_POST[ '_level_' . $level->id . "_price" ] );
+			$price = str_replace( $decimal_separator, '.', sanitize_text_field( $_POST[ '_level_' . $level->id . "_price" ] ) );
 			update_post_meta( $post_id, '_level_' . $level->id . '_price', $price );
 		}
 	}
@@ -658,13 +658,13 @@ function pmprowoo_add_membership_discount() {
 	}
 	?>
 	<hr />
-    <h2 class="title"><?php _e( "Set Membership Discount", "pmpro-woocommerce" ); ?></h2>
-    <p><?php _e( "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page.", "pmpro-woocommerce" ); ?></p>
+    <h2 class="title"><?php esc_html_e( "Set Membership Discount", "pmpro-woocommerce" ); ?></h2>
+    <p><?php esc_html_e( "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page.", "pmpro-woocommerce" ); ?></p>
     <table>
         <tbody class="form-table">
         <tr>
             <th scope="row" valign="top"><label
-                        for="membership_discount"><?php _e( "Membership Discount (%):", "pmpro-woocommerce" ); ?></label>
+                        for="membership_discount"><?php esc_html_e( "Membership Discount (%):", "pmpro-woocommerce" ); ?></label>
             </th>
             <td>
                 <input type="number" min="0" max="100" name="membership_discount"
@@ -707,9 +707,9 @@ function pmprowoo_custom_settings( $fields ) {
 	$fields[] = array(
 		'field_name' => 'pmprowoo_discounts_on_subscriptions',
 		'field_type' => 'select',
-		'label'      => __( 'Apply Member Discounts to WooCommerce Subscription and Membership Products?', 'pmpro-woocommerce' ),
-		'value'      => __( 'No', 'pmpro-woocommerce' ),
-		'options'    => array( __( 'Yes', 'pmpro-woocommerce' ), __( 'No', 'pmpro-woocommerce' ) ),
+		'label'      => esc_html__( 'Apply Member Discounts to WooCommerce Subscription and Membership Products?', 'pmpro-woocommerce' ),
+		'value'      => esc_html__( 'No', 'pmpro-woocommerce' ),
+		'options'    => array( esc_html__( 'Yes', 'pmpro-woocommerce' ), esc_html__( 'No', 'pmpro-woocommerce' ) ),
 	);
 	
 	return $fields;
@@ -898,7 +898,7 @@ function pmprowoo_order_autocomplete( $order_id ) {
 	
 	//change status if needed
 	if ( ! empty( $autocomplete ) ) {
-		$order->update_status( 'completed', __( 'Autocomplete via PMPro WooCommerce.', 'pmpro-woocommerce' ) );
+		$order->update_status( 'completed', esc_html__( 'Autocomplete via PMPro WooCommerce.', 'pmpro-woocommerce' ) );
 	}
 }
 add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete' );
