@@ -2,9 +2,9 @@
 Contributors: strangerstudios, paidmembershipspro
 Tags: woocommerce membership, member pricing, woocommerce, paid memberships pro, woocommerce subscription, pmpro
 Requires at least: 5.2
-Tested up to: 6.1
+Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 1.7.4
+Stable tag: 1.7.6
 
 Integrates Paid Memberships Pro with WooCommerce to offer a global members-only discount, set member price by product, or sell membership as a product.
 
@@ -127,6 +127,10 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.7.6 - 2023-01-24 =
+* SECURITY: Escaping and sanitization updates.
+* ENHANCEMENT: Updated readme, banner, and thumbnail assets.
+
 = 1.7.5 - 2023-01-17 =
 * ENHANCEMENT: Support Multiple Memberships Per User. If a member holds more than one level, give the member the best discount available to their levels.
 * ENHANCEMENT: Added functionality to autocomplete variation products.
