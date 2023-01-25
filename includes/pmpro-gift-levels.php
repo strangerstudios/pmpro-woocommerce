@@ -3,7 +3,8 @@
  * Load Email Template
  */
 function pmprowoo_gift_levels_email_path($default_templates, $page_name, $type = 'email', $where = 'local', $ext = 'html') {
-  $default_templates[] = esc_url( PMPROWC_DIR . "/email/{$page_name}.{$ext}" );
+  $default_templates[] = PMPROWC_DIR . '/email/' . sanitize_file_name( $page_name . '.' . $ext );
+
   return $default_templates;
 }
 add_filter('pmpro_email_custom_template_path', 'pmprowoo_gift_levels_email_path', 10, 5 );
