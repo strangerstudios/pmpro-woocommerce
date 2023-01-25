@@ -182,7 +182,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 				
 				//create custom level to mimic PMPro checkout
 				$custom_level = array(
-					'user_id'         => (int) $user_id,
+					'user_id'         => $user_id,
 					'membership_id'   => $pmpro_level->id,
 					'code_id'         => '', //will support PMPro discount codes later
 					'initial_payment' => sanitize_text_field( $item['line_total'] ),
