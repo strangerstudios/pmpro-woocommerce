@@ -185,7 +185,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 					'user_id'         => $user_id,
 					'membership_id'   => $pmpro_level->id,
 					'code_id'         => '', //will support PMPro discount codes later
-					'initial_payment' => sanitize_text_field( $item['line_total'] ),
+					'initial_payment' => $item['line_total'],
 					'billing_amount'  => '',
 					'cycle_number'    => '',
 					'cycle_period'    => '',
