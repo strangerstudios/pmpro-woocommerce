@@ -381,23 +381,27 @@ add_action('pmprowoo_extra_tab_options', 'pmprowoo_extra_tab_options_for_gift_le
  */
 function pmprowoo_process_product_meta_for_gift_levels() {
 	global $post_id, $pmprowoo_gift_codes;
-	// Save gift membership discount
-    $code = sanitize_text_field( $_POST['_gift_membership_code'] );
-
-    // update array of gift codes
-    if(!empty($code))
-		$pmprowoo_gift_codes[$post_id] = $code;
-	elseif(isset($pmprowoo_gift_codes[$post_id]))
-		unset($pmprowoo_gift_codes[$post_id]);
-
-    if( isset( $code ) ) {
-        update_post_meta( $post_id, '_gift_membership_code', esc_attr( $code ));
-        update_option('_pmprowoo_gift_codes', $pmprowoo_gift_codes);
+	
+    // If the fields aren't present. Bail. (Add On is probably not activated.)
+    if ( ! isset( $_POST['_gift_membership_code'] ) ) {
+        return;
     }
+    
+    // Get the code setting.    
+    $code = intval( $_POST['_gift_membership_code'] );
 
-    // Save gift membership email option    
-    if( isset( $_POST['_gift_membership_email_option'] ) ) {
-        update_post_meta( $post_id, '_gift_membership_email_option', intval( $_POST['_gift_membership_email_option'] ) );
-    }
+    // Update array of gift codes.
+    if( ! empty( $code ) ) {
+        $pmprowoo_gift_codes[$post_id] = $code;
+    } elseif ( isset( $pmprowoo_gift_codes[$post_id] ) ) {
+        unset($pmprowoo_gift_codes[$post_id]);
+    }		
+
+    // Save gift membership discount.
+    update_post_meta( $post_id, '_gift_membership_code', esc_attr( $code ) );
+    update_option('_pmprowoo_gift_codes', $pmprowoo_gift_codes);    
+
+    // Save gift membership email option.   
+    update_post_meta( $post_id, '_gift_membership_email_option', intval( $_POST['_gift_membership_email_option'] ) );
 }
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta_for_gift_levels' );
