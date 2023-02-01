@@ -545,30 +545,34 @@ function pmprowoo_tab_options() {
 			<h3><?php esc_html_e( 'Give Customers a Membership Level', 'pmpro-woocommerce' ); ?></h3>
 			<?php
 			// Membership Product
+			// woocommerce_wp_select() escapes attributes for us.
 			woocommerce_wp_select(
 				array(
 					'id'      => '_membership_product_level',
-					'label'   => esc_html__( 'Membership Product', 'pmpro-woocommerce' ),
-					'options' => $membership_level_options,
+					'label'   => __( 'Membership Product', 'pmpro-woocommerce' ),
+					'options' => $membership_level_options, // phpcs:ignore WordPress.Security.EscapeOutput
 				)
 			);
 
 			// Membership Product
-			if( !empty( $post->ID ) ) {
+			if ( ! empty( $post->ID ) ) {
 				$cbvalue = get_post_meta( $post->ID, '_membership_product_autocomplete', true );
 			}
-			if( empty( $cbvalue ) ) {
+
+			if ( empty( $cbvalue ) ) {
 				$cbvalue = NULL;
 			}
 
+			// woocommerce_wp_checkbox() escapes attributes for us.
 			woocommerce_wp_checkbox(
 				array(
 					'id'          => '_membership_product_autocomplete',
-					'label'       => esc_html__( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
-					'description' => esc_html__( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
-					'cbvalue'	  => esc_attr( $cbvalue ),
+					'label'       => __( 'Autocomplete Order Status', 'pmpro-woocommerce' ),
+					'description' => __( "Check this to mark the order as completed immediately after checkout to activate the associated membership.", 'pmpro-woocommerce' ),
+					'cbvalue'     => $cbvalue, // phpcs:ignore WordPress.Security.EscapeOutput
 				)
 			);
+
 			?>
         </div> <!-- end pmprowoo_options_group-membership_product -->
 		<div class="options-group pmprowoo_options_group-membership_discount">
@@ -616,7 +620,12 @@ function pmprowoo_process_product_meta() {
 	} else {
 		$autocomplete = 0;
 	}
-	
+
+	// update post meta for the autocomplete option
+	if ( isset ( $autocomplete ) ) {
+		update_post_meta( $post_id, '_membership_product_autocomplete', $autocomplete );
+	}
+
 	// update array of product levels
 	if ( ! empty( $level ) ) {
 		$pmprowoo_product_levels[ $post_id ] = $level;
@@ -637,10 +646,6 @@ function pmprowoo_process_product_meta() {
 		}
 	}
 	
-	// update post meta for the autocomplete option
-	if ( isset ( $autocomplete ) ) {
-		update_post_meta( $post_id, '_membership_product_autocomplete', $autocomplete );
-	}
 }
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta' );
 
