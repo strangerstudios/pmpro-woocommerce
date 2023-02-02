@@ -127,6 +127,9 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.7.7 - 2023-02-02 =
+* BUG FIX: Fixed an issue where the "Autocomplete Order Status" option wasn't saving correctly.
+
 = 1.7.6 - 2023-01-24 =
 * SECURITY: Escaping and sanitization updates.
 * ENHANCEMENT: Updated readme, banner, and thumbnail assets.
