@@ -267,7 +267,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
 	             $pmproemail->subject = sprintf( esc_html__("A Gift from %s", 'pmpro-woocommerce'), get_option('blogname'));
                      $pmproemail->template = 'gift_membership_code';
                      
-                     $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $recipient_name, "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $recipient_name, "user_email" => $recipient_email, "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
+                     $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $recipient_name, "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => get_option("pmpro_from_email"), "login_link" => '', "enddate" => '', "display_name" => $recipient_name, "user_email" => $recipient_email, "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
 			
 	            if($pmproemail->sendEmail() == false){
                        $message = sprintf( __( 'Gift Email FAILED To Recipient %s. Contact Site Admin.', 'pmpro-woocommerce' ), $recipient_email );
@@ -291,7 +291,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
                      $pmproemail->subject = sprintf( esc_html__("A Gift from %s", 'pmpro-woocommerce'), get_option("blogname"));
                      $pmproemail->template = 'gift_membership_code';
                      
-                     $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $order->get_billing_first_name(), "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => pmpro_getOption("from_email"), "login_link" => '', "enddate" => '', "display_name" => $order->get_billing_first_name(), "user_email" => $order->get_billing_email(), "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
+                     $pmproemail->data = array("subject" => $pmproemail->subject, "name" => $order->get_billing_first_name(), "user_login" => '', "sitename" => get_option("blogname"), "membership_id" => '', "membership_level_name" => '', "siteemail" => get_option("pmpro_from_email"), "login_link" => '', "enddate" => '', "display_name" => $order->get_billing_first_name(), "user_email" => $order->get_billing_email(), "gift_product" => $item['name'], "membership_gift_code" => $code, "body" => pmpro_loadTemplate('gift_membership_code','local','email','html'));		
 			
 	            if($pmproemail->sendEmail() == false){
                        $message = sprintf( __( 'Gift Email FAILED To %s. Contact Site Admin.', 'pmpro-woocommerce' ), $order->get_billing_email() );
