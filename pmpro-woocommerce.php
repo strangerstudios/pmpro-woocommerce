@@ -157,9 +157,9 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 			     in_array( $product_id, $membership_product_ids ) ) {    //not sure when a product has id 0, but the Woo code checks this
 				
 				// Check to see if the order is a renewal order for a subscription. If it is, bail.
-				if ( class_exists( 'WC_Subscriptions_Renewal_Order' ) ) {
+					if ( function_exists( 'wcs_order_contains_renewal' ) ) {
 					// If the user already has the level, let's just leave it and assume it's a renewal order.
-					if ( WC_Subscriptions_Renewal_Order::is_renewal( $order_id ) ) {
+					if ( wcs_order_contains_renewal( $order )  ) {
 						if ( pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $product_id ] ) ) {
 							return;
 						}
