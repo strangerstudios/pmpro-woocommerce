@@ -932,6 +932,7 @@ add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete'
 
 /**
  * Get products that are in the cart that are attached to a level ID.
+ * Return product ID's of membership level products in the cart.
  *
  * @return array $levels The products and levels.
  */
@@ -939,7 +940,7 @@ function pmprowoo_get_memberships_from_cart() {
 	global $woocommerce, $pmprowoo_product_levels;
 
 	$membership_product_ids = array_keys( $pmprowoo_product_levels );
-	$cart_items  = $woocommerce->cart->cart_contents; // items in the cart
+	$cart_items  = $woocommerce->cart->cart_contents;
 	$membership_product_ids_in_cart = array();
 	
 	// Nothing in the cart, just bail.
@@ -947,13 +948,13 @@ function pmprowoo_get_memberships_from_cart() {
 		return $membership_product_ids_in_cart;
 	}
 
-
+	// Get all product IDs in the cart
 	$product_ids = array();
 	foreach( $cart_items as $item ) {
 		$product_ids[] = $item['product_id'];
 	}
 
-	// Compare values between the two arrays and show all overlapping values
+	// Compare values between the two arrays of membership products and items in the cart.
 	$membership_product_ids_in_cart = array_values( array_intersect( $membership_product_ids, $product_ids ) );
 
 	return $membership_product_ids_in_cart;
