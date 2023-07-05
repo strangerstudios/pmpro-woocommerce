@@ -99,19 +99,31 @@ add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
  */
 function pmprowoo_purchase_disabled() {
 	$cart_url = wc_get_cart_url();
+	$product_id = wc_get_product()->get_id();
+
+	// Get cart contents and see if they're a membership product
+	$membership_products_in_cart = pmprowoo_get_memberships_from_cart();
+
+	$membership_in_cart = in_array( $product_id, $membership_products_in_cart );
+
+	if ( ! $membership_in_cart ) {
+		$message = sprintf( __( "You may only add one membership to your %scart%s.", 'pmpro-woocommerce' ),
+				sprintf( '<a href="%1$s" title="%2$s">', esc_url( $cart_url ), esc_html__( 'Cart', 'pmpro-woocommerce' ) ),
+				'</a>' );
+	} else {
+		$message = sprintf( __( "You have added this membership product to your %scart%s. Complete your purchase to activate your membership.", 'pmpro-woocommerce' ),
+				sprintf( '<a href="%1$s" title="%2$s">', esc_url( $cart_url ), esc_html__( 'Cart', 'pmpro-woocommerce' ) ),
+				'</a>' );
+	}
 	?>
     <div class="woocommerce">
         <div class="woocommerce-info wc-nonpurchasable-message">
-			<?php printf(
-				__( "You may only add one membership to your %scart%s.", 'pmpro-woocommerce' ),
-				sprintf( '<a href="%1$s" title="%2$s">', esc_url( $cart_url ), esc_html__( 'Cart', 'pmpro-woocommerce' ) ),
-				'</a>'
-			);
-			?>
+			<?php echo $message; ?>
         </div>
     </div>
 	<?php
 }
+
 
 /**
  * Add users to membership levels after order is completed.
@@ -917,6 +929,35 @@ function pmprowoo_order_autocomplete( $order_id ) {
 	}
 }
 add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete' );
+
+/**
+ * Get products that are in the cart that are attached to a level ID.
+ *
+ * @return array $levels The products and levels.
+ */
+function pmprowoo_get_memberships_from_cart() {
+	global $woocommerce, $pmprowoo_product_levels;
+
+	$membership_product_ids = array_keys( $pmprowoo_product_levels );
+	$cart_items  = $woocommerce->cart->cart_contents; // items in the cart
+	$membership_product_ids_in_cart = array();
+	
+	// Nothing in the cart, just bail.
+	if ( empty( $cart_items ) ) {
+		return $membership_product_ids_in_cart;
+	}
+
+
+	$product_ids = array();
+	foreach( $cart_items as $item ) {
+		$product_ids[] = $item['product_id'];
+	}
+
+	// Compare values between the two arrays and show all overlapping values
+	$membership_product_ids_in_cart = array_values( array_intersect( $membership_product_ids, $product_ids ) );
+
+	return $membership_product_ids_in_cart;
+}
 
 function pmpro_woocommerce_load_textdomain() {
   load_plugin_textdomain( 'pmpro-woocommerce', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
