@@ -922,3 +922,16 @@ function pmpro_woocommerce_load_textdomain() {
   load_plugin_textdomain( 'pmpro-woocommerce', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
 add_action( 'plugins_loaded', 'pmpro_woocommerce_load_textdomain' );
+
+/**
+ * Confirm that PMPro WooCommerce is compatible with HPOS (Custom Order Tables).
+ * Generally we store things to products, not orders.
+ * 
+ * @since TBD
+ */
+function pmprowoo_compatible_for_hpos() {
+	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+	}
+}
+add_action( 'before_woocommerce_init', 'pmprowoo_compatible_for_hpos' );
