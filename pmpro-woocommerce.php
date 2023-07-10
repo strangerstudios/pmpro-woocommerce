@@ -99,7 +99,8 @@ add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
  */
 function pmprowoo_purchase_disabled() {
 	$cart_url = wc_get_cart_url();
-	$product_id = wc_get_product()->get_id();
+	$product = wc_get_product();
+	$product_id = $product->get_id();
 
 	// Get cart contents and see if they're a membership product
 	$membership_products_in_cart = pmprowoo_get_memberships_from_cart();
@@ -111,7 +112,8 @@ function pmprowoo_purchase_disabled() {
 				sprintf( '<a href="%1$s" title="%2$s">', esc_url( $cart_url ), esc_html__( 'Cart', 'pmpro-woocommerce' ) ),
 				'</a>' );
 	} else {
-		$message = sprintf( __( "You have added this membership product to your %scart%s. Complete your purchase to activate your membership.", 'pmpro-woocommerce' ),
+		$message = sprintf( __( "%s is already in your %scart%s.", 'pmpro-woocommerce' ),
+				$product->get_name(),
 				sprintf( '<a href="%1$s" title="%2$s">', esc_url( $cart_url ), esc_html__( 'Cart', 'pmpro-woocommerce' ) ),
 				'</a>' );
 	}
