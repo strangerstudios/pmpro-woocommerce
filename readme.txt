@@ -127,6 +127,12 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.8 - 2023-07-10 =
+* ENHANCEMENT: Mark Paid Memberships Pro Integration with WooCommerce compatible with Custom Order Tables.
+* ENHANCEMENT: Shows a message that the membership product is already in the cart when viewing the same product in the store.
+* ENHANCEMENT: Stop Woocommerce subscription renewals from changing the user's membership level to the same level.
+* BUG FIX: Fixed an issue where simple variation subscriptions were being discounted incorrectly, when set to not discount level products.
+
 = 1.7.7 - 2023-02-02 =
 * BUG FIX: Fixed an issue where the "Autocomplete Order Status" option wasn't saving correctly.
 

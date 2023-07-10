@@ -3,9 +3,9 @@
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate Paid Memberships Pro With WooCommerce.
- * Version: 1.7.7
- * WC requires at least: 6.0.0
- * WC tested up to: 7.3.0
+ * Version: 1.8
+ * WC requires at least: 7.0.0
+ * WC tested up to: 7.8.2
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
@@ -971,7 +971,7 @@ add_action( 'plugins_loaded', 'pmpro_woocommerce_load_textdomain' );
  * Confirm that PMPro WooCommerce is compatible with HPOS (Custom Order Tables).
  * Generally we store things to products, not orders.
  * 
- * @since TBD
+ * @since 1.8
  */
 function pmprowoo_compatible_for_hpos() {
 	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
