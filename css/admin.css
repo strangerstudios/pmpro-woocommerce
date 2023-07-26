@@ -4,7 +4,7 @@
     content: "\f307";
 }
 
-.pmprowoo_options_group-membership_product h3,
-.pmprowoo_options_group-membership_discount h3 {
+.pmprowoo_options_group-membership_product h2,
+.pmprowoo_options_group-membership_discount h2 {
 	padding: 0 12px;
 }

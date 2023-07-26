@@ -566,7 +566,7 @@ function pmprowoo_tab_options() {
     <div id="pmprowoo_tab_data" class="panel woocommerce_options_panel">
 
 		<div class="options_group pmprowoo_options_group-membership_product">
-			<h3><?php esc_html_e( 'Give Customers a Membership Level', 'pmpro-woocommerce' ); ?></h3>
+			<h2><?php esc_html_e( 'Give Customers a Membership Level', 'pmpro-woocommerce' ); ?></h2>
 			<?php
 			// Membership Product
 			// woocommerce_wp_select() escapes attributes for us.
@@ -600,7 +600,7 @@ function pmprowoo_tab_options() {
 			?>
         </div> <!-- end pmprowoo_options_group-membership_product -->
 		<div class="options-group pmprowoo_options_group-membership_discount">
-			<h3><?php esc_html_e( 'Member Discount Pricing', 'pmpro-woocommerce' ); ?></h3>
+			<h2><?php esc_html_e( 'Member Discount Pricing', 'pmpro-woocommerce' ); ?></h2>
 			<p><?php printf( __( 'Set the custom price based on Membership Level. <a href="%s">Edit your membership levels</a> to set a global percent discount for all products.', 'pmpro-woocommerce' ), esc_url( admin_url( 'admin.php?page=pmpro-membershiplevels' ) ) ); ?></p>
             <?php
 			// For each membership level, create respective price field
