@@ -979,3 +979,19 @@ function pmprowoo_compatible_for_hpos() {
 	}
 }
 add_action( 'before_woocommerce_init', 'pmprowoo_compatible_for_hpos' );
+
+/**
+ * Remove content restriction for certain cases.
+ * @since TBD
+ */
+function pmprowoo_remove_pmpro_filtering_archives() {
+	// Don't do anything if we're not on a product archive page
+	if ( ! is_product_category() ) {
+		return;
+	}
+
+	// Just always remove this hook when on the category page.
+	remove_filter( 'pre_get_posts', 'pmpro_search_filter' );
+
+}
+add_action( 'pre_get_posts', 'pmprowoo_remove_pmpro_filtering_archives', 5 );
