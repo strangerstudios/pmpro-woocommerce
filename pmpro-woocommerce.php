@@ -985,8 +985,9 @@ add_action( 'before_woocommerce_init', 'pmprowoo_compatible_for_hpos' );
  * @since TBD
  */
 function pmprowoo_remove_pmpro_filtering_archives() {
+
 	// Don't do anything if we're not on a product archive page
-	if ( ! is_product_category() ) {
+	if ( ! function_exists( 'is_product_category' ) || ! is_product_category() ) {
 		return;
 	}
 
