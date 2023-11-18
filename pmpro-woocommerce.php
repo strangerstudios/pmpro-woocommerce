@@ -5,7 +5,7 @@
  * Description: Integrate Paid Memberships Pro With WooCommerce.
  * Version: 1.8
  * WC requires at least: 7.0.0
- * WC tested up to: 7.8.2
+ * WC tested up to: 8.3.0
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
