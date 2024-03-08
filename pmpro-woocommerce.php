@@ -81,77 +81,60 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 		return $is_purchasable;
 	}
 
-	$has_membership = pmprowoo_cart_has_membership();
-	$product_id     = $product->get_id();
+	// If the product is not a membership product, we don't need to check.
+	$product_id = $product->get_id();
+	if ( ! array_key_exists( $product_id, $pmprowoo_product_levels ) ) {
+		return $is_purchasable;
+	}
 
 	// Backwards compatibility for pre 3.0 versions of PMPro.
-	if ( version_compare( 'PMPRO_VERSION', '3.0.0', '<' ) ) {
-		$is_purchasable = ( in_array( $product_id, array_keys( $pmprowoo_product_levels ) ) && true === $has_membership ? false : $is_purchasable ); // Check if the product is in the cart
-		if ( ! $is_purchasable ) {
+	if ( ! function_exists( 'pmpro_get_group_id_for_level' ) ) {
+		// If the cart already has a membership product, let's disable the purchase.
+		if ( pmprowoo_cart_has_membership() ) {
 			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+			return false;
 		}
 		return $is_purchasable;
 	}
-	
-	$level_groups_in_cart = pmprowoo_get_level_groups_in_cart();
 
-	// Compare group ID of product with the one in the cart.
-	if ( $level_groups_in_cart ) {
-		$group_id = pmpro_get_group_id_for_level( $pmprowoo_product_levels[ $product_id ] );
-		if ( ! empty( $group_id ) ) {
-			// Get the group
-			$group = pmpro_get_level_group( $group_id );
-
-			// If the level group is in the cart already, let's make sure it the product viewing allows multiple levels at once.
-			if ( array_key_exists( $group_id, $level_groups_in_cart ) ) {	
-				$allowed_multiples = (bool) $group->allow_multiple_selections; // product allows multiples or not.
-				if ( $allowed_multiples ) {
-					$is_purchasable = true;
-				} elseif ( ! $allowed_multiples && $has_membership ) {
-					$is_purchasable = false;
-				}
-			} else {
-				$is_purchasable = true; // Groups not in the cart let's override the check.
-			}
-		} 
+	// Get the level group ID for the product.
+	$group_id = pmpro_get_group_id_for_level( $pmprowoo_product_levels[ $product_id ] );
+	if ( empty( $group_id ) ) {
+		return $is_purchasable;
 	}
 
-	// Add the warning message for the single product summary page(s)
-	if ( false === $is_purchasable ) {
-		add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+	// If the level group allows purchasing multiple levels in the group, we can allow purchasing this product.
+	$group = pmpro_get_level_group( $group_id );
+	if ( empty( $group ) || (bool) $group->allow_multiple_selections ) {
+		return $is_purchasable;
+	}
+
+	// This group only allows users to have one level from the group.
+	// Check if the cart already has a membership product for this group.
+	$products_in_cart = pmprowoo_get_memberships_from_cart();
+	foreach ( $products_in_cart as $product_id ) {
+		// If this is not a product level, continue.
+		if ( ! array_key_exists( $product_id, $pmprowoo_product_levels ) ) {
+			continue;
+		}
+
+		// Get the group ID for the product in the cart.
+		$group_id_in_cart = pmpro_get_group_id_for_level( $pmprowoo_product_levels[ $product_id ] );
+		if ( empty( $group_id_in_cart ) ) {
+			continue;
+		}
+
+		// If the group ID in the cart matches the group ID of the product we are viewing, let's disable the purchase.
+		if ( (int)$group_id_in_cart === (int)$group_id ) {
+			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+			return false;
+		}
 	}
 	
 	return $is_purchasable;
 }
 add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
 
-/**
- * Get the levels groups for membership products in the cart.
- *
- * @return array|bool $group_ids This will return false if no products are in the cart or an array of group ID's and whether they allow multiple levels.
- */
-function pmprowoo_get_level_groups_in_cart() {
-	global $pmprowoo_product_levels;
-
-	$products_in_cart = pmprowoo_get_memberships_from_cart();
-
-	// No products in the cart.
-	if ( empty( $products_in_cart ) ) {
-		return false;
-	}
-
-	// Loop through products and return group ID's
-	$group_ids = array();
-	foreach ( $products_in_cart as $product_id ) {
-		$group_id = pmpro_get_group_id_for_level( $pmprowoo_product_levels[$product_id] );
-		if ( ! empty( $group_id ) ) {
-			// Get the group
-			$group = pmpro_get_level_group( $group_id );
-			$group_ids[$group_id] = (bool) $group->allow_multiple_selections;
-		}
-	}
-	return $group_ids;
-}
 /**
  * Info message when attempting to add a 2nd membership level to the cart
  */
