@@ -1,24 +1,26 @@
-# Copyright (C) 2023 Paid Memberships Pro
+# Copyright (C) 2024 Paid Memberships Pro
 # This file is distributed under the same license as the Paid Memberships Pro - WooCommerce Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.8\n"
+"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.9\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-10T12:14:53+00:00\n"
+"POT-Creation-Date: 2024-03-11T13:43:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pmpro-woocommerce\n"
 
 #. Plugin Name of the plugin
+#: pmpro-woocommerce.php
 msgid "Paid Memberships Pro - WooCommerce Add On"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: pmpro-woocommerce.php
 msgid "https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/"
 msgstr ""
 
@@ -27,10 +29,12 @@ msgid "Integrate WooCommerce with Paid Memberships Pro."
 msgstr ""
 
 #. Author of the plugin
+#: pmpro-woocommerce.php
 msgid "Paid Memberships Pro"
 msgstr ""
 
 #. Author URI of the plugin
+#: pmpro-woocommerce.php
 msgid "https://www.paidmembershipspro.com/"
 msgstr ""
 
@@ -128,78 +132,92 @@ msgstr ""
 
 #: pmpro-woocommerce.php:106
 #: pmpro-woocommerce.php:111
+#: pmpro-woocommerce.php:152
 msgid "You may only add one membership to your %scart%s."
 msgstr ""
 
 #: pmpro-woocommerce.php:107
 #: pmpro-woocommerce.php:112
 #: pmpro-woocommerce.php:117
+#: pmpro-woocommerce.php:153
+#: pmpro-woocommerce.php:158
 msgid "Cart"
 msgstr ""
 
 #: pmpro-woocommerce.php:503
 #: pmpro-woocommerce.php:522
 #: pmpro-woocommerce.php:546
+#: pmpro-woocommerce.php:587
 msgid "Membership"
 msgstr ""
 
 #: pmpro-woocommerce.php:526
 #: pmpro-woocommerce.php:545
 #: pmpro-woocommerce.php:569
+#: pmpro-woocommerce.php:610
 msgid "Give Customers a Membership Level"
 msgstr ""
 
 #: pmpro-woocommerce.php:532
 #: pmpro-woocommerce.php:551
 #: pmpro-woocommerce.php:576
+#: pmpro-woocommerce.php:617
 msgid "Membership Product"
 msgstr ""
 
 #: pmpro-woocommerce.php:548
 #: pmpro-woocommerce.php:567
 #: pmpro-woocommerce.php:594
+#: pmpro-woocommerce.php:635
 msgid "Autocomplete Order Status"
 msgstr ""
 
 #: pmpro-woocommerce.php:549
 #: pmpro-woocommerce.php:568
 #: pmpro-woocommerce.php:595
+#: pmpro-woocommerce.php:636
 msgid "Check this to mark the order as completed immediately after checkout to activate the associated membership."
 msgstr ""
 
 #: pmpro-woocommerce.php:556
 #: pmpro-woocommerce.php:575
 #: pmpro-woocommerce.php:603
+#: pmpro-woocommerce.php:644
 msgid "Member Discount Pricing"
 msgstr ""
 
 #: pmpro-woocommerce.php:557
 #: pmpro-woocommerce.php:576
 #: pmpro-woocommerce.php:604
+#: pmpro-woocommerce.php:645
 msgid "Set the custom price based on Membership Level. <a href=\"%s\">Edit your membership levels</a> to set a global percent discount for all products."
 msgstr ""
 
 #: pmpro-woocommerce.php:642
 #: pmpro-woocommerce.php:661
 #: pmpro-woocommerce.php:690
+#: pmpro-woocommerce.php:731
 msgid "Set Membership Discount"
 msgstr ""
 
 #: pmpro-woocommerce.php:643
 #: pmpro-woocommerce.php:662
 #: pmpro-woocommerce.php:691
+#: pmpro-woocommerce.php:732
 msgid "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page."
 msgstr ""
 
 #: pmpro-woocommerce.php:648
 #: pmpro-woocommerce.php:667
 #: pmpro-woocommerce.php:696
+#: pmpro-woocommerce.php:737
 msgid "Membership Discount (%):"
 msgstr ""
 
 #: pmpro-woocommerce.php:691
 #: pmpro-woocommerce.php:710
 #: pmpro-woocommerce.php:739
+#: pmpro-woocommerce.php:780
 msgid "Apply Member Discounts to WooCommerce Subscription and Membership Products?"
 msgstr ""
 
@@ -211,6 +229,8 @@ msgstr ""
 #: includes/pmpro-gift-levels.php:365
 #: pmpro-woocommerce.php:740
 #: pmpro-woocommerce.php:741
+#: pmpro-woocommerce.php:781
+#: pmpro-woocommerce.php:782
 msgid "No"
 msgstr ""
 
@@ -219,6 +239,7 @@ msgstr ""
 #: pmpro-woocommerce.php:712
 #: includes/pmpro-gift-levels.php:364
 #: pmpro-woocommerce.php:741
+#: pmpro-woocommerce.php:782
 msgid "Yes"
 msgstr ""
 
@@ -226,6 +247,7 @@ msgstr ""
 #: pmpro-woocommerce.php:871
 #: pmpro-woocommerce.php:901
 #: pmpro-woocommerce.php:930
+#: pmpro-woocommerce.php:971
 msgid "Autocomplete via PMPro WooCommerce."
 msgstr ""
 
@@ -271,10 +293,12 @@ msgstr ""
 
 #: pmpro-woocommerce.php:583
 #: pmpro-woocommerce.php:611
+#: pmpro-woocommerce.php:652
 msgid "%s Price (%s)"
 msgstr ""
 
 #. Description of the plugin
+#: pmpro-woocommerce.php
 msgid "Integrate Paid Memberships Pro With WooCommerce."
 msgstr ""
 
@@ -283,5 +307,6 @@ msgid "Choose an option"
 msgstr ""
 
 #: pmpro-woocommerce.php:115
+#: pmpro-woocommerce.php:156
 msgid "%s is already in your %scart%s."
 msgstr ""
