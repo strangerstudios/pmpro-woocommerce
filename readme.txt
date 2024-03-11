@@ -1,12 +1,12 @@
 === Paid Memberships Pro Integration with WooCommerce ===
 Contributors: strangerstudios, paidmembershipspro
-Tags: woocommerce membership, member pricing, woocommerce, paid memberships pro, woocommerce subscription, pmpro
+Tags: woocommerce membership, woocommerce, paid memberships pro, woocommerce subscription, pmpro
 Requires at least: 5.2
 Tested up to: 6.4.3
 Requires PHP: 5.6
 Stable tag: 1.9
 
-Integrates Paid Memberships Pro with WooCommerce to offer a global members-only discount, set member price by product, or sell membership as a product.
+Integrates Paid Memberships Pro with WooCommerce to offer a global members-only discount, set member price by product or sell membership as a product.
 
 == Description ==
 
