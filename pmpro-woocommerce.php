@@ -64,7 +64,7 @@ function pmprowoo_init() {
 }
 add_action( 'init', 'pmprowoo_init' );
 
-function pmprowoo_gobals_subsite() {
+function pmprowoo_globals_subsite() {
 
 	// Let's only do this in a multisite environment if we're not on the main site.
 	if ( ! is_multisite() || is_main_site() ) {
@@ -129,7 +129,7 @@ function pmprowoo_gobals_subsite() {
 		}
 	}
 }
-add_action( 'init', 'pmprowoo_gobals_subsite', 11 );
+add_action( 'init', 'pmprowoo_globals_subsite', 11 );
 
 /**
  * Disable other membership products if a membership product is in the cart already
