@@ -330,7 +330,6 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 }
 add_action( "woocommerce_order_status_refunded", "pmprowoo_cancel_membership_from_order" );
 add_action( "woocommerce_order_status_failed", "pmprowoo_cancel_membership_from_order" );
-add_action( 'woocommerce_subscription_status_on-hold_to_active', 'pmprowoo_activated_subscription' );
 add_action( "woocommerce_order_status_cancelled", "pmprowoo_cancel_membership_from_order" );
 
 /**
@@ -453,7 +452,7 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 add_action( 'woocommerce_subscription_status_cancelled', 'pmprowoo_cancelled_subscription', 10 );
 add_action( 'woocommerce_subscription_status_trash', 'pmprowoo_cancelled_subscription', 10 );
 add_action( 'woocommerce_subscription_status_expired', 'pmprowoo_cancelled_subscription', 10 );
-add_action( 'woocommerce_subscription_status_on-hold', 'pmprowoo_cancelled_subscription', 10 );
+// add_action( 'woocommerce_subscription_status_on-hold', 'pmprowoo_cancelled_subscription', 10 );
 add_action( 'woocommerce_scheduled_subscription_end_of_prepaid_term', 'pmprowoo_cancelled_subscription', 10 );
 
 /**
