@@ -3,9 +3,9 @@
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate Paid Memberships Pro With WooCommerce.
- * Version: 1.8
+ * Version: 1.9
  * WC requires at least: 7.0.0
- * WC tested up to: 7.8.2
+ * WC tested up to: 8.6.1
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
@@ -148,13 +148,54 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 		return $is_purchasable;
 	}
 
-	$has_membership = pmprowoo_cart_has_membership();
-	$product_id     = $product->get_id();
-	$is_purchasable = ( in_array( $product_id, array_keys( $pmprowoo_product_levels ) ) && true === $has_membership ? false : $is_purchasable );
-	
-	if ( false === $is_purchasable ) {
-		// Add the warning message for the single product summary page(s)
-		add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+	// If the product is not a membership product, we don't need to check.
+	$product_id = $product->get_id();
+	if ( ! array_key_exists( $product_id, $pmprowoo_product_levels ) ) {
+		return $is_purchasable;
+	}
+
+	// Backwards compatibility for pre 3.0 versions of PMPro.
+	if ( ! function_exists( 'pmpro_get_group_id_for_level' ) ) {
+		// If the cart already has a membership product, let's disable the purchase.
+		if ( pmprowoo_cart_has_membership() ) {
+			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+			return false;
+		}
+		return $is_purchasable;
+	}
+
+	// Get the level group ID for the product.
+	$group_id = pmpro_get_group_id_for_level( $pmprowoo_product_levels[ $product_id ] );
+	if ( empty( $group_id ) ) {
+		return $is_purchasable;
+	}
+
+	// If the level group allows purchasing multiple levels in the group, we can allow purchasing this product.
+	$group = pmpro_get_level_group( $group_id );
+	if ( empty( $group ) || (bool) $group->allow_multiple_selections ) {
+		return $is_purchasable;
+	}
+
+	// This group only allows users to have one level from the group.
+	// Check if the cart already has a membership product for this group.
+	$products_in_cart = pmprowoo_get_memberships_from_cart();
+	foreach ( $products_in_cart as $product_id ) {
+		// If this is not a product level, continue.
+		if ( ! array_key_exists( $product_id, $pmprowoo_product_levels ) ) {
+			continue;
+		}
+
+		// Get the group ID for the product in the cart.
+		$group_id_in_cart = pmpro_get_group_id_for_level( $pmprowoo_product_levels[ $product_id ] );
+		if ( empty( $group_id_in_cart ) ) {
+			continue;
+		}
+
+		// If the group ID in the cart matches the group ID of the product we are viewing, let's disable the purchase.
+		if ( (int)$group_id_in_cart === (int)$group_id ) {
+			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+			return false;
+		}
 	}
 	
 	return $is_purchasable;
@@ -492,7 +533,7 @@ add_action( 'woocommerce_scheduled_subscription_end_of_prepaid_term', 'pmprowoo_
  */
 function pmprowoo_get_membership_price( $price, $product ) {
 	global $current_user, $pmprowoo_member_discounts, $pmprowoo_product_levels, $pmprowoo_discounts_on_subscriptions;
-	
+
 	// quitely exit if PMPro isn't active
 	if ( ! defined( 'PMPRO_DIR' ) && ! function_exists( 'pmpro_init' ) ) {
 		return $price;
