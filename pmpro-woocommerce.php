@@ -91,8 +91,14 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 	if ( ! function_exists( 'pmpro_get_group_id_for_level' ) ) {
 		// If the cart already has a membership product, let's disable the purchase.
 		if ( pmprowoo_cart_has_membership() ) {
-			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
-			return false;
+			// If we're on the cart page let's just return the $is_purchasable status and otherwise lets show a warning that there's already a membership in the cart.
+			if ( is_cart() || is_checkout() ) {
+				return $is_purchasable;
+			} else {
+				add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+				return false;
+			}
+			
 		}
 		return $is_purchasable;
 	}
@@ -126,8 +132,12 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 
 		// If the group ID in the cart matches the group ID of the product we are viewing, let's disable the purchase.
 		if ( (int)$group_id_in_cart === (int)$group_id ) {
-			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
-			return false;
+			if ( is_cart() || is_checkout() ) {
+				return $is_purchasable;
+			} else {
+				add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+				return false;
+			}
 		}
 	}
 	
