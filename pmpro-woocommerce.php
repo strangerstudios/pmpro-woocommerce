@@ -118,6 +118,11 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 			continue;
 		}
 
+		// If the cart product is the same as the product passed into this function, continue.
+		if ( $product_id === $product->get_id() ) {
+			continue;
+		}
+
 		// Get the group ID for the product in the cart.
 		$group_id_in_cart = pmpro_get_group_id_for_level( $pmprowoo_product_levels[ $product_id ] );
 		if ( empty( $group_id_in_cart ) ) {
