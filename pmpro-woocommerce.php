@@ -91,14 +91,8 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 	if ( ! function_exists( 'pmpro_get_group_id_for_level' ) ) {
 		// If the cart already has a membership product, let's disable the purchase.
 		if ( pmprowoo_cart_has_membership() ) {
-			// If we're on the cart page let's just return the $is_purchasable status and otherwise lets show a warning that there's already a membership in the cart.
-			if ( is_cart() || is_checkout() ) {
-				return $is_purchasable;
-			} else {
-				add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
-				return false;
-			}
-			
+			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+			return false;
 		}
 		return $is_purchasable;
 	}
@@ -132,18 +126,27 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 
 		// If the group ID in the cart matches the group ID of the product we are viewing, let's disable the purchase.
 		if ( (int)$group_id_in_cart === (int)$group_id ) {
-			if ( is_cart() || is_checkout() ) {
-				return $is_purchasable;
-			} else {
-				add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
-				return false;
-			}
+			add_action( 'woocommerce_single_product_summary', 'pmprowoo_purchase_disabled' );
+			return false;
 		}
 	}
 	
 	return $is_purchasable;
 }
-add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
+
+/**
+ * Only run the is_purchasable code once WordPress is loaded to prevent this from running multiple times as things initialize.
+ * This prevents checking in the cart or checkout page multiple times which can cause issues with newer WooCommerce versions.
+ * @since TBD
+ */
+function pmprowoo_run_is_purchasable() {
+	// Don't run this hook on the checkout or cart pages because we can assume that everything is okay once the customer reaches here.
+	if ( is_checkout() || is_cart() ) {
+		return;
+	}
+	add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
+}
+add_action( 'wp', 'pmprowoo_run_is_purchasable' );
 
 /**
  * Info message when attempting to add a 2nd membership level to the cart
