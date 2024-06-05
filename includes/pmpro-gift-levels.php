@@ -52,8 +52,8 @@ function pmprowoo_gift_levels_add_recipient_fields() {
                 <td class="label"><label for="gift-recipient-email">'. esc_html__( 'Send Email to Recipient?', 'pmpro-woocommerce' ) . '</label></td>
                 <td class="value"><select id="pa_send-email" class="" name="gift-send-email"> 
                    <option selected="selected" value="">' . esc_html__( 'Choose an option', 'pmpro-woocommerce' ) . '</option>
-                   <option class="attached enabled" value="1">' . esc_html( 'YES', 'pmpro-woocommerce' ) . '</option>
-                   <option class="attached enabled" value="0">' . esc_html( 'NO', 'pmpro-woocommerce' ) . '</option>
+                   <option class="attached enabled" value="1">' . esc_html__( 'YES', 'pmpro-woocommerce' ) . '</option>
+                   <option class="attached enabled" value="0">' . esc_html__( 'NO', 'pmpro-woocommerce' ) . '</option>
                 </select></td>
                 </tr> 
                 <tr id="recipient-name" style="display:none;">
