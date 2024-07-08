@@ -138,7 +138,20 @@ function pmprowoo_is_purchasable( $is_purchasable, $product ) {
 	
 	return $is_purchasable;
 }
-add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
+
+/**
+ * Only run the is_purchasable code once WordPress is loaded to prevent this from running multiple times as things initialize.
+ * This prevents checking in the cart or checkout page multiple times which can cause issues with newer WooCommerce versions.
+ * @since TBD
+ */
+function pmprowoo_run_is_purchasable() {
+	// Don't run this hook on the checkout or cart pages because we can assume that everything is okay once the customer reaches here.
+	if ( is_checkout() || is_cart() ) {
+		return;
+	}
+	add_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
+}
+add_action( 'wp', 'pmprowoo_run_is_purchasable' );
 
 /**
  * Info message when attempting to add a 2nd membership level to the cart
