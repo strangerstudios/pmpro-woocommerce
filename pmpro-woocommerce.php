@@ -57,6 +57,11 @@ function pmprowoo_init() {
 		require_once( dirname( __FILE__ ) . '/includes/pmpro-gift-levels.php' );
 	}
 
+	// Load multisite compatibility if running on a multisite.
+	if ( is_multisite() ) {
+		require_once( dirname( __FILE__ ) . '/includes/multisite.php' );
+	}
+
 	// If MMPU is active, allow for multiple membership products in your cart
 	if ( defined( 'PMPROMMPU_VER') ) {
 		remove_filter( 'woocommerce_is_purchasable', 'pmprowoo_is_purchasable', 10, 2 );
