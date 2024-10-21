@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate Paid Memberships Pro With WooCommerce.
- * Version: 1.9.1
+ * Version: 1.10
  * WC requires at least: 7.0.0
  * WC tested up to: 8.9.1
  * Author: Paid Memberships Pro
