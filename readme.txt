@@ -34,7 +34,7 @@ https://www.youtube.com/watch?v=BAA56eTRt4Q
 
 Each product can be assigned as a "Membership Product". Customers that purchase this product in WooCommerce will be assigned a membership level in Paid Memberships Pro. Using the features of PMPro, you can restrict member access to all types of premium content, courses, and community features.
 
-While [Paid Memberships Pro](https://wordpress.org/plugins/paid-memberships-pro/) has recurring subscriptions built-in, the default WooCommerce plugin only allows products to have a one-time payment. If you must use this plugin to sell recurring memberships through WooCommerce, you will also need WooCommerce Subscriptions.
+While [Paid Memberships Pro](https://www.paidmembershipspro.com) has recurring subscriptions built-in, the default WooCommerce plugin only allows products to have a one-time payment. If you must use this plugin to sell recurring memberships through WooCommerce, you will also need WooCommerce Subscriptions.
 
 Learn more about how to [sell memberships using PMPro and WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#membership-product) and [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#member-discount) in our documentation site.
 
@@ -67,7 +67,7 @@ Paid Memberships Pro is built "the WordPress way" with a lean core plugin and ov
 
 Paid Memberships Pro is the flagship product of Stranger Studios. We are a bootstrapped company which grows when membership sites like yours grow. That means we focus our entire company towards helping you succeed.
 
-[Try Paid Memberships Pro entirely for free on WordPress.org](https://wordpress.org/plugins/paid-memberships-pro/) and see why 100,000+ sites trust us to help them #GetPaid.
+[Try Paid Memberships Pro entirely for free](https://www.paidmembershipspro.com) and see why 100,000+ sites trust us to help them #GetPaid.
 
 ### Read More
 
@@ -79,7 +79,7 @@ Want more information on selling memberships and subscriptions with WooCommerce,
 
 == Installation ==
 
-Note: You must have [Paid Memberships Pro](https://wordpress.org/plugins/paid-memberships-pro/) and [WooCommerce](https://wordpress.org/plugins/woocommerce/) installed and activated on your site.
+Note: You must have [Paid Memberships Pro](https://www.paidmembershipspro.com) and [WooCommerce](https://wordpress.org/plugins/woocommerce/) installed and activated on your site.
 
 ### Install PMPro WooCommerce from within WordPress
 
