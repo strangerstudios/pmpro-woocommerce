@@ -1,0 +1,208 @@
+# Translation of Plugins - Paid Memberships Pro Integration with WooCommerce - Development (trunk) in Catalan
+# This file is distributed under the same license as the Plugins - Paid Memberships Pro Integration with WooCommerce - Development (trunk) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-03-03 07:44:50+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: ca\n"
+"Project-Id-Version: Plugins - Paid Memberships Pro Integration with WooCommerce - Development (trunk)\n"
+
+#: pmpro-woocommerce.php:161
+msgid "%s is already in your %scart%s."
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:54
+msgid "Choose an option"
+msgstr ""
+
+#. Description of the plugin
+#: pmpro-woocommerce.php
+msgid "Integrate Paid Memberships Pro With WooCommerce."
+msgstr ""
+
+#: pmpro-woocommerce.php:657
+msgid "%s Price (%s)"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:366
+msgid "Customer Decides"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:336
+msgid "None"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:334
+msgid "No Discount Codes Created"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:303
+msgid "Gift Email Sent To %s"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:297
+msgid "Gift Email FAILED To %s. Contact Site Admin."
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:279
+msgid "Gift Email Sent To Recipient %s"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:273
+msgid "Gift Email FAILED To Recipient %s. Contact Site Admin."
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:104
+msgid "Please select option for Send Email to Recipient"
+msgstr "Seleccioneu l'opció per enviar un correu electrònic al destinatari"
+
+#: pmpro-woocommerce.php:785
+msgid "Apply Member Discounts to WooCommerce Subscription and Membership Products?"
+msgstr "Voleu aplicar descomptes per a membres als productes de subscripció i afiliació de WooCommerce?"
+
+#: pmpro-woocommerce.php:650
+msgid "Set the custom price based on Membership Level. <a href=\"%s\">Edit your membership levels</a> to set a global percent discount for all products."
+msgstr "Establiu el preu personalitzat en funció del nivell d'afiliació. <a href=\"%s\">Editeu els vostres nivells d'afiliació</a> per establir un percentatge de descompte global per a tots els productes."
+
+#. Author URI of the plugin
+#: pmpro-woocommerce.php
+msgid "https://www.paidmembershipspro.com/"
+msgstr "https://www.paidmembershipspro.com/"
+
+#. Author of the plugin
+#: pmpro-woocommerce.php
+msgid "Paid Memberships Pro"
+msgstr "Paid Memberships Pro"
+
+#. Plugin URI of the plugin
+#: pmpro-woocommerce.php
+msgid "https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/"
+msgstr "https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/"
+
+#. Plugin Name of the plugin
+#: pmpro-woocommerce.php
+msgid "Paid Memberships Pro - WooCommerce Add On"
+msgstr "Paid Memberships Pro - WooCommerce Add On"
+
+#: pmpro-woocommerce.php:976
+msgid "Autocomplete via PMPro WooCommerce."
+msgstr "Completa automàticament via PMPro WooCommerce."
+
+#: includes/pmpro-gift-levels.php:364 pmpro-woocommerce.php:787
+msgid "Yes"
+msgstr "Sí"
+
+#: includes/pmpro-gift-levels.php:365 pmpro-woocommerce.php:786
+#: pmpro-woocommerce.php:787
+msgid "No"
+msgstr "No"
+
+#: pmpro-woocommerce.php:742
+msgid "Membership Discount (%):"
+msgstr "Descompte per a afiliacions (%):"
+
+#: pmpro-woocommerce.php:737
+msgid "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page."
+msgstr "Estableix un descompte d'afiliació per a aquest nivell que s'aplicarà quan un usuari amb aquest nivell d'afiliació entri. El descompte s'aplica al preu normal del producte, al preu rebaixat o al preu específic del nivell establert a la pàgina d'edició del producte."
+
+#: pmpro-woocommerce.php:736
+msgid "Set Membership Discount"
+msgstr "Estableix el descompte d'afiliació"
+
+#: pmpro-woocommerce.php:649
+msgid "Member Discount Pricing"
+msgstr "Preus de descompte per a membres"
+
+#: pmpro-woocommerce.php:641
+msgid "Check this to mark the order as completed immediately after checkout to activate the associated membership."
+msgstr "Marqueu això per marcar la comanda com a completada immediatament després de pagar per activar l'afiliació associada."
+
+#: pmpro-woocommerce.php:640
+msgid "Autocomplete Order Status"
+msgstr "Completa automàticament l'estat de les comandes"
+
+#: pmpro-woocommerce.php:622
+msgid "Membership Product"
+msgstr "Producte d'afiliació"
+
+#: pmpro-woocommerce.php:615
+msgid "Give Customers a Membership Level"
+msgstr "Doneu als clients un nivell d'afiliació"
+
+#: pmpro-woocommerce.php:592
+msgid "Membership"
+msgstr "Afiliació"
+
+#: pmpro-woocommerce.php:158 pmpro-woocommerce.php:163
+msgid "Cart"
+msgstr "Cistella"
+
+#: pmpro-woocommerce.php:157
+msgid "You may only add one membership to your %scart%s."
+msgstr "Només podeu afegir una afiliació a la vostra %scistella%s."
+
+#: includes/pmpro-gift-levels.php:369
+msgid "Decide if a recipient email is entered and the code is emailed upon successful purchase."
+msgstr "Decidiu si s'introdueix un correu electrònic de destinatari i el codi s'envia per correu electrònic després d'una compra correcta."
+
+#: includes/pmpro-gift-levels.php:362
+msgid "Email Recipient"
+msgstr "Destinatari del correu electrònic"
+
+#: includes/pmpro-gift-levels.php:354
+msgid "Upon each purchase a new one-time use code (which start with \"GIFT\") will be created from the code selected here."
+msgstr "En cada compra, es crearà un nou codi d'ús únic (que comença amb «GIFT») a partir del codi seleccionat aquí."
+
+#: includes/pmpro-gift-levels.php:351
+msgid "Select Discount Code"
+msgstr "Seleccioneu el codi de descompte"
+
+#: includes/pmpro-gift-levels.php:345
+msgid "Gift a Membership"
+msgstr "Regaleu una afiliació"
+
+#: includes/pmpro-gift-levels.php:267 includes/pmpro-gift-levels.php:291
+msgid "A Gift from %s"
+msgstr "Un regal de %s"
+
+#: includes/pmpro-gift-levels.php:113
+msgid "Please enter a EMAIL of Recipient"
+msgstr "Introduïu un CORREU ELECTRÒNIC del destinatari"
+
+#: includes/pmpro-gift-levels.php:109
+msgid "Please enter a NAME of Recipient"
+msgstr "Introduïu un NOM del destinatari"
+
+#: includes/pmpro-gift-levels.php:52
+msgid "Send Email to Recipient?"
+msgstr "Voleu enviar el correu electrònic al destinatari?"
+
+#: includes/pmpro-gift-levels.php:43 includes/pmpro-gift-levels.php:64
+#: includes/pmpro-gift-levels.php:158
+msgid "Recipient Email"
+msgstr "Correu electrònic del destinatari"
+
+#: includes/pmpro-gift-levels.php:39 includes/pmpro-gift-levels.php:60
+#: includes/pmpro-gift-levels.php:154
+msgid "Recipient Name"
+msgstr "Nom del destinatari"
+
+#: includes/admin.php:14
+msgid "Support"
+msgstr "Suport"
+
+#: includes/admin.php:14
+msgid "Visit Customer Support Forum"
+msgstr "Visiteu el fòrum de suport al client"
+
+#: includes/admin.php:13
+msgid "Docs"
+msgstr "Documentació"
+
+#: includes/admin.php:13
+msgid "View Documentation"
+msgstr "Consulteu la documentació"
