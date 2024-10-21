@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the Paid Memberships Pro - WooCommerce Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.9.1\n"
+"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.10\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-05-27T09:04:44+00:00\n"
+"POT-Creation-Date: 2024-10-21T18:26:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: pmpro-woocommerce\n"
 
 #. Plugin Name of the plugin
@@ -73,6 +73,14 @@ msgstr ""
 
 #: includes/pmpro-gift-levels.php:54
 msgid "Choose an option"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:55
+msgid "YES"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:56
+msgid "NO"
 msgstr ""
 
 #: includes/pmpro-gift-levels.php:104

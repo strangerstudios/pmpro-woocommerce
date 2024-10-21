@@ -1,15 +1,18 @@
-# Translation of Plugins - Paid Memberships Pro Integration with WooCommerce - Development (trunk) in Slovak
-# This file is distributed under the same license as the Plugins - Paid Memberships Pro Integration with WooCommerce - Development (trunk) package.
+# Copyright (C) 2024 Paid Memberships Pro
+# This file is distributed under the same license as the Paid Memberships Pro - WooCommerce Add On plugin.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-03-07 09:50:13+0000\n"
+"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.10\n"
+"Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
+"Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.1\n"
-"Language: sk\n"
-"Project-Id-Version: Plugins - Paid Memberships Pro Integration with WooCommerce - Development (trunk)\n"
+"POT-Creation-Date: 2024-10-21T18:26:12+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: pmpro-woocommerce\n"
 
 #: pmpro-woocommerce.php:161
 msgid "%s is already in your %scart%s."
@@ -92,11 +95,13 @@ msgstr "Paid Memberships Pro - WooCommerce Add On"
 msgid "Autocomplete via PMPro WooCommerce."
 msgstr "Automaticky dokončiť cez PMPro WooCommerce."
 
-#: includes/pmpro-gift-levels.php:364 pmpro-woocommerce.php:787
+#: includes/pmpro-gift-levels.php:364
+#: pmpro-woocommerce.php:787
 msgid "Yes"
 msgstr "Áno"
 
-#: includes/pmpro-gift-levels.php:365 pmpro-woocommerce.php:786
+#: includes/pmpro-gift-levels.php:365
+#: pmpro-woocommerce.php:786
 #: pmpro-woocommerce.php:787
 msgid "No"
 msgstr "Nie"
@@ -137,7 +142,8 @@ msgstr "Pridať zákazníkom členskú úroveň"
 msgid "Membership"
 msgstr "Členstvo"
 
-#: pmpro-woocommerce.php:158 pmpro-woocommerce.php:163
+#: pmpro-woocommerce.php:158
+#: pmpro-woocommerce.php:163
 msgid "Cart"
 msgstr "Košík"
 
@@ -165,7 +171,8 @@ msgstr "Vybrať zľavový kód"
 msgid "Gift a Membership"
 msgstr "Daruj členstvo"
 
-#: includes/pmpro-gift-levels.php:267 includes/pmpro-gift-levels.php:291
+#: includes/pmpro-gift-levels.php:267
+#: includes/pmpro-gift-levels.php:291
 msgid "A Gift from %s"
 msgstr "Dar od %s"
 
@@ -181,12 +188,14 @@ msgstr "Prosím zadajte MENO príjemcu"
 msgid "Send Email to Recipient?"
 msgstr "Odoslať email príjemcovi?"
 
-#: includes/pmpro-gift-levels.php:43 includes/pmpro-gift-levels.php:64
+#: includes/pmpro-gift-levels.php:43
+#: includes/pmpro-gift-levels.php:64
 #: includes/pmpro-gift-levels.php:158
 msgid "Recipient Email"
 msgstr "Email príjemcu"
 
-#: includes/pmpro-gift-levels.php:39 includes/pmpro-gift-levels.php:60
+#: includes/pmpro-gift-levels.php:39
+#: includes/pmpro-gift-levels.php:60
 #: includes/pmpro-gift-levels.php:154
 msgid "Recipient Name"
 msgstr "Meno príjemcu"
@@ -206,3 +215,11 @@ msgstr "Dokumentácia"
 #: includes/admin.php:13
 msgid "View Documentation"
 msgstr "Zobraziť dokumentáciu"
+
+#: includes/pmpro-gift-levels.php:55
+msgid "YES"
+msgstr ""
+
+#: includes/pmpro-gift-levels.php:56
+msgid "NO"
+msgstr ""
