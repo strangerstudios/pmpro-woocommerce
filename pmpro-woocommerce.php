@@ -207,6 +207,12 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 			// Get the product object from the ID of the item in the order.
 			$_product = wc_get_product( $item['product_id'] );
 
+			// If we don't have a product object, skip.
+			if ( empty( $_product ) ) {
+				continue;
+			}
+
+			// Get the product ID for the product that we are currently getting a membership price for.
 			if ( $_product->is_type( 'variation' ) ) {
 			    $product_id = $_product->get_parent_id();
 			} else {
