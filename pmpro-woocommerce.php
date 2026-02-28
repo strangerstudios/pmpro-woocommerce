@@ -734,7 +734,13 @@ function pmprowoo_add_membership_discount() {
 	?>
 	<hr />
     <h2 class="title"><?php esc_html_e( "Set Membership Discount", "pmpro-woocommerce" ); ?></h2>
-    <p><?php esc_html_e( "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page.", "pmpro-woocommerce" ); ?></p>
+    <p>
+    	<?php esc_html_e( "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page.", "pmpro-woocommerce" ); ?>
+    	<?php
+    	$woocommerce_link = '<a title="' . esc_attr__( 'WooCommerce Integration', 'pmpro-woocommerce' ) . '" target="_blank" rel="nofollow noopener" href="https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=plugin&utm_medium=pmpro-woocommerce&utm_campaign=add-ons&utm_content=&utm_term=">' . esc_html__( 'WooCommerce Integration', 'pmpro-woocommerce' ) . '</a>';
+    	printf( esc_html__( 'Learn more about %s.', 'pmpro-woocommerce' ), $woocommerce_link ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    	?>
+    </p>
     <table>
         <tbody class="form-table">
         <tr>
