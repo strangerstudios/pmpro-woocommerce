@@ -4,7 +4,6 @@
     content: "\f307";
 }
 
-.pmprowoo_options_group-membership_product h3,
-.pmprowoo_options_group-membership_discount h3 {
-	padding: 0 12px;
+.pmpro_woocommerce_options_panel .options_group h3 {
+	padding: 0px 9px;
 }
