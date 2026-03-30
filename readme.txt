@@ -36,24 +36,24 @@ Each product can be assigned as a "Membership Product". Customers that purchase 
 
 While [Paid Memberships Pro](https://www.paidmembershipspro.com) has recurring subscriptions built-in, the default WooCommerce plugin only allows products to have a one-time payment. If you must use this plugin to sell recurring memberships through WooCommerce, you will also need WooCommerce Subscriptions.
 
-Learn more about how to [sell memberships using PMPro and WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#membership-product) and [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce#member-discount) in our documentation site.
+Learn more about [how to set members-only pricing in WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce#member-discount) or [sell memberships using PMPro and WooCommerce](https://www.paidmembershipspro.com/gateway/woocommerce/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce#membership-product) in our documentation site.
 
 ### Bonus Features of the Paid Memberships Pro Integration with WooCommerce
 
 = Members Only Products =
 If you'd like to offer certain products to members only, see the [Custom Post Type Membership Access Add On](
-https://www.paidmembershipspro.com/add-ons/custom-post-type-membership-access/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
+https://www.paidmembershipspro.com/add-ons/custom-post-type-membership-access/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce).
 
 = Members Only Store =
-If your entire store is locked for members only, see this post on [Locking Your Entire eCommerce Shop for Members-Only](https://www.paidmembershipspro.com/lock-entire-ecommerce-shop-members/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce
+If your entire store is locked for members only, see this post on [Locking Your Entire eCommerce Shop for Members-Only](https://www.paidmembershipspro.com/lock-entire-ecommerce-shop-members/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce
 ).
 
 = Catalog Mode for Non-Members =
-If you would like non-members the ability to see your store items but restrict them from seeing prices and ability to purchase, see this post on [Turn your WooCommerce Store into a Catalog for Non Members](https://www.paidmembershipspro.com/turn-your-woocommerce-store-into-a-catalog-for-non-members/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
+If you would like non-members the ability to see your store items but restrict them from seeing prices and ability to purchase, see this post on [Turn your WooCommerce Store into a Catalog for Non Members](https://www.paidmembershipspro.com/turn-your-woocommerce-store-into-a-catalog-for-non-members/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce).
 
 ### About Paid Memberships Pro
 
-[Paid Memberships Pro is a WordPress membership plugin](https://www.paidmembershipspro.com/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) that puts you in control. Create what you want and release in whatever format works best for your business.
+[Paid Memberships Pro is a WordPress membership plugin](https://www.paidmembershipspro.com/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce) that puts you in control. Create what you want and release in whatever format works best for your business.
 
 * Courses & E-Learning
 * Private podcasts
@@ -73,8 +73,8 @@ Paid Memberships Pro is the flagship product of Stranger Studios. We are a boots
 
 Want more information on selling memberships and subscriptions with WooCommerce, members-only product pricing, and WordPress membership sites? Have a look at:
 
-* The [Paid Memberships Pro](https://www.paidmembershipspro.com/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce) official homepage.
-* The [WooCommerce Integration for PMPro documentation page](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
+* The [Paid Memberships Pro](https://www.paidmembershipspro.com/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce) official homepage.
+* The [WooCommerce Integration for PMPro documentation page](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce).
 * Also follow PMPro on [Twitter](https://twitter.com/pmproplugin), [YouTube](https://www.youtube.com/channel/UCFtMIeYJ4_YVidi1aq9kl5g) & [Facebook](https://www.facebook.com/PaidMembershipsPro/).
 
 == Installation ==
@@ -115,7 +115,7 @@ Note: You must have [Paid Memberships Pro](https://www.paidmembershipspro.com) a
 3. Add a percent discount to the field.
 4. Save changes.
 
-Visit our documentation site to [learn more about the settings, access custom code recipes and tutorials, and view a list of compatibility with other Paid Memberships Pro Add Ons](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=wordpress-org&utm_medium=readme&utm_campaign=pmpro-woocommerce).
+Visit our documentation site to [learn more about the settings, access custom code recipes and tutorials, and view a list of compatibility with other Paid Memberships Pro Add Ons](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/?utm_source=plugin&utm_medium=readme&utm_campaign=pmpro-woocommerce).
 
 == Frequently Asked Questions ==
 
