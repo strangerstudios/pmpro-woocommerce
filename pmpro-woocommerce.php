@@ -499,7 +499,15 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	} else {
 		$product_id = $product->get_id();
 	}
-	
+
+	// Ensure the global is initialized before using it.
+	if ( ! is_array( $pmprowoo_product_levels ) ) {
+		$pmprowoo_product_levels = get_option( '_pmprowoo_product_levels' );
+		if ( empty( $pmprowoo_product_levels ) ) {
+			$pmprowoo_product_levels = array();
+		}
+	}
+
 	$membership_product_ids = array_keys( $pmprowoo_product_levels );
 	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 
