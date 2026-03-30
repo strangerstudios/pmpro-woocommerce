@@ -2,7 +2,7 @@
 
 # [Paid Memberships Pro Integration with WooCommerce](https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/) #
 
-![License](https://img.shields.io/badge/license-GPL--3.0%2B-red.svg?style=flat-square)
+![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg?style=flat-square)
 
 ### Welcome to the Paid Memberships Pro Integration with WooCommerce GitHub Repository
 Integrates with WooCommerce to sell Memberships as a product, set a global % discount on products by level or set a per-product members-only price.
