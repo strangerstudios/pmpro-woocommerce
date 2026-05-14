@@ -65,6 +65,28 @@ function pmprowoo_init() {
 add_action( 'init', 'pmprowoo_init' );
 
 /**
+ * Register our option names with pmpro-network-subsite so that subsites in
+ * "inherit" mode read these settings from the main site.
+ *
+ * Requires a version of pmpro-network-subsite that exposes the
+ * pmpro_multisite_advanced_settings_options filter. On older versions this
+ * is a harmless no-op.
+ *
+ * @since TBD
+ *
+ * @param string[] $options Option names to inherit from the main site.
+ * @return string[]
+ */
+function pmprowoo_register_multisite_inherited_options( $options ) {
+	$options[] = '_pmprowoo_product_levels';
+	$options[] = '_pmprowoo_gift_codes';
+	$options[] = '_pmprowoo_member_discounts';
+	$options[] = 'pmpro_pmprowoo_discounts_on_subscriptions';
+	return $options;
+}
+add_filter( 'pmpro_multisite_advanced_settings_options', 'pmprowoo_register_multisite_inherited_options' );
+
+/**
  * Disable other membership products if a membership product is in the cart already
  *
  * @param bool        $is_purchasable
