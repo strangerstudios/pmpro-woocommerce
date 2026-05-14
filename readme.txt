@@ -2,9 +2,9 @@
 Contributors: strangerstudios, paidmembershipspro
 Tags: woocommerce membership, woocommerce, paid memberships pro, woocommerce subscription, pmpro
 Requires at least: 5.2
-Tested up to: 6.5
+Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 1.10
+Stable tag: 1.10.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,12 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.10.1 - 2026-05-14 =
+* ENHANCEMENT: Inherit pmpro-woocommerce option values on multisite subsites. Membership product levels, gift codes, member discounts, and "discounts on subscriptions" are now read from the main site when pmpro-network-subsite is active and in "inherit" mode. #213 (@dparker1005)
+* ENHANCEMENT: Added a "Learn More" link to the Add On documentation in the WooCommerce product data panel and the Edit Membership Level screen, and cleaned up settings formatting. #211 (@kimcoleman)
+* BUG FIX: Added a null guard for the `$pmprowoo_product_levels` global to prevent a fatal error when `pmprowoo_get_membership_price()` is called before `pmprowoo_init()` has run. #212 (@flintfromthebasement)
+* BUG FIX: Skip order items whose product no longer exists when granting memberships from an order, preventing a fatal in `pmprowoo_add_membership_from_order()`. #207 (@dparker1005)
+
 = 1.10 - 2024-10-21 =
 * FEATURE: Now updating the plugin from paidmembershipspro.com.
 * ENHANCEMENT: Updated translation files bundled with the plugin.
