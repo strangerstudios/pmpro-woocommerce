@@ -118,7 +118,7 @@ function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level
 							return true;
 						}
 					} else {
-						if ( wc_customer_bought_product( $user->ID, $user->data->user_email, intval( $product_id ) ) ) {
+						if ( wc_customer_bought_product( $user->data->user_email, $user->ID, intval( $product_id ) ) ) {
 							return true;
 						}
 					}
