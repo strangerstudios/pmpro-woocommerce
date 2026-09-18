@@ -105,6 +105,10 @@ function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level
 	global $pmprowoo_product_levels;
 	if ( ! empty( $pmprowoo_product_levels ) ) {
 		$user = get_userdata( intval( $user_id ) );
+		// No such user? They can't have an active membership product.
+		if ( ! $user ) {
+			return false;
+		}
 		foreach ( $pmprowoo_product_levels as $product_id => $product_level_id ) {
 			if ( intval( $level_id ) === intval( $product_level_id ) ) {
 				$product = wc_get_product( $product_id );
