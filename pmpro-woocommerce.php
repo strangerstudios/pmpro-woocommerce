@@ -467,15 +467,15 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 		
 		foreach ( $items as $item ) {
-			//does the order have a user id and some products?
-			if ( ! empty( $item['product_id']  && in_array($item['product_id'], $membership_product_ids)) ) {
+			//resolve the product id (falls back to stored meta for deleted products)
+			$product_id = pmprowoo_get_order_item_product_id( $item );
+
+			//does the order have a matching membership product with a mapped level?
+			if ( $product_id > 0 && in_array( $product_id, $membership_product_ids ) && isset( $pmprowoo_product_levels[ $product_id ] ) ) {
 				//check if another active subscription exists
-				if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {	
-					//is there a membership level for this product?
-					if( in_array($item['product_id'], $membership_product_ids) ){
-						//remove the user from the level
-						pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
-					}
+				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $product_id ] ) ) {
+					//remove the user from the level
+					pmpro_cancelMembershipLevel( $pmprowoo_product_levels[ $product_id ], $user_id );
 				}
 			}
 		}
