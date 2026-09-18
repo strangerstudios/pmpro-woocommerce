@@ -107,7 +107,7 @@ function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level
 		$user = get_userdata( intval( $user_id ) );
 		foreach ( $pmprowoo_product_levels as $product_id => $product_level_id ) {
 			if ( intval( $level_id ) === intval( $product_level_id ) ) {
-				$product = get_product( $product_id );
+				$product = wc_get_product( $product_id );
 				if ( ! empty( $product ) && is_object( $product ) && method_exists( $product, 'is_type' ) ) {
 					if ( $product->is_type( array( 'subscription', 'variable-subscription', 'subscription_variation' ) ) ) {
 						if ( function_exists( 'wcs_user_has_subscription' ) && wcs_user_has_subscription( $user_id, $product_id, array( 'active', 'pending-cancel' ) ) ) {
