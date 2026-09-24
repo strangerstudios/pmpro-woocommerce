@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /*
  * Load Email Template
  */
@@ -99,6 +103,7 @@ function pmprowoo_gift_levels_recipient_fields_validation($passed, $product_id) 
     $gift_membership_code = get_post_meta($product_id, '_gift_membership_code', true);
     $gift_membership_email_option = get_post_meta($product_id, '_gift_membership_email_option', true);
 
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- WooCommerce add-to-cart requests do not include a nonce.
     if(!empty($gift_membership_code) && !empty($gift_membership_email_option)){
      if($gift_membership_email_option == '3' && ( ! isset( $_REQUEST['gift-send-email'] ) || $_REQUEST['gift-send-email'] == '' ) ){
            wc_add_notice( esc_html__( 'Please select option for Send Email to Recipient', 'pmpro-woocommerce' ), 'error' );
@@ -115,6 +120,7 @@ function pmprowoo_gift_levels_recipient_fields_validation($passed, $product_id) 
        }
      }
     }
+    // phpcs:enable WordPress.Security.NonceVerification.Recommended
     return true;
 }
 add_action( 'woocommerce_add_to_cart_validation', 'pmprowoo_gift_levels_recipient_fields_validation', 1, 2 );
@@ -125,18 +131,20 @@ add_action( 'woocommerce_add_to_cart_validation', 'pmprowoo_gift_levels_recipien
 */
 function pmprowoo_gift_levels_save_recipient_fields( $cart_item_data, $product_id ) {
 
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- WooCommerce add-to-cart requests do not include a nonce.
     if( isset( $_REQUEST['gift-recipient-name'] ) ) {
 	if( !empty( $_REQUEST['gift-recipient-name'] ) ){
-        $cart_item_data[ 'gift_recipient_name' ] = sanitize_text_field( $_REQUEST['gift-recipient-name'] );
-        $cart_item_data['unique_key'] = md5( microtime().rand() );
+        $cart_item_data[ 'gift_recipient_name' ] = sanitize_text_field( wp_unslash( $_REQUEST['gift-recipient-name'] ) );
+        $cart_item_data['unique_key'] = md5( microtime().wp_rand() );
 	}
     }
     if( isset( $_REQUEST['gift-recipient-email'] ) ) {
 	if( !empty( $_REQUEST['gift-recipient-email'] ) ){
-        $cart_item_data[ 'gift_recipient_email' ] = sanitize_email( $_REQUEST['gift-recipient-email'] );
-        $cart_item_data['unique_key'] = md5( microtime().rand() );
+        $cart_item_data[ 'gift_recipient_email' ] = sanitize_email( wp_unslash( $_REQUEST['gift-recipient-email'] ) );
+        $cart_item_data['unique_key'] = md5( microtime().wp_rand() );
 	}
     }
+    // phpcs:enable WordPress.Security.NonceVerification.Recommended
     return $cart_item_data;
 }
 add_action( 'woocommerce_add_cart_item_data', 'pmprowoo_gift_levels_save_recipient_fields', 10, 2 );
@@ -216,7 +224,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
 	           $gift_code_id = $pmprowoo_gift_codes[$item['product_id']];
 
                    // get discount code level to copy
-                   $gift_level = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . esc_sql( $gift_code_id ) . "' LIMIT 1");
+                   $gift_level = $wpdb->get_row("SELECT * FROM $wpdb->pmpro_discount_codes_levels WHERE code_id = '" . esc_sql( $gift_code_id ) . "' LIMIT 1"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                    if(!$gift_level){ 
                            //possibly add an error if coupon code doesn't exist
                            return; 
@@ -224,12 +232,12 @@ function pmprowoo_add_gift_code_from_order($order_id)
           
 
 	           //create new gift code
-	           $code = "GIFT" . rand(1, 99) . pmpro_getDiscountCode(); //added rand to code to make it unique for multiple gift orders
+	           $code = "GIFT" . wp_rand(1, 99) . pmpro_getDiscountCode(); //added rand to code to make it unique for multiple gift orders
 	           $starts = current_time( 'Y-m-d', 0 );
 	           $expires = date("Y-m-d", strtotime("+1 year"));		
 	           $sqlQuery = "INSERT INTO $wpdb->pmpro_discount_codes (code, starts, expires, uses) VALUES('" . esc_sql($code) . "', '" . esc_sql( $starts ) . "', '" . esc_sql( $expires ) . "', '1')";
 	
-  	          if($wpdb->query($sqlQuery) !== false){
+  	          if($wpdb->query($sqlQuery) !== false){ // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Values are escaped with esc_sql() above.
 		      //get id of new code
 		      $code_id = $wpdb->insert_id;
 		
@@ -246,7 +254,7 @@ function pmprowoo_add_gift_code_from_order($order_id)
            '" . esc_sql($gift_level->trial_limit) . "',
            '" . esc_sql($gift_level->expiration_number) . "',
            '" . esc_sql($gift_level->expiration_period) . "')";
-		$wpdb->query($sqlQuery);
+		$wpdb->query($sqlQuery); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Values are escaped with esc_sql() above.
 			  
               /* Add Code to Order Meta */
               wc_add_order_item_meta( $item_id, "Gift Code", $code );
@@ -327,7 +335,7 @@ function pmprowoo_extra_tab_options_for_gift_levels() {
 	// Get Discount Codes List
 	$codes_sqlQuery = "SELECT *, UNIX_TIMESTAMP(starts) as starts, UNIX_TIMESTAMP(expires) as expires FROM $wpdb->pmpro_discount_codes ";
 	$codes_sqlQuery .= "WHERE `code` NOT LIKE 'GIFT%' ORDER BY id ASC";
-	$codes = $wpdb->get_results($codes_sqlQuery, OBJECT);
+	$codes = $wpdb->get_results($codes_sqlQuery, OBJECT); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Static query with no user input.
 		
 	$gift_membership_code_options = array();
 	if(!$codes) {
@@ -382,6 +390,7 @@ add_action('pmprowoo_extra_tab_options', 'pmprowoo_extra_tab_options_for_gift_le
 function pmprowoo_process_product_meta_for_gift_levels() {
 	global $post_id, $pmprowoo_gift_codes;
 	
+    // phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies its nonce before woocommerce_process_product_meta fires.
     // If the fields aren't present. Bail. (Add On is probably not activated.)
     if ( ! isset( $_POST['_gift_membership_code'] ) ) {
         return;
@@ -402,6 +411,7 @@ function pmprowoo_process_product_meta_for_gift_levels() {
     update_option('_pmprowoo_gift_codes', $pmprowoo_gift_codes);    
 
     // Save gift membership email option.   
-    update_post_meta( $post_id, '_gift_membership_email_option', intval( $_POST['_gift_membership_email_option'] ) );
+    update_post_meta( $post_id, '_gift_membership_email_option', isset( $_POST['_gift_membership_email_option'] ) ? intval( $_POST['_gift_membership_email_option'] ) : 0 );
+    // phpcs:enable WordPress.Security.NonceVerification.Missing
 }
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta_for_gift_levels' );

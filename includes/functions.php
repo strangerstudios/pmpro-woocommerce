@@ -5,6 +5,10 @@
  * it will be overwritten when the plugin is updated.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Return an array of membership product IDs for an order.
  *
