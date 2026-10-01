@@ -348,14 +348,15 @@ function pmprowoo_cancel_membership_from_order( $order_id ) {
 	$user_id = $order->get_user_id();
 	if ( ! empty( $user_id ) && sizeof( $order->get_items() ) > 0 ) {
 		foreach ( $order->get_items() as $item ) {
-			//not sure when a product has id 0, but the Woo code checks this
-			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
-	
+			//resolve the product id (falls back to stored meta for deleted products)
+			$product_id = pmprowoo_get_order_item_product_id( $item );
+
+			if ( $product_id > 0 && in_array( $product_id, $membership_product_ids ) && isset( $pmprowoo_product_levels[ $product_id ] ) ) {
+
 				//check if another active subscription exists
-				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {
-					//is there a membership level for this product?
+				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $product_id ] ) ) {
 					//remove the user from the level
-					pmpro_cancelMembershipLevel( $pmprowoo_product_levels[$item['product_id']], $user_id, 'cancelled' );
+					pmpro_cancelMembershipLevel( $pmprowoo_product_levels[ $product_id ], $user_id, 'cancelled' );
 				}
 			}
 		}
@@ -407,16 +408,18 @@ function pmprowoo_activated_subscription( $subscription ) {
 		
 		//does the order item have a user id and a product?
 		foreach ( $items as $item ) {
-			
-			if ( ! empty( $item['product_id'] ) && in_array( $item['product_id'], $membership_product_ids ) ) {
+			//resolve the product id (falls back to stored meta for deleted products)
+			$product_id = pmprowoo_get_order_item_product_id( $item );
+
+			if ( $product_id > 0 && in_array( $product_id, $membership_product_ids ) && isset( $pmprowoo_product_levels[ $product_id ] ) ) {
 				// Is MMPU activated?
 				if ( function_exists( 'pmprommpu_addMembershipLevel' ) ) {
 					// Allow filter to force add levels (ignore MMPU group level settings).
 					$mmpu_force_add_level = apply_filters( 'pmprowoo_mmpu_force_add_level', false );
-					pmprommpu_addMembershipLevel( $pmprowoo_product_levels[ $item['product_id'] ], $user_id, $mmpu_force_add_level );
+					pmprommpu_addMembershipLevel( $pmprowoo_product_levels[ $product_id ], $user_id, $mmpu_force_add_level );
 				} else {
 					// Only add the first membership level found.
-					pmpro_changeMembershipLevel( $pmprowoo_product_levels[ $item['product_id'] ], $user_id );
+					pmpro_changeMembershipLevel( $pmprowoo_product_levels[ $product_id ], $user_id );
 					break;
 				}
 			}
@@ -467,15 +470,15 @@ function pmprowoo_cancelled_subscription( $subscription ) {
 		$membership_product_ids = pmprowoo_get_membership_products_from_order( $order_id );
 		
 		foreach ( $items as $item ) {
-			//does the order have a user id and some products?
-			if ( ! empty( $item['product_id']  && in_array($item['product_id'], $membership_product_ids)) ) {
+			//resolve the product id (falls back to stored meta for deleted products)
+			$product_id = pmprowoo_get_order_item_product_id( $item );
+
+			//does the order have a matching membership product with a mapped level?
+			if ( $product_id > 0 && in_array( $product_id, $membership_product_ids ) && isset( $pmprowoo_product_levels[ $product_id ] ) ) {
 				//check if another active subscription exists
-				if (  ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $item['product_id'] ] ) ) {	
-					//is there a membership level for this product?
-					if( in_array($item['product_id'], $membership_product_ids) ){
-						//remove the user from the level
-						pmpro_cancelMembershipLevel($pmprowoo_product_levels[$item['product_id']], $user_id);
-					}
+				if ( ! pmprowoo_user_has_active_membership_product_for_level( $user_id, $pmprowoo_product_levels[ $product_id ] ) ) {
+					//remove the user from the level
+					pmpro_cancelMembershipLevel( $pmprowoo_product_levels[ $product_id ], $user_id );
 				}
 			}
 		}
