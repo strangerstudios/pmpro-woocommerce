@@ -12,6 +12,10 @@
  * Domain Path: /languages
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 //constants
 define( 'PMPROWC_DIR', dirname( __FILE__ ) );
 define( 'PMPROWC_BASENAME', plugin_basename( __FILE__ ) );
@@ -181,14 +185,14 @@ function pmprowoo_purchase_disabled() {
 				'</a>' );
 	} else {
 		$message = sprintf( __( "%s is already in your %scart%s.", 'pmpro-woocommerce' ),
-				$product->get_name(),
+				esc_html( $product->get_name() ),
 				sprintf( '<a href="%1$s" title="%2$s">', esc_url( $cart_url ), esc_html__( 'Cart', 'pmpro-woocommerce' ) ),
 				'</a>' );
 	}
 	?>
     <div class="woocommerce">
         <div class="woocommerce-info wc-nonpurchasable-message">
-			<?php echo $message; ?>
+			<?php echo wp_kses_post( $message ); ?>
         </div>
     </div>
 	<?php
@@ -271,7 +275,7 @@ function pmprowoo_add_membership_from_order( $order_id ) {
 					$pmpro_level->id
 				);
 				
-				$old_startdate = $wpdb->get_var( $sqlQuery );
+				$old_startdate = $wpdb->get_var( $sqlQuery ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Query is prepared above.
 				if ( ! empty( $old_startdate ) ) {
 					$startdate = "'" . $old_startdate . "'";
 				} else {
@@ -695,7 +699,7 @@ function pmprowoo_tab_options() {
         </div> <!-- end pmprowoo_options_group-membership_product -->
 		<div class="options_group pmprowoo_options_group-membership_discount">
 			<h3><?php esc_html_e( 'Member Discount Pricing', 'pmpro-woocommerce' ); ?></h3>
-			<p><?php printf( __( 'Set the custom price based on Membership Level. <a href="%s">Edit your membership levels</a> to set a global percent discount for all products.', 'pmpro-woocommerce' ), esc_url( admin_url( 'admin.php?page=pmpro-membershiplevels' ) ) ); ?></p>
+			<p><?php echo wp_kses_post( sprintf( __( 'Set the custom price based on Membership Level. <a href="%s">Edit your membership levels</a> to set a global percent discount for all products.', 'pmpro-woocommerce' ), esc_url( admin_url( 'admin.php?page=pmpro-membershiplevels' ) ) ) ); ?></p>
             <?php
 			// For each membership level, create respective price field
 			foreach ( $membership_levels as $level ) {
@@ -725,7 +729,8 @@ add_action( 'woocommerce_product_data_panels', 'pmprowoo_tab_options' );
 function pmprowoo_process_product_meta() {
 	
 	global $membership_levels, $post_id, $pmprowoo_product_levels;
-	
+
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies its nonce before woocommerce_process_product_meta fires.
 	// get values from post
 	if ( isset( $_POST['_membership_product_level'] ) ) {
 		$level = intval( $_POST['_membership_product_level'] );
@@ -759,11 +764,11 @@ function pmprowoo_process_product_meta() {
 		// Save each membership level price
 		$decimal_separator = wc_get_price_decimal_separator();
 		foreach ( $membership_levels as $level ) {
-			$price = str_replace( $decimal_separator, '.', sanitize_text_field( $_POST[ '_level_' . $level->id . "_price" ] ) );
+			$price = isset( $_POST[ '_level_' . $level->id . '_price' ] ) ? str_replace( $decimal_separator, '.', sanitize_text_field( wp_unslash( $_POST[ '_level_' . $level->id . '_price' ] ) ) ) : '';
 			update_post_meta( $post_id, '_level_' . $level->id . '_price', $price );
 		}
 	}
-	
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 }
 add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta' );
 
@@ -772,7 +777,7 @@ add_action( 'woocommerce_process_product_meta', 'pmprowoo_process_product_meta' 
  */
 function pmprowoo_add_membership_discount() {
 	global $pmprowoo_member_discounts;
-	$level_id = intval( $_REQUEST['edit'] );
+	$level_id = isset( $_REQUEST['edit'] ) ? intval( $_REQUEST['edit'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only use of the level being edited.
 	if ( $level_id > 0 && ! empty( $pmprowoo_member_discounts ) && ! empty( $pmprowoo_member_discounts[ $level_id ] ) ) {
 		$membership_discount = $pmprowoo_member_discounts[ $level_id ] * 100;
 	} //convert back to %
@@ -813,7 +818,8 @@ function pmprowoo_save_membership_level( $level_id ) {
 	global $pmprowoo_member_discounts;
 	
 	//convert % to decimal
-	$member_discount = ! empty( $_POST['membership_discount'] ) ? ( (float) sanitize_text_field( $_POST['membership_discount'] ) / 100 ) : 0;
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- PMPro verifies its nonce before pmpro_save_membership_level fires.
+	$member_discount = ! empty( $_POST['membership_discount'] ) ? ( (float) sanitize_text_field( wp_unslash( $_POST['membership_discount'] ) ) / 100 ) : 0;
 	$pmprowoo_member_discounts[$level_id] = $member_discount;
 	update_option( '_pmprowoo_member_discounts', $pmprowoo_member_discounts );
 }

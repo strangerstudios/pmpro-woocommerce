@@ -5,6 +5,10 @@
  * it will be overwritten when the plugin is updated.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Resolve the product ID for an order/subscription line item.
  *
