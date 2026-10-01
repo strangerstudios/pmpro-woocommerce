@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Fall back to that stored meta so memberships tied to deleted products can
  * still be resolved (and cancelled).
  *
- * @since TBD
+ * @since 1.10.2
  *
  * @param WC_Order_Item $item
  *

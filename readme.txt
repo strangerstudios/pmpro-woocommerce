@@ -2,9 +2,9 @@
 Contributors: strangerstudios, paidmembershipspro
 Tags: woocommerce membership, woocommerce, paid memberships pro, woocommerce subscription, pmpro
 Requires at least: 5.2
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 1.10.1
+Stable tag: 1.10.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,11 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.10.2 - 2026-10-01 =
+* SECURITY: Improved sanitization and escaping throughout the plugin to resolve Plugin Check security findings. #215 (@dparker1005)
+* BUG FIX: Fixed memberships not being cancelled when the WooCommerce product had been deleted. #214 (@dwanjuki)
+* BUG FIX: Fixed the check for whether a member has another paid order for a membership product, which matched guest orders instead of the member's own orders and could wrongly keep or remove the membership. #214 (@dwanjuki)
+
 = 1.10.1 - 2026-05-14 =
 * ENHANCEMENT: Inherit pmpro-woocommerce option values on multisite subsites. Membership product levels, gift codes, member discounts, and "discounts on subscriptions" are now read from the main site when pmpro-network-subsite is active and in "inherit" mode. #213 (@dparker1005)
 * ENHANCEMENT: Added a "Learn More" link to the Add On documentation in the WooCommerce product data panel and the Edit Membership Level screen, and cleaned up settings formatting. #211 (@kimcoleman)
