@@ -522,14 +522,15 @@ function pmprowoo_get_membership_price( $price, $product ) {
 		return $price;
 	}
 
-	// If another plugin saved a price we already returned for this product object back with set_price()
+	// If another plugin saved a price we already returned for this product back with set_price()
 	// (e.g. set_price( get_price() ) in woocommerce_before_calculate_totals), start again from the original price.
 	// This stops the discount from being applied twice and keeps it in step with the cart if the cart changes.
+	// Prices are compared at the store's price precision because plugins often round the price they write back.
 	static $pmprowoo_membership_prices = array();
-	$product_key = spl_object_hash( $product );
-	$price_key   = number_format( (float) $price, 4, '.', '' );
-	if ( isset( $pmprowoo_membership_prices[ $product_key ][ $price_key ] ) && array_key_exists( 'price', $product->get_changes() ) ) {
-		$price = $pmprowoo_membership_prices[ $product_key ][ $price_key ];
+	$product_cache_id = $product->get_id();
+	$price_key        = number_format( (float) $price, wc_get_price_decimals(), '.', '' );
+	if ( ! empty( $product_cache_id ) && array_key_exists( 'price', $product->get_changes() ) && isset( $pmprowoo_membership_prices[ $product_cache_id ][ $price_key ] ) ) {
+		$price = $pmprowoo_membership_prices[ $product_cache_id ][ $price_key ];
 	}
 
 	// Get the ID for the product that we are currently getting a membership price for.
@@ -600,8 +601,10 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	// Filter the result.
 	$membership_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $lowest_price_level, $price, $product );
 
-	// Remember the original price for each price we return for this product object so we can recognize it if it is set back on the product.
-	$pmprowoo_membership_prices[ $product_key ][ number_format( (float) $membership_price, 4, '.', '' ) ] = $price;
+	// Remember the original price for each discounted price we return for this product so we can recognize it if it is set back on the product.
+	if ( ! empty( $product_cache_id ) && (float) $membership_price !== (float) $price ) {
+		$pmprowoo_membership_prices[ $product_cache_id ][ number_format( (float) $membership_price, wc_get_price_decimals(), '.', '' ) ] = $price;
+	}
 
 	return $membership_price;
 }
