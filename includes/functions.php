@@ -101,11 +101,12 @@ function pmprowoo_cart_has_membership() {
  * Returns whether a user has an active WooCommerce product that gives membership
  * access to a given PMPro level.
  *
- * @param  int $user_id  user whose orders to check.
- * @param  int $level_id to search for in active orders.
+ * @param  int $user_id                 user whose orders to check.
+ * @param  int $level_id                to search for in active orders.
+ * @param  int $exclude_subscription_id optional subscription ID to ignore. @since TBD
  * @return boolean
  */
-function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level_id ) {
+function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level_id, $exclude_subscription_id = 0 ) {
 	global $pmprowoo_product_levels;
 	if ( ! empty( $pmprowoo_product_levels ) ) {
 		$user = get_userdata( intval( $user_id ) );
@@ -118,8 +119,17 @@ function pmprowoo_user_has_active_membership_product_for_level( $user_id, $level
 				$product = wc_get_product( $product_id );
 				if ( ! empty( $product ) && is_object( $product ) && method_exists( $product, 'is_type' ) ) {
 					if ( $product->is_type( array( 'subscription', 'variable-subscription', 'subscription_variation' ) ) ) {
-						if ( function_exists( 'wcs_user_has_subscription' ) && wcs_user_has_subscription( $user_id, $product_id, array( 'active', 'pending-cancel' ) ) ) {
-							return true;
+						if ( empty( $exclude_subscription_id ) ) {
+							if ( function_exists( 'wcs_user_has_subscription' ) && wcs_user_has_subscription( $user_id, $product_id, array( 'active', 'pending-cancel' ) ) ) {
+								return true;
+							}
+						} elseif ( function_exists( 'wcs_get_users_subscriptions' ) ) {
+							// Check the user's other subscriptions for this product.
+							foreach ( wcs_get_users_subscriptions( $user_id ) as $user_subscription ) {
+								if ( (int) $user_subscription->get_id() !== (int) $exclude_subscription_id && $user_subscription->has_status( array( 'active', 'pending-cancel' ) ) && $user_subscription->has_product( $product_id ) ) {
+									return true;
+								}
+							}
 						}
 					} else {
 						if ( wc_customer_bought_product( $user->data->user_email, $user->ID, intval( $product_id ) ) ) {

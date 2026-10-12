@@ -497,6 +497,116 @@ add_action( 'woocommerce_subscription_status_on-hold', 'pmprowoo_cancelled_subsc
 add_action( 'woocommerce_scheduled_subscription_end_of_prepaid_term', 'pmprowoo_cancelled_subscription', 10 );
 
 /**
+ * Set memberships to expire when a WooCommerce subscription is pending cancellation.
+ *
+ * When a subscription with time left in its billing period is cancelled, WooCommerce Subscriptions
+ * sets it to Pending Cancellation and ends it on the next payment date. The member keeps access until then,
+ * so give the membership the same expiration date. This matches how Paid Memberships Pro cancels its own
+ * subscriptions on the next payment date.
+ *
+ * @since TBD
+ *
+ * @param \WC_Subscription $subscription
+ */
+function pmprowoo_pending_cancel_subscription( $subscription ) {
+	global $pmprowoo_product_levels;
+
+	// quitely exit if PMPro 3.0+ isn't active
+	if ( ! function_exists( 'pmpro_set_expiration_date' ) ) {
+		return;
+	}
+
+	//don't bother if array is empty
+	if ( empty( $pmprowoo_product_levels ) ) {
+		return;
+	}
+
+	if ( is_numeric( $subscription ) ) {
+		$subscription = wcs_get_subscription( $subscription );
+	}
+
+	$user_id = empty( $subscription ) ? 0 : $subscription->get_user_id();
+	if ( empty( $user_id ) ) {
+		return;
+	}
+
+	// Get the date the subscription ends, in the site's timezone like membership dates.
+	$enddate = $subscription->get_date( 'end', 'site' );
+	if ( empty( $enddate ) ) {
+		$end_of_prepaid_term = $subscription->calculate_date( 'end_of_prepaid_term' );
+		$enddate             = empty( $end_of_prepaid_term ) ? '' : get_date_from_gmt( $end_of_prepaid_term );
+	}
+	if ( empty( $enddate ) ) {
+		return;
+	}
+
+	$previous_enddates = array();
+	foreach ( $subscription->get_items() as $item ) {
+		//resolve the product id (falls back to stored meta for deleted products)
+		$product_id = pmprowoo_get_order_item_product_id( $item );
+		if ( $product_id <= 0 || ! isset( $pmprowoo_product_levels[ $product_id ] ) ) {
+			continue;
+		}
+		$level_id = (int) $pmprowoo_product_levels[ $product_id ];
+
+		// Skip if the user doesn't have the level, or another product still gives them the level.
+		$membership_level = pmpro_getSpecificMembershipLevelForUser( $user_id, $level_id );
+		if ( empty( $membership_level ) || pmprowoo_user_has_active_membership_product_for_level( $user_id, $level_id, $subscription->get_id() ) ) {
+			continue;
+		}
+
+		// Keep the current expiration date if the membership already expires before the subscription ends.
+		if ( ! empty( $membership_level->enddate ) && (int) $membership_level->enddate <= strtotime( $enddate ) ) {
+			continue;
+		}
+
+		$previous_enddates[ $level_id ] = empty( $membership_level->enddate ) ? '' : date( 'Y-m-d H:i:s', $membership_level->enddate );
+		pmpro_set_expiration_date( $user_id, $level_id, $enddate );
+	}
+
+	// Remember the previous expiration dates so they can be restored if the subscription is reactivated.
+	if ( ! empty( $previous_enddates ) ) {
+		$subscription->update_meta_data( '_pmprowoo_enddates_before_pending_cancel', $previous_enddates );
+		$subscription->save();
+	}
+}
+add_action( 'woocommerce_subscription_status_pending-cancel', 'pmprowoo_pending_cancel_subscription', 10 );
+
+/**
+ * Restore membership expiration dates when a subscription pending cancellation is reactivated.
+ *
+ * @since TBD
+ *
+ * @param \WC_Subscription $subscription
+ */
+function pmprowoo_reactivated_pending_cancel_subscription( $subscription ) {
+	// quitely exit if PMPro 3.0+ isn't active
+	if ( ! function_exists( 'pmpro_set_expiration_date' ) ) {
+		return;
+	}
+
+	if ( is_numeric( $subscription ) ) {
+		$subscription = wcs_get_subscription( $subscription );
+	}
+
+	$previous_enddates = empty( $subscription ) ? array() : $subscription->get_meta( '_pmprowoo_enddates_before_pending_cancel' );
+	if ( empty( $previous_enddates ) || ! is_array( $previous_enddates ) ) {
+		return;
+	}
+
+	$user_id = $subscription->get_user_id();
+	foreach ( $previous_enddates as $level_id => $previous_enddate ) {
+		if ( pmpro_hasMembershipLevel( $level_id, $user_id ) ) {
+			pmpro_set_expiration_date( $user_id, $level_id, empty( $previous_enddate ) ? null : $previous_enddate );
+		}
+	}
+
+	$subscription->delete_meta_data( '_pmprowoo_enddates_before_pending_cancel' );
+	$subscription->save();
+}
+add_action( 'woocommerce_subscription_status_pending-cancel_to_active', 'pmprowoo_reactivated_pending_cancel_subscription', 10 );
+
+/**
  * Update Product Prices with Membership Price and/or Discount
  *
  * @param float      $price
