@@ -84,17 +84,36 @@ function pmprowoo_get_membership_products_from_order( $order_id ) {
  * @return bool
  */
 function pmprowoo_cart_has_membership() {
-	
+	$cart_membership_levels = pmprowoo_get_cart_membership_levels();
+	return ! empty( $cart_membership_levels );
+}
+
+/**
+ * Get the membership levels that the membership products in the cart will give the user.
+ *
+ * @since TBD
+ *
+ * @param int $exclude_product_id Optional product ID to leave out, e.g. the product being priced.
+ * @return array Level IDs keyed by membership product ID, in cart order. Empty if there is no cart.
+ */
+function pmprowoo_get_cart_membership_levels( $exclude_product_id = 0 ) {
 	global $pmprowoo_product_levels;
-	$has_membership = false;
-	
-	$cart_items = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array();
-	
-	foreach ( $cart_items as $cart_item ) {
-		$has_membership = $has_membership || in_array( $cart_item['product_id'], array_keys( $pmprowoo_product_levels ) );
+
+	$cart_membership_levels = array();
+
+	// No membership products or no cart? Nothing to find.
+	if ( empty( $pmprowoo_product_levels ) || ! function_exists( 'WC' ) || ! is_object( WC()->cart ) ) {
+		return $cart_membership_levels;
 	}
-	
-	return $has_membership;
+
+	foreach ( WC()->cart->get_cart_contents() as $cart_item ) {
+		$product_id = (int) $cart_item['product_id'];
+		if ( $product_id !== (int) $exclude_product_id && isset( $pmprowoo_product_levels[ $product_id ] ) ) {
+			$cart_membership_levels[ $product_id ] = $pmprowoo_product_levels[ $product_id ];
+		}
+	}
+
+	return $cart_membership_levels;
 }
 
 /**
