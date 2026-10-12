@@ -559,9 +559,20 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	// Get all membership level ids that will be given to the user after checkout.
 	// Ignore the product that we are currently getting a membership price for.
 	$cart_level_ids = array();
-	foreach ( $items as $item ) {
-		if ( $item['product_id'] != $product->get_id() && in_array( $item['product_id'], $membership_product_ids ) ) {
-			$cart_level_ids[] = $pmprowoo_product_levels[ $item['product_id'] ];
+
+	/**
+	 * Filter whether membership level products in the cart should discount other products.
+	 *
+	 * @since TBD
+	 *
+	 * @param bool       $apply_cart_level_discounts Whether to apply discounts for levels in the cart. Default true.
+	 * @param WC_Product $product                    The product that we are getting a membership price for.
+	 */
+	if ( apply_filters( 'pmprowoo_apply_cart_level_discounts', true, $product ) ) {
+		foreach ( $items as $item ) {
+			if ( $item['product_id'] != $product->get_id() && in_array( $item['product_id'], $membership_product_ids ) ) {
+				$cart_level_ids[] = $pmprowoo_product_levels[ $item['product_id'] ];
+			}
 		}
 	}
 
