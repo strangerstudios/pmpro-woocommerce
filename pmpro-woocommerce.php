@@ -549,7 +549,6 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	}
 
 	$membership_product_ids = array_keys( $pmprowoo_product_levels );
-	$items       = is_object( WC()->cart ) ? WC()->cart->get_cart_contents() : array(); // items in the cart
 
 	//ignore membership products and subscriptions if we are set that way
 	if ( ( ! $pmprowoo_discounts_on_subscriptions || $pmprowoo_discounts_on_subscriptions == 'No' ) && ( $product->is_type( array( 'subscription', 'variable-subscription', 'subscription_variation' ) ) || in_array( $product_id, $membership_product_ids, false ) ) ) {
@@ -569,11 +568,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	 * @param WC_Product $product                    The product that we are getting a membership price for.
 	 */
 	if ( apply_filters( 'pmprowoo_apply_cart_level_discounts', true, $product ) ) {
-		foreach ( $items as $item ) {
-			if ( $item['product_id'] != $product->get_id() && in_array( $item['product_id'], $membership_product_ids ) ) {
-				$cart_level_ids[] = $pmprowoo_product_levels[ $item['product_id'] ];
-			}
-		}
+		$cart_level_ids = array_values( pmprowoo_get_cart_membership_levels( $product->get_id() ) );
 	}
 
 	// Get the membership level ids that the user already has.
@@ -882,23 +877,7 @@ add_filter( 'pmpro_custom_advanced_settings', 'pmprowoo_custom_settings' );
  * Force account creation at WooCommerce checkout if the cart includes a membership product.
  */
 function pmprowoo_woocommerce_after_checkout_registration_form() {
-	global $woocommerce, $pmprowoo_product_levels;
-	
-	// grab items from the cart	
-	$items = $woocommerce->cart->cart_contents;
-	
-	//membership product ids
-	$membership_product_ids = array_keys( $pmprowoo_product_levels );
-	
-	// Search for any membership level products. IF found, use first one as the cart membership level.
-	foreach ( $items as $item ) {
-		if ( in_array( $item['product_id'], $membership_product_ids ) ) {
-			$cart_membership_level = $pmprowoo_product_levels[ $item['product_id'] ];
-			break;
-		}
-	}
-	
-	if ( ! empty( $cart_membership_level ) ) {
+	if ( pmprowoo_cart_has_membership() ) {
 		?>
         <script>
             jQuery('#createaccount').prop('checked', true);
@@ -1069,30 +1048,10 @@ add_filter( 'woocommerce_order_status_processing', 'pmprowoo_order_autocomplete'
  * Get products that are in the cart that are attached to a level ID.
  * Return product ID's of membership level products in the cart.
  *
- * @return array $levels The products and levels.
+ * @return int[] Membership product IDs in the cart.
  */
 function pmprowoo_get_memberships_from_cart() {
-	global $woocommerce, $pmprowoo_product_levels;
-
-	$membership_product_ids = array_keys( $pmprowoo_product_levels );
-	$cart_items  = $woocommerce->cart->cart_contents;
-	$membership_product_ids_in_cart = array();
-	
-	// Nothing in the cart, just bail.
-	if ( empty( $cart_items ) ) {
-		return $membership_product_ids_in_cart;
-	}
-
-	// Get all product IDs in the cart
-	$product_ids = array();
-	foreach( $cart_items as $item ) {
-		$product_ids[] = $item['product_id'];
-	}
-
-	// Compare values between the two arrays of membership products and items in the cart.
-	$membership_product_ids_in_cart = array_values( array_intersect( $membership_product_ids, $product_ids ) );
-
-	return $membership_product_ids_in_cart;
+	return array_keys( pmprowoo_get_cart_membership_levels() );
 }
 
 function pmpro_woocommerce_load_textdomain() {
