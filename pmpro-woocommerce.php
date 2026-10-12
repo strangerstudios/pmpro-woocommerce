@@ -522,11 +522,12 @@ function pmprowoo_get_membership_price( $price, $product ) {
 		return $price;
 	}
 
-	// If another plugin saved the price we already returned for this product object back with set_price()
+	// If another plugin saved a price we already returned for this product back with set_price()
 	// (e.g. set_price( get_price() ) in woocommerce_before_calculate_totals), don't discount it a second time.
+	// Prices are compared at the store's price precision because plugins often round the price they write back.
 	static $pmprowoo_membership_prices = array();
-	$product_key = spl_object_hash( $product );
-	if ( isset( $pmprowoo_membership_prices[ $product_key ] ) && array_key_exists( 'price', $product->get_changes() ) && abs( (float) $pmprowoo_membership_prices[ $product_key ] - (float) $price ) < 0.0001 ) {
+	$product_cache_id = $product->get_id();
+	if ( ! empty( $product_cache_id ) && array_key_exists( 'price', $product->get_changes() ) && isset( $pmprowoo_membership_prices[ $product_cache_id ][ number_format( (float) $price, wc_get_price_decimals(), '.', '' ) ] ) ) {
 		return $price;
 	}
 
@@ -598,8 +599,10 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	// Filter the result.
 	$membership_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $lowest_price_level, $price, $product );
 
-	// Remember the price we returned for this product object so we can recognize it if it is set back on the product.
-	$pmprowoo_membership_prices[ $product_key ] = $membership_price;
+	// Remember the discounted prices we return for this product so we can recognize them if they are set back on the product.
+	if ( ! empty( $product_cache_id ) && (float) $membership_price !== (float) $price ) {
+		$pmprowoo_membership_prices[ $product_cache_id ][ number_format( (float) $membership_price, wc_get_price_decimals(), '.', '' ) ] = true;
+	}
 
 	return $membership_price;
 }
