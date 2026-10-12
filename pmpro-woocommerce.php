@@ -522,12 +522,14 @@ function pmprowoo_get_membership_price( $price, $product ) {
 		return $price;
 	}
 
-	// If another plugin saved the price we already returned for this product object back with set_price()
-	// (e.g. set_price( get_price() ) in woocommerce_before_calculate_totals), don't discount it a second time.
+	// If another plugin saved a price we already returned for this product object back with set_price()
+	// (e.g. set_price( get_price() ) in woocommerce_before_calculate_totals), start again from the original price.
+	// This stops the discount from being applied twice and keeps it in step with the cart if the cart changes.
 	static $pmprowoo_membership_prices = array();
 	$product_key = spl_object_hash( $product );
-	if ( isset( $pmprowoo_membership_prices[ $product_key ] ) && array_key_exists( 'price', $product->get_changes() ) && abs( (float) $pmprowoo_membership_prices[ $product_key ] - (float) $price ) < 0.0001 ) {
-		return $price;
+	$price_key   = number_format( (float) $price, 4, '.', '' );
+	if ( isset( $pmprowoo_membership_prices[ $product_key ][ $price_key ] ) && array_key_exists( 'price', $product->get_changes() ) ) {
+		$price = $pmprowoo_membership_prices[ $product_key ][ $price_key ];
 	}
 
 	// Get the ID for the product that we are currently getting a membership price for.
@@ -598,8 +600,8 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	// Filter the result.
 	$membership_price = apply_filters( 'pmprowoo_get_membership_price', $discount_price, $lowest_price_level, $price, $product );
 
-	// Remember the price we returned for this product object so we can recognize it if it is set back on the product.
-	$pmprowoo_membership_prices[ $product_key ] = $membership_price;
+	// Remember the original price for each price we return for this product object so we can recognize it if it is set back on the product.
+	$pmprowoo_membership_prices[ $product_key ][ number_format( (float) $membership_price, 4, '.', '' ) ] = $price;
 
 	return $membership_price;
 }
