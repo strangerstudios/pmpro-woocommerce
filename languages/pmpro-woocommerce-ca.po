@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - WooCommerce Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.10.2\n"
+"Project-Id-Version: Paid Memberships Pro - WooCommerce Add On 1.11\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-01T16:55:17+00:00\n"
+"POT-Creation-Date: 2026-10-13T12:52:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-woocommerce\n"
@@ -34,6 +34,7 @@ msgstr ""
 #: pmpro-woocommerce.php:657
 #: pmpro-woocommerce.php:702
 #: pmpro-woocommerce.php:709
+#: pmpro-woocommerce.php:733
 #, php-format
 msgid "%s Price (%s)"
 msgstr ""
@@ -85,12 +86,14 @@ msgstr "Seleccioneu l'opció per enviar un correu electrònic al destinatari"
 #: pmpro-woocommerce.php:785
 #: pmpro-woocommerce.php:834
 #: pmpro-woocommerce.php:843
+#: pmpro-woocommerce.php:867
 msgid "Apply Member Discounts to WooCommerce Subscription and Membership Products?"
 msgstr "Voleu aplicar descomptes per a membres als productes de subscripció i afiliació de WooCommerce?"
 
 #: pmpro-woocommerce.php:650
 #: pmpro-woocommerce.php:695
 #: pmpro-woocommerce.php:702
+#: pmpro-woocommerce.php:726
 #, php-format
 msgid "Set the custom price based on Membership Level. <a href=\"%s\">Edit your membership levels</a> to set a global percent discount for all products."
 msgstr "Establiu el preu personalitzat en funció del nivell d'afiliació. <a href=\"%s\">Editeu els vostres nivells d'afiliació</a> per establir un percentatge de descompte global per a tots els productes."
@@ -118,6 +121,7 @@ msgstr "Paid Memberships Pro - WooCommerce Add On"
 #: pmpro-woocommerce.php:976
 #: pmpro-woocommerce.php:1025
 #: pmpro-woocommerce.php:1034
+#: pmpro-woocommerce.php:1047
 msgid "Autocomplete via PMPro WooCommerce."
 msgstr "Completa automàticament via PMPro WooCommerce."
 
@@ -126,6 +130,7 @@ msgstr "Completa automàticament via PMPro WooCommerce."
 #: pmpro-woocommerce.php:836
 #: includes/pmpro-gift-levels.php:372
 #: pmpro-woocommerce.php:845
+#: pmpro-woocommerce.php:869
 msgid "Yes"
 msgstr "Sí"
 
@@ -137,6 +142,8 @@ msgstr "Sí"
 #: includes/pmpro-gift-levels.php:373
 #: pmpro-woocommerce.php:844
 #: pmpro-woocommerce.php:845
+#: pmpro-woocommerce.php:868
+#: pmpro-woocommerce.php:869
 msgid "No"
 msgstr "No"
 
@@ -147,48 +154,56 @@ msgstr "Descompte per a afiliacions (%):"
 #: pmpro-woocommerce.php:737
 #: pmpro-woocommerce.php:783
 #: pmpro-woocommerce.php:791
+#: pmpro-woocommerce.php:815
 msgid "Set a membership discount for this level which will be applied when a user with this membership level is logged in. The discount is applied to the product's regular price, sale price, or level-specific price set on the edit product page."
 msgstr "Estableix un descompte d'afiliació per a aquest nivell que s'aplicarà quan un usuari amb aquest nivell d'afiliació entri. El descompte s'aplica al preu normal del producte, al preu rebaixat o al preu específic del nivell establert a la pàgina d'edició del producte."
 
 #: pmpro-woocommerce.php:736
 #: pmpro-woocommerce.php:781
 #: pmpro-woocommerce.php:789
+#: pmpro-woocommerce.php:813
 msgid "Set Membership Discount"
 msgstr "Estableix el descompte d'afiliació"
 
 #: pmpro-woocommerce.php:649
 #: pmpro-woocommerce.php:694
 #: pmpro-woocommerce.php:701
+#: pmpro-woocommerce.php:725
 msgid "Member Discount Pricing"
 msgstr "Preus de descompte per a membres"
 
 #: pmpro-woocommerce.php:641
 #: pmpro-woocommerce.php:686
 #: pmpro-woocommerce.php:693
+#: pmpro-woocommerce.php:717
 msgid "Check this to mark the order as completed immediately after checkout to activate the associated membership."
 msgstr "Marqueu això per marcar la comanda com a completada immediatament després de pagar per activar l'afiliació associada."
 
 #: pmpro-woocommerce.php:640
 #: pmpro-woocommerce.php:685
 #: pmpro-woocommerce.php:692
+#: pmpro-woocommerce.php:716
 msgid "Autocomplete Order Status"
 msgstr "Completa automàticament l'estat de les comandes"
 
 #: pmpro-woocommerce.php:622
 #: pmpro-woocommerce.php:667
 #: pmpro-woocommerce.php:674
+#: pmpro-woocommerce.php:698
 msgid "Membership Product"
 msgstr "Producte d'afiliació"
 
 #: pmpro-woocommerce.php:615
 #: pmpro-woocommerce.php:660
 #: pmpro-woocommerce.php:667
+#: pmpro-woocommerce.php:691
 msgid "Give Customers a Membership Level"
 msgstr "Doneu als clients un nivell d'afiliació"
 
 #: pmpro-woocommerce.php:592
 #: pmpro-woocommerce.php:628
 #: pmpro-woocommerce.php:635
+#: pmpro-woocommerce.php:659
 msgid "Membership"
 msgstr "Afiliació"
 
@@ -306,11 +321,13 @@ msgstr ""
 
 #: pmpro-woocommerce.php:650
 #: pmpro-woocommerce.php:657
+#: pmpro-woocommerce.php:681
 msgid "Paid Memberships Pro - WooCommerce Integration Settings"
 msgstr ""
 
 #: pmpro-woocommerce.php:652
 #: pmpro-woocommerce.php:659
+#: pmpro-woocommerce.php:683
 msgid "These settings allow you to integrate Paid Memberships Pro with WooCommerce products. You can assign a membership level to a product and set up member discount pricing."
 msgstr ""
 
@@ -318,6 +335,8 @@ msgstr ""
 #: pmpro-woocommerce.php:785
 #: pmpro-woocommerce.php:661
 #: pmpro-woocommerce.php:793
+#: pmpro-woocommerce.php:685
+#: pmpro-woocommerce.php:817
 msgid "Paid Memberships Pro - WooCommerce Integration Documentation"
 msgstr ""
 
@@ -325,6 +344,8 @@ msgstr ""
 #: pmpro-woocommerce.php:785
 #: pmpro-woocommerce.php:661
 #: pmpro-woocommerce.php:793
+#: pmpro-woocommerce.php:685
+#: pmpro-woocommerce.php:817
 msgid "WooCommerce Integration"
 msgstr ""
 
@@ -332,11 +353,14 @@ msgstr ""
 #: pmpro-woocommerce.php:786
 #: pmpro-woocommerce.php:662
 #: pmpro-woocommerce.php:794
+#: pmpro-woocommerce.php:686
+#: pmpro-woocommerce.php:818
 #, php-format
 msgid "Learn more about %s."
 msgstr ""
 
 #: pmpro-woocommerce.php:792
 #: pmpro-woocommerce.php:800
+#: pmpro-woocommerce.php:824
 msgid "Membership Discount (%)"
 msgstr ""
