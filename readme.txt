@@ -4,7 +4,7 @@ Tags: woocommerce membership, woocommerce, paid memberships pro, woocommerce sub
 Requires at least: 5.2
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 1.10.2
+Stable tag: 1.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,12 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 2. The "Set Membership Discount" field on the "Edit Membership Level" page (Memberships > Settings > Membership Levels > Edit).
 
 == Changelog ==
+= 1.11 - 2026-10-13 =
+* ENHANCEMENT: Membership products now require account creation on the WooCommerce Checkout block and Store API, not just the classic checkout. Guests can no longer place an order for a membership product without an account. #221 (@andrewlimaza)
+* ENHANCEMENT: Added the `pmprowoo_apply_cart_level_discounts` filter so sites can stop membership products in the cart from discounting other products in the same cart. #217 (@dparker1005)
+* ENHANCEMENT: Added the `pmprowoo_get_cart_membership_levels()` helper to get the membership levels for the membership products in the cart. #220 (@andrewlimaza)
+* BUG FIX: Fixed the membership discount being applied twice when another plugin writes the discounted price back to the cart product. #216, #218 (@andrewlimaza)
+
 = 1.10.2 - 2026-10-01 =
 * SECURITY: Improved sanitization and escaping throughout the plugin to resolve Plugin Check security findings. #215 (@dparker1005)
 * BUG FIX: Fixed memberships not being cancelled when the WooCommerce product had been deleted. #214 (@dwanjuki)

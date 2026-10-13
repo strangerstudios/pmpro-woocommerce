@@ -3,9 +3,9 @@
  * Plugin Name: Paid Memberships Pro - WooCommerce Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-woocommerce/
  * Description: Integrate Paid Memberships Pro With WooCommerce.
- * Version: 1.10.2
+ * Version: 1.11
  * WC requires at least: 7.0.0
- * WC tested up to: 8.9.1
+ * WC tested up to: 11.2.1
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com/
  * Text Domain: pmpro-woocommerce
@@ -562,7 +562,7 @@ function pmprowoo_get_membership_price( $price, $product ) {
 	/**
 	 * Filter whether membership level products in the cart should discount other products.
 	 *
-	 * @since TBD
+	 * @since 1.11
 	 *
 	 * @param bool       $apply_cart_level_discounts Whether to apply discounts for levels in the cart. Default true.
 	 * @param WC_Product $product                    The product that we are getting a membership price for.
@@ -879,7 +879,7 @@ add_filter( 'pmpro_custom_advanced_settings', 'pmprowoo_custom_settings' );
  * The classic checkout, the Checkout block and the Store API all check this, so guests
  * can't place an order for a membership product without an account being created.
  *
- * @since TBD
+ * @since 1.11
  *
  * @param bool $registration_required Whether customers must create an account to check out.
  * @return bool

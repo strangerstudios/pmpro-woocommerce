@@ -91,7 +91,7 @@ function pmprowoo_cart_has_membership() {
 /**
  * Get the membership levels that the membership products in the cart will give the user.
  *
- * @since TBD
+ * @since 1.11
  *
  * @param int $exclude_product_id Optional product ID to leave out, e.g. the product being priced.
  * @return array Level IDs keyed by membership product ID, in cart order. Empty if there is no cart.
