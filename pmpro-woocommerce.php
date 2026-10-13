@@ -874,19 +874,24 @@ function pmprowoo_custom_settings( $fields ) {
 add_filter( 'pmpro_custom_advanced_settings', 'pmprowoo_custom_settings' );
 
 /**
- * Force account creation at WooCommerce checkout if the cart includes a membership product.
+ * Require an account at WooCommerce checkout if the cart includes a membership product.
+ *
+ * The classic checkout, the Checkout block and the Store API all check this, so guests
+ * can't place an order for a membership product without an account being created.
+ *
+ * @since TBD
+ *
+ * @param bool $registration_required Whether customers must create an account to check out.
+ * @return bool
  */
-function pmprowoo_woocommerce_after_checkout_registration_form() {
+function pmprowoo_checkout_registration_required( $registration_required ) {
 	if ( pmprowoo_cart_has_membership() ) {
-		?>
-        <script>
-            jQuery('#createaccount').prop('checked', true);
-            jQuery('#createaccount').parent().hide();
-        </script>
-		<?php
+		return true;
 	}
+
+	return $registration_required;
 }
-add_action( 'woocommerce_after_checkout_registration_form', 'pmprowoo_woocommerce_after_checkout_registration_form' );
+add_filter( 'woocommerce_checkout_registration_required', 'pmprowoo_checkout_registration_required' );
 
 /**
  * When the Woo Commerce Billing Address fields are updated, update the equivalent PMPro Fields
